@@ -1,0 +1,115 @@
+body { 
+    margin: 0; 
+    padding: 0; 
+    overflow: hidden; 
+    font-family: 'Open Sans', sans-serif;
+    height: 100%;
+}
+#control-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    z-index: 2;
+    padding: 5px;
+    background: #fff;
+    width: 100vw;
+}
+#char-count, #copy-button, #star-button, #toggle-button, #clear-button, #clear-saved-texts-button, #sort-button {
+    font-size: 0.8em;
+    padding: 5px 10px;
+    background: #191836;
+    color: #fff;
+    margin: 0 5px;
+    border: none;
+    cursor: pointer;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#char-count, #toggle-button, #clear-saved-texts-button, #sort-button {
+    background-color: transparent;
+    color: #000;
+}
+#copy-button:active, #star-button:active, #toggle-button:active, #clear-saved-texts-button, #clear-button:active,
+.add-text:active, .remove-text:active, #sort-button {
+    transform: scale(0.95);
+}
+#text-input {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(100% - 50px);
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    overflow-y: auto;
+    outline: none;
+    white-space: pre-wrap;
+    background-color: white;
+    contenteditable: true;
+}
+#toggle-button {
+    transform: rotate(0deg);
+}
+#saved-texts {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    left: 0;
+    margin-top: 15px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1;
+    max-height: 100px;
+    overflow-y: auto;
+}
+.saved-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    overflow: hidden;
+    max-width: 90%;
+}
+.saved-text span {
+    flex-grow: 1;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+.text-buttons {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+.remove-text, .add-text {
+    padding: 3px 6px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 3px;
+}
+.remove-text {
+    background-color: #ff6347;
+}
+.add-text {
+    background-color: #4caf50;
+}
+.editable {
+    border-bottom: 1px dashed #ccc;
+    display: inline-block;
+    width: auto;
+    min-width: 100px;
+}
