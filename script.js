@@ -130,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('saved-texts').style.display = 'none';
             document.getElementById('toggle-button').textContent = '▶';
             isRotated = false;
+            updateCharCount();
         } else if (target.tagName === 'SPAN' && !target.classList.contains('text-buttons')) {
             target.setAttribute('contenteditable', 'true');
             target.classList.add('editable');
@@ -176,6 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('clear-button').addEventListener('click', function() {
         document.getElementById('text-input').innerText = ''; // Clear the text input
+        updateCharCount(); // Update the character count
     });
 
     function reapplyDnDEvents() {
@@ -188,6 +190,13 @@ document.addEventListener("DOMContentLoaded", function () {
             savedText.addEventListener('dragover', handleDragOver, false);
             savedText.addEventListener('drop', handleDrop, false);
         });
+    }
+
+    function updateCharCount() {
+        var textInput = document.getElementById('text-input');
+        var textLength = textInput.innerText.length;
+        var charCountDisplay = document.getElementById('char-count');
+        charCountDisplay.textContent = 'Characters: ' + textLength;
     }
 
     function handleDragStart(e) {
