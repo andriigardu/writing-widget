@@ -73,7 +73,10 @@ document.addEventListener("DOMContentLoaded", function () {
         textButtonsDiv.className = 'text-buttons';
         textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
                                    '<button class="remove-text">-</button>';
-
+        
+         // Append elements in the correct order
+        newSavedTextDiv.appendChild(dragHandleDiv); // Drag handle first
+        newSavedTextDiv.appendChild(spanElement);
         newSavedTextDiv.appendChild(textButtonsDiv);
         
         // Append the new saved text div to the saved texts container
