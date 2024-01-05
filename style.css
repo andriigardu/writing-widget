@@ -84,6 +84,7 @@ body {
     align-content:justify;
     z-index: 1;
     height: flex;
+    max-height:450px;
     overflow-y: auto;
 }
 .saved-text {
