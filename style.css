@@ -21,7 +21,6 @@ body {
     padding: 5px;
     background: #fff;
     border: 2px solid #000;
-    border-bottom: none; /* Optional: Remove bottom border if it overlaps with something else */
     box-sizing: border-box; /* Ensure padding is included in the width */
     width: 100%; /* Full width of the parent element */
 }
