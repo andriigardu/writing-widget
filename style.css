@@ -5,6 +5,11 @@ body {
     font-family: 'Jost', sans-serif;
     height: 100%;
 }
+#container {
+    width: 425px;
+    max-width: 425px;
+    min-width: 425px;
+}
 #control-panel {
     position: absolute;
     top: 0;
