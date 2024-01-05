@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Ensure the saved texts are shown
         savedTexts.style.display = 'block';
-        toggleButton.textContent = 'v'; 
+        toggleButton.textContent = '>'; 
         toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
     });
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
         isRotated = !isRotated;
         savedTexts.style.display = isRotated ? 'block' : 'none';
         this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
-        this.textContent = isRotated ? '>' : 'v';
+        this.textContent = isRotated ? 'v' : '>';
     });
 
     document.addEventListener('click', function(event) {
