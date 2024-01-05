@@ -69,8 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
         var container = document.getElementById('saved-texts');
         container.insertBefore(newSavedTextDiv, container.firstChild);
 
-        newSavedTextDiv.setAttribute('draggable', 'true');
-
         newSavedTextDiv.appendChild(spanElement);
         newSavedTextDiv.appendChild(textButtonsDiv);
 
@@ -79,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
 
-        // Ensure the saved texts are shown
+        // Open the saved texts
         savedTexts.style.display = 'block';
         toggleButton.textContent = 'v'; 
         toggleButton.style.transform = 'rotate(90deg)';
@@ -98,9 +96,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener('click', function(event) {
         var savedTexts = document.getElementById('saved-texts');
         var toggleButton = document.getElementById('toggle-button');
-        var withinBoundaries = event.composedPath().includes(savedTexts) || event.composedPath().includes(toggleButton);
+        var sortButton = document.getElementById('sort-button');
 
-        if (!withinBoundaries && savedTexts.style.display === 'block') {
+        if (!event.composedPath().includes(savedTexts) && !event.composedPath().includes(toggleButton) && event.target !== sortButton) {
             savedTexts.style.display = 'none';
             toggleButton.textContent = '>';
             isRotated = false;
