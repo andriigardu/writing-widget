@@ -79,8 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
 
+        // Show the saved texts
         savedTexts.style.display = 'block';
-        toggleButton.textContent = 'v';
+        toggleButton.textContent = 'v'; 
         toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
     });
@@ -146,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('sort-button').addEventListener('click', function() {
         var container = document.getElementById('saved-texts');
         var savedTexts = Array.from(container.getElementsByClassName('saved-text'));
-        
+
         savedTexts.sort(function(a, b) {
             var textA = a.innerText.toUpperCase();
             var textB = b.innerText.toUpperCase();
@@ -163,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         localStorage.setItem('savedTexts', container.innerHTML);
-        isSortedAscending = !isSortedAscending; // Toggle the sorting order for the next click
+        isSortedAscending = !isSortedAscending;
     });
 
     document.getElementById('clear-button').addEventListener('click', function() {
@@ -225,5 +226,5 @@ document.addEventListener("DOMContentLoaded", function () {
         return false;
     }
 
-    loadSavedTexts(); // Load saved texts when the page loads
+    loadSavedTexts();
 });
