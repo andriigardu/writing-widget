@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Ensure the saved texts are shown
         savedTexts.style.display = 'block';
-        toggleButton.textContent = '▼'; 
+        toggleButton.textContent = '▶'; 
         toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
     });
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
         isRotated = !isRotated;
         savedTexts.style.display = isRotated ? 'block' : 'none';
         this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
-        this.textContent = isRotated ? '▼' : '▶';
+        this.textContent = isRotated ? '▶' : '▶';
     });
 
     document.addEventListener('click', function(event) {
@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var fullText = parent.getAttribute('data-fulltext');
             document.getElementById('text-input').innerHTML = fullText;
             document.getElementById('saved-texts').style.display = 'none';
-            document.getElementById('toggle-button').textContent = '>';
+            document.getElementById('toggle-button').textContent = '▶';
             isRotated = false;
         } else if (target.tagName === 'SPAN' && !target.classList.contains('text-buttons')) {
             target.setAttribute('contenteditable', 'true');
