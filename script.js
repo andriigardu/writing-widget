@@ -45,8 +45,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById('star-button').addEventListener('click', function() {
-        console.log("Star button clicked"); // Debugging line
-
         var textInput = document.getElementById('text-input');
         var savedTexts = document.getElementById('saved-texts');
         var toggleButton = document.getElementById('toggle-button');
@@ -63,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var dragHandleDiv = document.createElement('div');
         dragHandleDiv.className = 'drag-handle';
-        dragHandleDiv.textContent = '⠿'; // Drag handle symbol
+        dragHandleDiv.textContent = '⠿';
         newSavedTextDiv.appendChild(dragHandleDiv);
         
         var spanElement = document.createElement('span');
@@ -74,34 +72,21 @@ document.addEventListener("DOMContentLoaded", function () {
         textButtonsDiv.className = 'text-buttons';
         textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
                                    '<button class="remove-text">-</button>';
-
-        newSavedTextDiv.appendChild(spanElement);
         newSavedTextDiv.appendChild(textButtonsDiv);
-        newSavedTextDiv.appendChild(dragHandleDiv);
         
-        // Append the new saved text div to the saved texts container
         document.getElementById('saved-texts').appendChild(newSavedTextDiv);
-        
-        savedTexts.appendChild(newSavedTextDiv);
-        console.log("New saved text should be appended"); // Debugging line
 
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
 
-        // Ensure the saved texts are shown
         savedTexts.style.display = 'block';
-        console.log("Saved texts display set to block, current style: " + savedTexts.style.display);
-
         toggleButton.textContent = 'v'; 
         toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
-
-        console.log("Saved texts display set to block"); // Debugging line
     });
 
     document.getElementById('toggle-button').addEventListener('click', function() {
         var savedTexts = document.getElementById('saved-texts');
-
         isRotated = !isRotated;
         savedTexts.style.display = isRotated ? 'block' : 'none';
         this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
@@ -173,16 +158,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         localStorage.setItem('savedTexts', container.innerHTML);
-        isSortedAscending = !isSortedAscending; // Toggle sort order
+        isSortedAscending = !isSortedAscending;
     });
 
     document.getElementById('clear-button').addEventListener('click', function() {
-        document.getElementById('text-input').innerText = ''; // Clear the text input
+        document.getElementById('text-input').innerText = '';
     });
 
     function reapplyDnDEvents() {
         var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-        [].forEach.call(savedTexts, function (savedText) {
+        savedTexts.forEach(function(savedText) {
             savedText.removeEventListener('dragstart', handleDragStart);
             savedText.removeEventListener('dragover', handleDragOver);
             savedText.removeEventListener('drop', handleDrop);
@@ -200,18 +185,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function handleDragOver(e) {
-        if (e.preventDefault) {
-            e.preventDefault();
-        }
+        e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
-        return false;
     }
 
     function handleDrop(e) {
-        if (e.stopPropagation) {
-            e.stopPropagation();
-        }
-
+        e.preventDefault();
         var dragElem = document.querySelector('.dragElem');
         if (dragElem !== this) {
             var rect = this.getBoundingClientRect();
@@ -230,20 +209,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             reapplyDnDEvents();
         }
-
         dragElem.classList.remove('dragElem');
-        return false;
     }
-function reapplyDnDEvents() {
-    var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-    savedTexts.forEach(function(savedText) {
-        savedText.removeEventListener('dragstart', handleDragStart);
-        savedText.removeEventListener('dragover', handleDragOver);
-        savedText.removeEventListener('drop', handleDrop);
-        savedText.addEventListener('dragstart', handleDragStart, false);
-        savedText.addEventListener('dragover', handleDragOver, false);
-        savedText.addEventListener('drop', handleDrop, false);
-    });
-}
+
     loadSavedTexts();
 });
