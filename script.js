@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Ensure the saved texts are shown
         savedTexts.style.display = 'block';
         toggleButton.textContent = '▼'; 
-        toggleButton.style.transform = 'rotate(0deg)';
+        toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
     });
 
