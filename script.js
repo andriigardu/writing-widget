@@ -1,3 +1,4 @@
+<script>
 document.getElementById('text-input').addEventListener('input', function () {
                         var text = this.innerText;
                         var wordCount = text.split(/\\s+/).filter(function (word) {
@@ -90,3 +91,4 @@ document.getElementById('text-input').addEventListener('input', function () {
                     if (savedTexts) {
                         document.getElementById('saved-texts').innerHTML = savedTexts;
                     }
+<\/script>
