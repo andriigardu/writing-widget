@@ -87,11 +87,10 @@ body {
 }
 .saved-text {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-bottom: 5px;
     overflow: hidden;
-    max-width: 90%;
+    width: 100%;
 }
 .saved-text span {
     flex-grow: 1;
