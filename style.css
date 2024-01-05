@@ -116,6 +116,7 @@ body {
     margin-left: 3px;
     width:24px;
     height:24px;
+    user-select: none;
 }
 .remove-text {
     background-color: #ff6347;
@@ -128,4 +129,9 @@ body {
     display: inline-block;
     width: auto;
     min-width: 100px;
+}
+
+/* When span is editable */
+.saved-text span[contenteditable="true"] {
+    user-select: text; /* Allow text selection when editable */
 }
