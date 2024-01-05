@@ -83,7 +83,7 @@ body {
     padding: 10px;
     align-content:justify;
     z-index: 1;
-    height: 100%;
+    height: flex;
     overflow-y: auto;
 }
 .saved-text {
