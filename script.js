@@ -47,11 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
         var savedTexts = document.getElementById('saved-texts');
         var toggleButton = document.getElementById('toggle-button');
 
-        // Open the saved texts and adjust the toggle button
-        savedTexts.style.display = 'block';
-        isRotated = true; // Set the rotated state to true
-        toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
-        toggleButton.textContent = 'v'; // Change to reflect the open state
+        // Ensure saved texts are displayed
+    savedTexts.style.display = 'block';
+    toggleButton.textContent = 'v'; // Change to reflect the open state
+    toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
+    isRotated = true; // Update the isRotated state
 
         var fullText = textInput.innerHTML;
         var displayText = textInput.innerText.substring(0, 50);
