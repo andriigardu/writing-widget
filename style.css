@@ -108,6 +108,7 @@ body {
 }
 .remove-text, .add-text {
     padding: 3px 6px;
+    right: 5px;
     color: white;
     border: none;
     cursor: pointer;
