@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
         reapplyDnDEvents();
 
         var savedTexts = document.getElementById('saved-texts'); // Ensure we're targeting the right element
-        savedTexts.style.display = 'block'!important; // Set display to block to show the saved texts
+        savedTexts.style.display = 'block'; // Set display to block to show the saved texts
         toggleButton.textContent = '▼'; 
         toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
@@ -105,7 +105,8 @@ document.addEventListener("DOMContentLoaded", function () {
         var savedTexts = document.getElementById('saved-texts');
         var toggleButton = document.getElementById('toggle-button');
         var sortButton = document.getElementById('sort-button');
-
+        var sortButton = document.getElementById('star-button');
+        
         if (!event.composedPath().includes(savedTexts) && !event.composedPath().includes(toggleButton) && event.target !== sortButton) {
             savedTexts.style.display = 'none';
             toggleButton.textContent = '▶';
