@@ -4,7 +4,7 @@ body {
     overflow: hidden; 
     font-family: 'Jost', sans-serif;
     width: 400px; /* Fixed width */
-    height: 100vh; /* Full viewport height */
+    height: 500px; /* Full viewport height */
     position: relative; /* For absolute positioning inside */
     border: 2px solid #000;
     box-shadow: -6px 6px;
