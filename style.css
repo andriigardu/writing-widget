@@ -12,6 +12,7 @@ body {
 #control-panel {
     position: absolute;
     top: 0;
+    left: 0; /* Align with the left edge */
     right: 0;
     display: flex;
     align-items: center;
@@ -20,7 +21,9 @@ body {
     padding: 5px;
     background: #fff;
     border: 2px solid #000;
-    width: 100vw;
+    border-bottom: none; /* Optional: Remove bottom border if it overlaps with something else */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+    width: 100%; /* Full width of the parent element */
 }
 #char-count, #copy-button, #star-button, #toggle-button, #clear-button, #clear-saved-texts-button, #sort-button {
     font-size: 0.8em;
