@@ -46,9 +46,12 @@ document.addEventListener("DOMContentLoaded", function () {
         var textInput = document.getElementById('text-input');
         var savedTexts = document.getElementById('saved-texts');
         var toggleButton = document.getElementById('toggle-button');
+
+        // Open the saved texts and adjust the toggle button
         savedTexts.style.display = 'block';
-        toggleButton.textContent = 'v'; // Change this to reflect the open state
-        toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button if needed
+        isRotated = true; // Set the rotated state to true
+        toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
+        toggleButton.textContent = 'v'; // Change to reflect the open state
 
         var fullText = textInput.innerHTML;
         var displayText = textInput.innerText.substring(0, 50);
@@ -87,8 +90,10 @@ document.addEventListener("DOMContentLoaded", function () {
         var savedTexts = document.getElementById('saved-texts');
         savedTexts.style.display = savedTexts.style.display === 'block' ? 'none' : 'block';
 
-        isRotated = !isRotated;
+        isRotated = !isRotated; // Toggle the rotated state
+        savedTexts.style.display = isRotated ? 'block' : 'none';
         this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
+        this.textContent = isRotated ? 'v' : '>'; // Adjust text content based on state
     });
 
     document.addEventListener('click', function(event) {
