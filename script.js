@@ -42,49 +42,49 @@ document.addEventListener("DOMContentLoaded", function () {
         sel.removeAllRanges();
     });
 
-    document.getElementById('star-button').addEventListener('click', function() {
-        var textInput = document.getElementById('text-input');
-        var savedTexts = document.getElementById('saved-texts');
-        var toggleButton = document.getElementById('toggle-button');
+   document.getElementById('star-button').addEventListener('click', function() {
+    var textInput = document.getElementById('text-input');
+    var savedTexts = document.getElementById('saved-texts');
+    var toggleButton = document.getElementById('toggle-button');
 
-        // Ensure saved texts are displayed
-    savedTexts.style.display = 'block';
-    toggleButton.textContent = 'v'; // Change to reflect the open state
-    toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
-    isRotated = true; // Update the isRotated state
+    var fullText = textInput.innerHTML;
+    var displayText = textInput.innerText.substring(0, 50);
+    if (textInput.innerText.length > 50) displayText += '...';
 
-        var fullText = textInput.innerHTML;
-        var displayText = textInput.innerText.substring(0, 50);
-        if (textInput.innerText.length > 50) displayText += '...';
+    var newSavedTextDiv = document.createElement('div');
+    newSavedTextDiv.className = 'saved-text';
+    newSavedTextDiv.setAttribute('data-fulltext', fullText);
+    newSavedTextDiv.setAttribute('data-displaytext', displayText);
 
-        var newSavedTextDiv = document.createElement('div');
-        newSavedTextDiv.className = 'saved-text';
-        newSavedTextDiv.setAttribute('data-fulltext', fullText);
-        newSavedTextDiv.setAttribute('data-displaytext', displayText);
+    var spanElement = document.createElement('span');
+    spanElement.textContent = displayText;
 
-        var spanElement = document.createElement('span');
-        spanElement.textContent = displayText;
+    var textButtonsDiv = document.createElement('div');
+    textButtonsDiv.className = 'text-buttons';
+    textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
+                               '<button class="remove-text">-</button>';
 
-        var textButtonsDiv = document.createElement('div');
-        textButtonsDiv.className = 'text-buttons';
-        textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
-                                   '<button class="remove-text">-</button>';
+    var container = document.getElementById('saved-texts');
+    container.insertBefore(newSavedTextDiv, container.firstChild);
 
-        var container = document.getElementById('saved-texts');
-        container.insertBefore(newSavedTextDiv, container.firstChild);
+    newSavedTextDiv.setAttribute('draggable', 'true');
 
-        newSavedTextDiv.setAttribute('draggable', 'true');
+    newSavedTextDiv.appendChild(spanElement);
+    newSavedTextDiv.appendChild(textButtonsDiv);
 
-        newSavedTextDiv.appendChild(spanElement);
-        newSavedTextDiv.appendChild(textButtonsDiv);
+    savedTexts.appendChild(newSavedTextDiv);
 
-        savedTexts.appendChild(newSavedTextDiv);
+    localStorage.setItem('savedTexts', savedTexts.innerHTML);
+    reapplyDnDEvents();
 
-        localStorage.setItem('savedTexts', savedTexts.innerHTML);
-        reapplyDnDEvents();
-    });
-
-    var isRotated = false;
+    // Open the saved texts and adjust the toggle button
+    if (!isRotated) {
+        savedTexts.style.display = 'block';
+        toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
+        toggleButton.textContent = 'v'; // Change to reflect the open state
+        isRotated = true;
+    }
+});
 
     document.getElementById('toggle-button').addEventListener('click', function() {
         var savedTexts = document.getElementById('saved-texts');
