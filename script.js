@@ -87,9 +87,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Ensure the saved texts are shown
         savedTexts.style.display = 'block';
-        toggleButton.textContent = 'v'; 
+        toggleButton.textContent = '▼'; 
         toggleButton.style.transform = 'rotate(90deg)';
-        isRotated = false;
+        isRotated = true;
     });
 
     document.getElementById('toggle-button').addEventListener('click', function() {
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
         isRotated = !isRotated;
         savedTexts.style.display = isRotated ? 'block' : 'none';
         this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
-        this.textContent = isRotated ? 'v' : '>';
+        this.textContent = isRotated ? '▼' : '▶';
     });
 
     document.addEventListener('click', function(event) {
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!event.composedPath().includes(savedTexts) && !event.composedPath().includes(toggleButton) && event.target !== sortButton) {
             savedTexts.style.display = 'none';
-            toggleButton.textContent = 'v';
+            toggleButton.textContent = '▶';
             isRotated = false;
         }
     });
