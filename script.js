@@ -49,8 +49,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var textInput = document.getElementById('text-input');
         var savedTexts = document.getElementById('saved-texts');
+        savedTexts.style.display = 'block';
+        savedTexts.style.opacity = '0';
+        setTimeout(function() {
+            savedTexts.style.opacity = '1';
+        }, 10);
         var toggleButton = document.getElementById('toggle-button');
-
+        toggleButton.textContent = 'v';
+        toggleButton.style.transform = 'rotate(90deg)';
+        isRotated = true;
+        
         var fullText = textInput.innerHTML;
         var displayText = textInput.innerText.substring(0, 50);
         if (textInput.innerText.length > 50) displayText += '...';
