@@ -130,8 +130,3 @@ body {
     width: auto;
     min-width: 100px;
 }
-
-/* When span is editable */
-.saved-text span[contenteditable="true"] {
-    user-select: text; /* Allow text selection when editable */
-}
