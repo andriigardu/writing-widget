@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    document.getElementById('copy-button').addEventListener('click', function() {
+    document.getElementById('copy-button').addEventListener('click', function () {
         var textInput = document.getElementById('text-input');
         var range = document.createRange();
         range.selectNodeContents(textInput);
@@ -44,9 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sel.removeAllRanges();
     });
 
-    document.getElementById('star-button').addEventListener('click', function() {
-        console.log("Star button clicked"); // Debugging line
-
+    document.getElementById('star-button').addEventListener('click', function () {
         var textInput = document.getElementById('text-input');
         var savedTexts = document.getElementById('saved-texts');
         var toggleButton = document.getElementById('toggle-button');
@@ -68,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         var spanElement = document.createElement('span');
         spanElement.textContent = displayText;
+        spanElement.setAttribute('unselectable', 'on'); // Making text non-selectable
         newSavedTextDiv.appendChild(spanElement);
 
         var textButtonsDiv = document.createElement('div');
@@ -75,28 +74,19 @@ document.addEventListener("DOMContentLoaded", function () {
         textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
                                    '<button class="remove-text">-</button>';
 
-        newSavedTextDiv.appendChild(spanElement);
         newSavedTextDiv.appendChild(textButtonsDiv);
-        newSavedTextDiv.appendChild(dragHandleDiv);
         
         // Append the new saved text div to the saved texts container
-        document.getElementById('saved-texts').appendChild(newSavedTextDiv);
-        
         savedTexts.appendChild(newSavedTextDiv);
-        console.log("New saved text should be appended"); // Debugging line
-
+        
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
 
         // Ensure the saved texts are shown
         savedTexts.style.display = 'block';
-        console.log("Saved texts display set to block, current style: " + savedTexts.style.display);
-
         toggleButton.textContent = 'v'; 
         toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
-
-        console.log("Saved texts display set to block"); // Debugging line
     });
 
     document.getElementById('toggle-button').addEventListener('click', function() {
@@ -182,11 +172,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function reapplyDnDEvents() {
         var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-        [].forEach.call(savedTexts, function (savedText) {
+        savedTexts.forEach(function(savedText) {
             savedText.removeEventListener('dragstart', handleDragStart);
             savedText.removeEventListener('dragover', handleDragOver);
             savedText.removeEventListener('drop', handleDrop);
-
             savedText.addEventListener('dragstart', handleDragStart, false);
             savedText.addEventListener('dragover', handleDragOver, false);
             savedText.addEventListener('drop', handleDrop, false);
@@ -234,16 +223,6 @@ document.addEventListener("DOMContentLoaded", function () {
         dragElem.classList.remove('dragElem');
         return false;
     }
-function reapplyDnDEvents() {
-    var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-    savedTexts.forEach(function(savedText) {
-        savedText.removeEventListener('dragstart', handleDragStart);
-        savedText.removeEventListener('dragover', handleDragOver);
-        savedText.removeEventListener('drop', handleDrop);
-        savedText.addEventListener('dragstart', handleDragStart, false);
-        savedText.addEventListener('dragover', handleDragOver, false);
-        savedText.addEventListener('drop', handleDrop, false);
-    });
-}
+
     loadSavedTexts();
 });
