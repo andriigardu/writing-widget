@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
          // Append elements in the correct order
         newSavedTextDiv.appendChild(dragHandleDiv); // Drag handle first
         newSavedTextDiv.appendChild(spanElement);
-        newSavedTextDiv.appendChild(textButtonsDiv);
+        newSavedTextDiv.appendChild(textButtonsDiv);e
         
         // Append the new saved text div to the saved texts container
         savedTexts.appendChild(newSavedTextDiv);
@@ -87,8 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Ensure the saved texts are shown
         savedTexts.style.display = 'block';
-        toggleButton.textContent = '▶'; 
-        toggleButton.style.transform = 'rotate(90deg)';
+        toggleButton.textContent = '▼'; 
+        toggleButton.style.transform = 'rotate(0deg)';
         isRotated = true;
     });
 
