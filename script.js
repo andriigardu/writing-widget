@@ -203,7 +203,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var charCountDisplay = document.getElementById('char-count');
     charCountDisplay.textContent = 'Characters: ' + charCount + ', Words: ' + wordCount;
 }
-}
 
     function handleDragStart(e) {
         e.dataTransfer.effectAllowed = 'move';
