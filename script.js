@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
     savedTexts.style.display = 'block';
     toggleButton.textContent = 'v'; // Change to reflect the open state
     toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
-    isRotated = true; // Update the isRotated state
+    isRotated = false; // Update the isRotated state
 
         var fullText = textInput.innerHTML;
         var displayText = textInput.innerText.substring(0, 50);
