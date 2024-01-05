@@ -3,9 +3,11 @@ body {
     padding: 0; 
     overflow: hidden; 
     font-family: 'Jost', sans-serif;
-    width: 425px; /* Fixed width */
+    width: 400px; /* Fixed width */
     height: 100vh; /* Full viewport height */
     position: relative; /* For absolute positioning inside */
+    border: 2px solid #000;
+    box-shadow: -6px -6px 0;
 }
 #control-panel {
     position: absolute;
@@ -46,7 +48,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    width: 425px;
+    width: 400px;
     height: calc(100% - 50px);
     padding: 8px;
     box-sizing: border-box;
