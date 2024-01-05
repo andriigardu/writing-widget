@@ -76,24 +76,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
-        // Show the saved texts
-    savedTexts.style.display = 'block';
-    toggleButton.textContent = 'v'; // Change to reflect the open state
-    toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
-    isRotated = true; // Update the isRotated state
-    });
+
+        if (!isRotated) {
+        // If not, show the saved texts and adjust the toggle button
+        savedTexts.style.display = 'block';
+        toggleButton.textContent = 'v'; // Change to reflect the open state
+        toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
+        isRotated = true; // Update the isRotated state
+    } else {
+        // If already displayed, update the list without changing its display state
+        localStorage.setItem('savedTexts', savedTexts.innerHTML);
+    }
 
     var isRotated = false;
 
     document.getElementById('toggle-button').addEventListener('click', function() {
         var savedTexts = document.getElementById('saved-texts');
-        savedTexts.style.display = savedTexts.style.display === 'block' ? 'none' : 'block';
-
+        
         isRotated = !isRotated; // Toggle the rotated state
-        savedTexts.style.display = isRotated ? 'block' : 'none';
-        this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
-        this.textContent = isRotated ? 'v' : '>'; // Adjust text content based on state
-    });
+    savedTexts.style.display = isRotated ? 'block' : 'none';
+    this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
+    this.textContent = isRotated ? 'v' : '>'; // Adjust text content based on state
+});
 
     document.addEventListener('click', function(event) {
         var savedTexts = document.getElementById('saved-texts');
