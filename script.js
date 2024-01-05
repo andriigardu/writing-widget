@@ -107,11 +107,14 @@ document.addEventListener("DOMContentLoaded", function () {
         var sortButton = document.getElementById('sort-button');
         var sortButton = document.getElementById('star-button');
         
-        if (!event.composedPath().includes(savedTexts) && !event.composedPath().includes(toggleButton) && event.target !== sortButton) {
-            savedTexts.style.display = 'none';
-            toggleButton.textContent = '▶';
-            isRotated = false;
-        }
+        if (!event.composedPath().includes(savedTexts) && 
+        !event.composedPath().includes(toggleButton) && 
+        event.target !== sortButton && 
+        event.target !== starButton) {
+        savedTexts.style.display = 'none';
+        toggleButton.textContent = '▶';
+        isRotated = false;
+    }
     });
 
     document.getElementById('saved-texts').addEventListener('click', function(event) {
