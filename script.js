@@ -1,4 +1,4 @@
-<script>
+document.addEventListener("DOMContentLoaded", function () {
  function saveText(span, parent) {
                         span.setAttribute('contenteditable', 'false');
                         span.classList.remove('editable');
@@ -264,5 +264,5 @@ function toggleSortOrder() {
 
 document.getElementById('sort-button').addEventListener('click', function() {
     toggleSortOrder();
-});
-<\/script>
+	});
+});	
