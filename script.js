@@ -59,11 +59,13 @@ document.addEventListener("DOMContentLoaded", function () {
         newSavedTextDiv.className = 'saved-text';
         newSavedTextDiv.setAttribute('data-fulltext', fullText);
         newSavedTextDiv.setAttribute('data-displaytext', displayText);
+        newSavedTextDiv.setAttribute('draggable', 'true');
 
         // Adding drag handle
         var dragHandleDiv = document.createElement('div');
         dragHandleDiv.className = 'drag-handle';
         dragHandleDiv.textContent = '⇅'; // Drag handle symbol
+        newSavedTextDiv.appendChild(dragHandleDiv);
         
         var spanElement = document.createElement('span');
         spanElement.textContent = displayText;
