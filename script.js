@@ -61,14 +61,14 @@ document.addEventListener("DOMContentLoaded", function () {
         newSavedTextDiv.setAttribute('data-displaytext', displayText);
         newSavedTextDiv.setAttribute('draggable', 'true');
 
-        // Adding drag handle
         var dragHandleDiv = document.createElement('div');
         dragHandleDiv.className = 'drag-handle';
-        dragHandleDiv.textContent = '⇅'; // Drag handle symbol
+        dragHandleDiv.textContent = '⠿'; // Drag handle symbol
         newSavedTextDiv.appendChild(dragHandleDiv);
         
         var spanElement = document.createElement('span');
         spanElement.textContent = displayText;
+        newSavedTextDiv.appendChild(spanElement);
 
         var textButtonsDiv = document.createElement('div');
         textButtonsDiv.className = 'text-buttons';
@@ -234,6 +234,16 @@ document.addEventListener("DOMContentLoaded", function () {
         dragElem.classList.remove('dragElem');
         return false;
     }
-
+function reapplyDnDEvents() {
+    var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
+    savedTexts.forEach(function(savedText) {
+        savedText.removeEventListener('dragstart', handleDragStart);
+        savedText.removeEventListener('dragover', handleDragOver);
+        savedText.removeEventListener('drop', handleDrop);
+        savedText.addEventListener('dragstart', handleDragStart, false);
+        savedText.addEventListener('dragover', handleDragOver, false);
+        savedText.addEventListener('drop', handleDrop, false);
+    });
+}
     loadSavedTexts();
 });
