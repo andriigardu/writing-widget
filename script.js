@@ -196,8 +196,13 @@ document.addEventListener("DOMContentLoaded", function () {
     var textInput = document.getElementById('text-input');
     var text = textInput.textContent || textInput.innerText; // Get the text content or inner text
     var textLength = text.replace(/\s/g, '').length; // Remove all spaces and then get the length
+    // Count words
+    var wordCount = text.trim().split(/\s+/).filter(function(word) {
+    return word.length > 0;
+        }).length;
     var charCountDisplay = document.getElementById('char-count');
-    charCountDisplay.textContent = 'Characters: ' + textLength;
+    charCountDisplay.textContent = 'Characters: ' + charCount + ', Words: ' + wordCount;
+}
 }
 
     function handleDragStart(e) {
