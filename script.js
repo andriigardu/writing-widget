@@ -82,6 +82,9 @@ document.addEventListener("DOMContentLoaded", function () {
         toggleButton.textContent = 'v'; 
         toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
+
+        // Debugging
+        console.log("Star button clicked. Saved texts should be displayed.");
     });
 
     document.getElementById('toggle-button').addEventListener('click', function() {
