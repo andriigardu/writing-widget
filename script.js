@@ -193,11 +193,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateCharCount() {
-        var textInput = document.getElementById('text-input');
-        var textLength = textInput.innerText.length;
-        var charCountDisplay = document.getElementById('char-count');
-        charCountDisplay.textContent = 'Characters: ' + textLength;
-    }
+    var textInput = document.getElementById('text-input');
+    var textLength = textInput.textContent.length; // Using textContent instead of innerText
+    var charCountDisplay = document.getElementById('char-count');
+    charCountDisplay.textContent = 'Characters: ' + textLength;
+}
 
     function handleDragStart(e) {
         e.dataTransfer.effectAllowed = 'move';
