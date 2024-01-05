@@ -1,10 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Load saved texts from localStorage
+    var isRotated = false;
+
     function loadSavedTexts() {
         var savedTexts = localStorage.getItem('savedTexts');
         if (savedTexts) {
             document.getElementById('saved-texts').innerHTML = savedTexts;
-            reapplyDnDEvents(); // Reapply events to the loaded texts
+            reapplyDnDEvents();
         }
     }
 
@@ -78,26 +79,21 @@ document.addEventListener("DOMContentLoaded", function () {
         reapplyDnDEvents();
 
         if (!isRotated) {
-        // If not, show the saved texts and adjust the toggle button
-        savedTexts.style.display = 'block';
-        toggleButton.textContent = 'v'; // Change to reflect the open state
-        toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
-        isRotated = true; // Update the isRotated state
-    } else {
-        // If already displayed, update the list without changing its display state
-        localStorage.setItem('savedTexts', savedTexts.innerHTML);
-    }
-
-    var isRotated = false;
+            savedTexts.style.display = 'block';
+            toggleButton.textContent = 'v'; 
+            toggleButton.style.transform = 'rotate(90deg)';
+            isRotated = true;
+        }
+    });
 
     document.getElementById('toggle-button').addEventListener('click', function() {
         var savedTexts = document.getElementById('saved-texts');
         
-        isRotated = !isRotated; // Toggle the rotated state
-    savedTexts.style.display = isRotated ? 'block' : 'none';
-    this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
-    this.textContent = isRotated ? 'v' : '>'; // Adjust text content based on state
-});
+        isRotated = !isRotated;
+        savedTexts.style.display = isRotated ? 'block' : 'none';
+        this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
+        this.textContent = isRotated ? 'v' : '>';
+    });
 
     document.addEventListener('click', function(event) {
         var savedTexts = document.getElementById('saved-texts');
@@ -107,6 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!withinBoundaries && savedTexts.style.display === 'block') {
             savedTexts.style.display = 'none';
             toggleButton.textContent = '>';
+            isRotated = false;
         }
     });
 
@@ -121,6 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('text-input').innerHTML = fullText;
             document.getElementById('saved-texts').style.display = 'none';
             document.getElementById('toggle-button').textContent = '>';
+            isRotated = false;
         } else if (target.tagName === 'SPAN' && !target.classList.contains('text-buttons')) {
             target.setAttribute('contenteditable', 'true');
             target.classList.add('editable');
@@ -146,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-document.getElementById('sort-button').addEventListener('click', function() {
+    document.getElementById('sort-button').addEventListener('click', function() {
         var container = document.getElementById('saved-texts');
         var savedTexts = Array.from(container.getElementsByClassName('saved-text'));
         
@@ -156,13 +154,11 @@ document.getElementById('sort-button').addEventListener('click', function() {
             return textA.localeCompare(textB);
         });
 
-        // Clear the container and append sorted elements
         container.innerHTML = '';
         savedTexts.forEach(function(text) {
             container.appendChild(text);
         });
 
-        // Update local storage after sorting
         localStorage.setItem('savedTexts', container.innerHTML);
     });
 
