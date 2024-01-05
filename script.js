@@ -45,7 +45,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('star-button').addEventListener('click', function() {
         var textInput = document.getElementById('text-input');
         var savedTexts = document.getElementById('saved-texts');
+        var toggleButton = document.getElementById('toggle-button');
         savedTexts.style.display = 'block';
+        toggleButton.textContent = 'v'; // Change this to reflect the open state
+        toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button if needed
 
         var fullText = textInput.innerHTML;
         var displayText = textInput.innerText.substring(0, 50);
