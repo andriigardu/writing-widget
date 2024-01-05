@@ -107,6 +107,7 @@ body {
     margin-left: 10px;
 }
 .remove-text, .add-text {
+    align-items: end;
     padding: 3px 6px;
     right: 5px;
     color: white;
