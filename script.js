@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
 
-        // Show the saved texts
+        // Ensure the saved texts are shown
         savedTexts.style.display = 'block';
         toggleButton.textContent = 'v'; 
         toggleButton.style.transform = 'rotate(90deg)';
@@ -151,11 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
         savedTexts.sort(function(a, b) {
             var textA = a.innerText.toUpperCase();
             var textB = b.innerText.toUpperCase();
-            if (isSortedAscending) {
-                return textA.localeCompare(textB);
-            } else {
-                return textB.localeCompare(textA);
-            }
+            return isSortedAscending ? textA.localeCompare(textB) : textB.localeCompare(textA);
         });
 
         container.innerHTML = '';
@@ -164,11 +160,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         localStorage.setItem('savedTexts', container.innerHTML);
-        isSortedAscending = !isSortedAscending;
+        isSortedAscending = !isSortedAscending; // Toggle sort order
     });
 
     document.getElementById('clear-button').addEventListener('click', function() {
-        document.getElementById('text-input').innerText = '';
+        document.getElementById('text-input').innerText = ''; // Clear the text input
     });
 
     function reapplyDnDEvents() {
