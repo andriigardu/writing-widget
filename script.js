@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     var isRotated = false;
+    var isSortedAscending = true;
 
     function loadSavedTexts() {
         var savedTexts = localStorage.getItem('savedTexts');
@@ -78,17 +79,15 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
 
-        if (!isRotated) {
-            savedTexts.style.display = 'block';
-            toggleButton.textContent = 'v'; 
-            toggleButton.style.transform = 'rotate(90deg)';
-            isRotated = true;
-        }
+        savedTexts.style.display = 'block';
+        toggleButton.textContent = 'v';
+        toggleButton.style.transform = 'rotate(90deg)';
+        isRotated = true;
     });
 
     document.getElementById('toggle-button').addEventListener('click', function() {
         var savedTexts = document.getElementById('saved-texts');
-        
+
         isRotated = !isRotated;
         savedTexts.style.display = isRotated ? 'block' : 'none';
         this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
@@ -149,9 +148,13 @@ document.addEventListener("DOMContentLoaded", function () {
         var savedTexts = Array.from(container.getElementsByClassName('saved-text'));
         
         savedTexts.sort(function(a, b) {
-            var textA = a.innerText.toUpperCase(); // convert text to uppercase to ensure case-insensitive comparison
+            var textA = a.innerText.toUpperCase();
             var textB = b.innerText.toUpperCase();
-            return textA.localeCompare(textB);
+            if (isSortedAscending) {
+                return textA.localeCompare(textB);
+            } else {
+                return textB.localeCompare(textA);
+            }
         });
 
         container.innerHTML = '';
@@ -160,10 +163,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         localStorage.setItem('savedTexts', container.innerHTML);
+        isSortedAscending = !isSortedAscending; // Toggle the sorting order for the next click
     });
 
     document.getElementById('clear-button').addEventListener('click', function() {
-        document.getElementById('text-input').innerText = ''; // Clear the text input
+        document.getElementById('text-input').innerText = '';
     });
 
     function reapplyDnDEvents() {
