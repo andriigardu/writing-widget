@@ -45,6 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById('star-button').addEventListener('click', function() {
+        console.log("Star button clicked"); // Debugging line
+
         var textInput = document.getElementById('text-input');
         var savedTexts = document.getElementById('saved-texts');
         var toggleButton = document.getElementById('toggle-button');
@@ -66,25 +68,22 @@ document.addEventListener("DOMContentLoaded", function () {
         textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
                                    '<button class="remove-text">-</button>';
 
-        var container = document.getElementById('saved-texts');
-        container.insertBefore(newSavedTextDiv, container.firstChild);
-
         newSavedTextDiv.appendChild(spanElement);
         newSavedTextDiv.appendChild(textButtonsDiv);
 
         savedTexts.appendChild(newSavedTextDiv);
+        console.log("New saved text should be appended"); // Debugging line
 
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
 
-        // Open the saved texts
+        // Ensure the saved texts are shown
         savedTexts.style.display = 'block';
         toggleButton.textContent = 'v'; 
         toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
 
-        // Debugging
-        console.log("Star button clicked. Saved texts should be displayed.");
+        console.log("Saved texts display set to block"); // Debugging line
     });
 
     document.getElementById('toggle-button').addEventListener('click', function() {
