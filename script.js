@@ -105,12 +105,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function handleDragOver(e) {
-        e.preventDefault();
+        if (e.preventDefault) {
+            e.preventDefault();
+        }
         e.dataTransfer.dropEffect = 'move';
+        return false;
     }
 
-    function handleDrop(e) {
-        e.preventDefault();
+  function handleDrop(e) {
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
+
         var dragElem = document.querySelector('.dragElem');
         if (dragElem !== this) {
             var rect = this.getBoundingClientRect();
