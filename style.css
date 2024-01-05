@@ -96,6 +96,7 @@ body {
 .saved-text span {
     flex-grow: 1;
     cursor: pointer;
+    user-select: none;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -129,4 +130,10 @@ body {
     display: inline-block;
     width: auto;
     min-width: 100px;
+}
+.drag-handle {
+    cursor: move; /* Cursor indicates this element can be dragged */
+    padding: 2px 4px; /* Adjust padding as needed */
+    margin-right: 5px; /* Space between handle and text */
+    user-select: none; /* Prevent text selection on drag handle */
 }
