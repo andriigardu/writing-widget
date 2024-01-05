@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Load saved texts from localStorage
+    function loadSavedTexts() {
+        var savedTexts = localStorage.getItem('savedTexts');
+        if (savedTexts) {
+            document.getElementById('saved-texts').innerHTML = savedTexts;
+            reapplyDnDEvents(); // Reapply events to the loaded texts
+        }
+    }
+
     function saveText(span, parent) {
         span.setAttribute('contenteditable', 'false');
         span.classList.remove('editable');
@@ -185,12 +194,5 @@ document.addEventListener("DOMContentLoaded", function () {
         return false;
     }
 
-    var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-    [].forEach.call(savedTexts, function (savedText) {
-        savedText.addEventListener('dragstart', handleDragStart, false);
-        savedText.addEventListener('dragover', handleDragOver, false);
-        savedText.addEventListener('drop', handleDrop, false);
-    });
-
-    reapplyDnDEvents();
+    loadSavedTexts(); // Load saved texts when the page loads
 });
