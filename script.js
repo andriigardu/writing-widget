@@ -86,7 +86,8 @@ document.addEventListener("DOMContentLoaded", function () {
         reapplyDnDEvents();
 
         // Ensure the saved texts are shown
-        savedTexts.style.display = 'block';
+        isRotated = !isRotated;
+        savedTexts.style.display = isRotated ? 'block' : 'none';
         toggleButton.textContent = '▼'; 
         toggleButton.style.transform = 'rotate(0deg)';
         isRotated = true;
