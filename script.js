@@ -1,20 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     var isRotated = false;
     var isSortedAscending = true;
-// Define the reapplyDnDEvents function first
-    function reapplyDnDEvents() {
-        var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-        savedTexts.forEach(function(savedText) {
-            savedText.removeEventListener('dragstart', handleDragStart);
-            savedText.removeEventListener('dragover', handleDragOver);
-            savedText.removeEventListener('drop', handleDrop);
 
-            savedText.addEventListener('dragstart', handleDragStart, false);
-            savedText.addEventListener('dragover', handleDragOver, false);
-            savedText.addEventListener('drop', handleDrop, false);
-        });
-    }
-    
     function loadSavedTexts() {
         var savedTexts = localStorage.getItem('savedTexts');
         if (savedTexts) {
@@ -105,18 +92,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function handleDragOver(e) {
-        if (e.preventDefault) {
-            e.preventDefault();
-        }
+        e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
-        return false;
     }
 
-  function handleDrop(e) {
-        if (e.stopPropagation) {
-            e.stopPropagation();
-        }
-
+    function handleDrop(e) {
+        e.preventDefault();
         var dragElem = document.querySelector('.dragElem');
         if (dragElem !== this) {
             var rect = this.getBoundingClientRect();
