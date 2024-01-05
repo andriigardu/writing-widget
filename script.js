@@ -60,6 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
         newSavedTextDiv.setAttribute('data-fulltext', fullText);
         newSavedTextDiv.setAttribute('data-displaytext', displayText);
 
+        // Adding drag handle
+        var dragHandleDiv = document.createElement('div');
+        dragHandleDiv.className = 'drag-handle';
+        dragHandleDiv.textContent = '⇅'; // Drag handle symbol
+        
         var spanElement = document.createElement('span');
         spanElement.textContent = displayText;
 
@@ -70,7 +75,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         newSavedTextDiv.appendChild(spanElement);
         newSavedTextDiv.appendChild(textButtonsDiv);
-
+        newSavedTextDiv.appendChild(dragHandleDiv);
+        
+        // Append the new saved text div to the saved texts container
+        document.getElementById('saved-texts').appendChild(newSavedTextDiv);
+        
         savedTexts.appendChild(newSavedTextDiv);
         console.log("New saved text should be appended"); // Debugging line
 
