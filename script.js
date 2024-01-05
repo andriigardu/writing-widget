@@ -142,6 +142,26 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+document.getElementById('sort-button').addEventListener('click', function() {
+        var container = document.getElementById('saved-texts');
+        var savedTexts = Array.from(container.getElementsByClassName('saved-text'));
+        
+        savedTexts.sort(function(a, b) {
+            var textA = a.innerText.toUpperCase(); // convert text to uppercase to ensure case-insensitive comparison
+            var textB = b.innerText.toUpperCase();
+            return textA.localeCompare(textB);
+        });
+
+        // Clear the container and append sorted elements
+        container.innerHTML = '';
+        savedTexts.forEach(function(text) {
+            container.appendChild(text);
+        });
+
+        // Update local storage after sorting
+        localStorage.setItem('savedTexts', container.innerHTML);
+    });
+
     document.getElementById('clear-button').addEventListener('click', function() {
         document.getElementById('text-input').innerText = ''; // Clear the text input
     });
