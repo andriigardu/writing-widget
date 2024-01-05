@@ -47,12 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
         var savedTexts = document.getElementById('saved-texts');
         var toggleButton = document.getElementById('toggle-button');
 
-        // Ensure saved texts are displayed
-    savedTexts.style.display = 'block';
-    toggleButton.textContent = 'v'; // Change to reflect the open state
-    toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
-    isRotated = false; // Update the isRotated state
-
         var fullText = textInput.innerHTML;
         var displayText = textInput.innerText.substring(0, 50);
         if (textInput.innerText.length > 50) displayText += '...';
@@ -82,6 +76,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
+        // Show the saved texts
+    savedTexts.style.display = 'block';
+    toggleButton.textContent = 'v'; // Change to reflect the open state
+    toggleButton.style.transform = 'rotate(90deg)'; // Rotate the toggle button
+    isRotated = true; // Update the isRotated state
     });
 
     var isRotated = false;
