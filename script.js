@@ -194,7 +194,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateCharCount() {
     var textInput = document.getElementById('text-input');
-    var textLength = textInput.textContent.length; // Using textContent instead of innerText
+    var text = textInput.textContent || textInput.innerText; // Get the text content or inner text
+    var textLength = text.replace(/\s/g, '').length; // Remove all spaces and then get the length
     var charCountDisplay = document.getElementById('char-count');
     charCountDisplay.textContent = 'Characters: ' + textLength;
 }
