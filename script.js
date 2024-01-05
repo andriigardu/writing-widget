@@ -57,12 +57,13 @@ document.addEventListener("DOMContentLoaded", function () {
                                '<button class="remove-text">-</button>';
 
 		// Add the new saved text to the top of the saved texts container
+    function initializeWidget() {
     var container = document.getElementById('saved-texts');
     container.insertBefore(newSavedTextDiv, container.firstChild);
-
+    
 		// Make the new saved text draggable
 		newSavedTextDiv.setAttribute('draggable', 'true');
-
+    
     // Append elements
     newSavedTextDiv.appendChild(spanElement);
     newSavedTextDiv.appendChild(textButtonsDiv);
@@ -95,7 +96,7 @@ document.getElementById('toggle-button').addEventListener('click', function() {
                             toggleButton.textContent = '>';
                         }
                     });
-
+			function initializeWidget() {
                     document.getElementById('saved-texts').addEventListener('click', function(event) {
                         var target = event.target;
                         var parent = target.closest('.saved-text');
@@ -131,7 +132,7 @@ document.getElementById('toggle-button').addEventListener('click', function() {
                             }
                         }
                     });
-
+			}
                     document.getElementById('clear-button').addEventListener('click', function() {
                         document.getElementById('text-input').innerText = '';
                     });
@@ -145,7 +146,7 @@ document.getElementById('toggle-button').addEventListener('click', function() {
 										document.getElementById('clear-saved-texts-button').addEventListener('click', function() {
 										    localStorage.removeItem('savedTexts');
 										    document.getElementById('saved-texts').innerHTML = '';
-										});
+function initializeWidget() {										
 function reapplyDnDEvents() {
     var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
     [].forEach.call(savedTexts, function (savedText) {
@@ -158,7 +159,7 @@ function reapplyDnDEvents() {
         savedText.addEventListener('drop', handleDrop, false);
     });
 }
-
+});
 // Function to handle the drag start
 function handleDragStart(e) {
     e.dataTransfer.effectAllowed = 'move';
