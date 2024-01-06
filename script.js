@@ -206,6 +206,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }).length;  // Count words
     var charCountDisplay = document.getElementById('char-count');
     charCountDisplay.textContent = 'Characters: ' + charCount;
+
+        // Change color if character count exceeds 280
+    if (charCount > 280) {
+        charCountDisplay.style.color = 'red';
+    } else {
+        charCountDisplay.style.color = ''; // Reset to default color
+    }
         
        var wordCountDisplay = document.getElementById('word-count');
     wordCountDisplay.textContent = 'Words: ' + wordCount; 
