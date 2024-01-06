@@ -26,7 +26,7 @@ body {
     box-sizing: border-box; /* Ensure padding is included in the width */
     width: 100%; /* Full width of the parent element */
 }
-#char-count, #copy-button, #star-button, #toggle-button, #clear-button, #clear-saved-texts-button, #sort-button {
+#char-count, #word-count, #copy-button, #star-button, #toggle-button, #clear-button, #clear-saved-texts-button, #sort-button {
     font-size: 0.8em;
     padding: 5px 10px;
     background: #191836;
