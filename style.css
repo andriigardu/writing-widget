@@ -39,7 +39,7 @@ body {
     align-items: center;
     justify-content: center;
 }
-#char-count, #toggle-button, #clear-saved-texts-button, #sort-button {
+#char-count, #word-count, #toggle-button, #clear-saved-texts-button, #sort-button {
     background-color: transparent;
     color: #000;
 }
