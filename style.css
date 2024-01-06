@@ -111,6 +111,16 @@ body {
     animation: fadeIn 0.5s ease forwards;
     /* animation-delay will be set by JavaScript */
 }
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+.saved-text.reverse {
+    animation: fadeOut 0.5s ease forwards;
+}
+
 .saved-text span {
     flex-grow: 1;
     cursor: pointer;
