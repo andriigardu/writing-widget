@@ -89,7 +89,6 @@ document.addEventListener("DOMContentLoaded", function () {
         reapplyDnDEvents();
 
         var savedTexts = document.getElementById('saved-texts'); // Ensure we're targeting the right element
-        savedTexts.style.display = 'block'; // Set display to block to show the saved texts
         toggleButton.textContent = '▼'; 
         toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
