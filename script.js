@@ -224,6 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
             savedText.addEventListener('dragover', handleDragOver, false);
             savedText.addEventListener('drop', handleDrop, false);
         });
+        applyAnimationDelays();
     }
 
     function updateCharCount() {
