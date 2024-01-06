@@ -83,12 +83,13 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Append the new saved text div to the saved texts container
         savedTexts.appendChild(newSavedTextDiv);
-        savedTexts.classList.add('visible');
+        
         
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
 
         var savedTexts = document.getElementById('saved-texts'); // Ensure we're targeting the right element
+        savedTexts.classList.add('visible');
         toggleButton.textContent = '▼'; 
         toggleButton.style.transform = 'rotate(90deg)';
         isRotated = true;
@@ -96,9 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('toggle-button').addEventListener('click', function() {
         var savedTexts = document.getElementById('saved-texts');
-    savedTexts.classList.add('visible');
-        var savedTexts = document.getElementById('saved-texts');
         isRotated = !isRotated;
+
        if (isRotated) {
         savedTexts.classList.add('visible');
         this.textContent = '▼';
