@@ -86,7 +86,19 @@ body {
     height: flex;
     max-height:400px;
     overflow-y: auto;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none; /* To prevent interaction when it's invisible */
 }
+
+#saved-texts.visible {
+    opacity: 1;
+    transform: translateY(0px);
+    pointer-events: auto; /* Allow interaction when it's visible */
+}
+
+
 .saved-text {
     display: flex;
     align-items: center;
