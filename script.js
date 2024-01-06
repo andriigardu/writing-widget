@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Define the applyAnimationDelays function here
     function applyAnimationDelays() {
         var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-        var delayIncrement = 0.1; // Increment delay by 0.1s for each line
+        var delayIncrement = 0.065; // Increment delay by 0.1s for each line
 
         savedTexts.forEach(function(savedText, index) {
             var delay = index * delayIncrement;
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function applyReverseAnimationDelays() {
     var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-    var delayIncrement = 0.1;
+    var delayIncrement = 0.05;
     var maxDelay = (savedTexts.length - 1) * delayIncrement; // Calculate the maximum delay for the last item
 
     savedTexts.forEach(function(savedText, index) {
