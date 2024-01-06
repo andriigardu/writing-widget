@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     document.getElementById('text-input').addEventListener('input', function () {
+        // Update character and word count whenever the text changes
+    updateCharCount();
         var text = this.innerText.replace(/\s/g, '');
         var charCount = text.length;
         var charCountDisplay = document.getElementById('char-count');
