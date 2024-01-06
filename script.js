@@ -57,6 +57,18 @@ document.addEventListener("DOMContentLoaded", function () {
             savedText.style.animationDelay = delay + 's';
         });
     }
+
+    function applyReverseAnimationDelays() {
+    var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
+    var delayIncrement = 0.1;
+
+    savedTexts.forEach(function(savedText, index) {
+        var delay = (savedTexts.length - index - 1) * delayIncrement;
+        savedText.style.animationDelay = delay + 's';
+        savedText.classList.add('reverse');  // Apply reverse animation class
+        });
+    }
+
     
     document.getElementById('star-button').addEventListener('click', function () {
         var textInput = document.getElementById('text-input');
@@ -116,10 +128,12 @@ document.addEventListener("DOMContentLoaded", function () {
         savedTexts.classList.add('visible');
         this.textContent = '▼';
         this.style.transform = 'rotate(90deg)';
+           applyAnimationDelays();
     } else {
         savedTexts.classList.remove('visible');
         this.textContent = '▶';
         this.style.transform = 'rotate(0deg)';
+           applyReverseAnimationDelays();
     }
     });
 
