@@ -108,7 +108,7 @@ body {
     overflow: hidden;
     width: 100%;
     opacity: 0; /* Start with hidden text */
-    animation: fadeIn 0.5s ease forwards;
+    animation: fadeIn 0.3s ease forwards;
     /* animation-delay will be set by JavaScript */
 }
 
@@ -118,7 +118,7 @@ body {
 }
 
 .saved-text.reverse {
-    animation: fadeOut 0.5s ease forwards;
+    animation: fadeOut 0.3s ease forwards;
 }
 
 .saved-text span {
