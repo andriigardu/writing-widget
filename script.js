@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var delay = index * delayIncrement;
             console.log('Element index:', index, 'Delay:', delay + 's'); // Debugging line
             savedText.style.animationDelay = delay + 's';
+            savedText.classList.remove('reverse');  // Remove reverse animation class
         });
     }
 
