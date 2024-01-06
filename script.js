@@ -46,6 +46,17 @@ document.addEventListener("DOMContentLoaded", function () {
         sel.removeAllRanges();
     });
 
+    // Define the applyAnimationDelays function here
+    function applyAnimationDelays() {
+        var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
+        var delayIncrement = 0.1; // Increment delay by 0.1s for each line
+
+        savedTexts.forEach(function(savedText, index) {
+            var delay = index * delayIncrement;
+            savedText.style.animationDelay = delay + 's';
+        });
+    }
+    
     document.getElementById('star-button').addEventListener('click', function () {
         var textInput = document.getElementById('text-input');
         var savedTexts = document.getElementById('saved-texts');
@@ -83,7 +94,8 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Append the new saved text div to the saved texts container
         savedTexts.appendChild(newSavedTextDiv);
-        
+
+        applyAnimationDelays();
         
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
@@ -133,6 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (target.classList.contains('remove-text')) {
             parent.remove();
             localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
+            applyAnimationDelays();
         } else if (target.classList.contains('add-text')) {
             var fullText = parent.getAttribute('data-fulltext');
             document.getElementById('text-input').innerHTML = fullText;
@@ -189,6 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         localStorage.setItem('savedTexts', container.innerHTML);
         isSortedAscending = !isSortedAscending; // Toggle sort order
+        applyAnimationDelays();
     });
 
     document.getElementById('clear-button').addEventListener('click', function() {
