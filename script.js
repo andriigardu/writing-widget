@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Append the new saved text div to the saved texts container
         savedTexts.appendChild(newSavedTextDiv);
+        savedTexts.classList.add('visible');
         
         localStorage.setItem('savedTexts', savedTexts.innerHTML);
         reapplyDnDEvents();
@@ -98,9 +99,15 @@ document.addEventListener("DOMContentLoaded", function () {
         var savedTexts = document.getElementById('saved-texts');
 
         isRotated = !isRotated;
-        savedTexts.style.display = isRotated ? 'block' : 'none';
-        this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
-        this.textContent = isRotated ? '▶' : '▶';
+       if (isRotated) {
+        savedTexts.classList.add('visible');
+        this.textContent = '▼';
+        this.style.transform = 'rotate(90deg)';
+    } else {
+        savedTexts.classList.remove('visible');
+        this.textContent = '▶';
+        this.style.transform = 'rotate(0deg)';
+    }
     });
 
     document.addEventListener('click', function(event) {
@@ -113,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
         !event.composedPath().includes(toggleButton) && 
         event.target !== sortButton && 
         event.target !== starButton) {
-        savedTexts.style.display = 'none';
+        savedTexts.classList.remove('visible');
         toggleButton.textContent = '▶';
         toggleButton.style.transform = 'rotate(0deg)';
         isRotated = false;
