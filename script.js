@@ -180,6 +180,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('clear-button').addEventListener('click', function() {
         document.getElementById('text-input').innerText = ''; // Clear the text input
         updateCharCount(); // Update the character count
+        // Reset the color of the character count display
+    var charCountDisplay = document.getElementById('char-count');
+    charCountDisplay.style.color = ''; // Reset to default color
     });
 
     function reapplyDnDEvents() {
