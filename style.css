@@ -166,3 +166,11 @@ body {
     margin-right: 5px; /* Space between handle and text */
     user-select: none; /* Prevent text selection on drag handle */
 }
+#statistic {
+    position: absolute;
+    bottom:0;
+    height: 28px;
+    width:100%;
+    display: flex;
+    font-size:0.8em;
+}
