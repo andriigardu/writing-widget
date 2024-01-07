@@ -178,7 +178,7 @@ body {
 }
 
 .clicked {
-    transform: scale(0.95);
+    transform: scale(0.85);
 }
 
 #statistic {
