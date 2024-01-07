@@ -85,57 +85,63 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
         savedText.classList.add('reverse');  // Apply reverse animation class
         });
     }
-
     
     document.getElementById('star-button').addEventListener('click', function () {
-        var textInput = document.getElementById('text-input');
-        var savedTexts = document.getElementById('saved-texts');
-        var toggleButton = document.getElementById('toggle-button');
-        
-        var fullText = textInput.innerHTML;
-        var displayText = textInput.innerText.substring(0, 50);
-        if (textInput.innerText.length > 50) displayText += '...';
+    var textInput = document.getElementById('text-input');
+    var twitterSaved = document.getElementById('twitter-saved'); // Twitter section
+    var linkedinSaved = document.getElementById('linkedin-saved'); // LinkedIn section
+    var toggleButton = document.getElementById('toggle-button');
+    var currentMode = toggleButton.textContent;
 
-        var newSavedTextDiv = document.createElement('div');
-        newSavedTextDiv.className = 'saved-text';
-        newSavedTextDiv.setAttribute('data-fulltext', fullText);
-        newSavedTextDiv.setAttribute('data-displaytext', displayText);
-        newSavedTextDiv.setAttribute('draggable', 'true');
+    var fullText = textInput.innerHTML;
+    var displayText = textInput.innerText.substring(0, 50);
+    if (textInput.innerText.length > 50) displayText += '...';
 
-        var dragHandleDiv = document.createElement('div');
-        dragHandleDiv.className = 'drag-handle';
-        dragHandleDiv.textContent = '⠿'; // Drag handle symbol
-        newSavedTextDiv.appendChild(dragHandleDiv);
-        
-        var spanElement = document.createElement('span');
-        spanElement.textContent = displayText;
-        spanElement.setAttribute('unselectable', 'on'); // Making text non-selectable
-        newSavedTextDiv.appendChild(spanElement);
+    var newSavedTextDiv = document.createElement('div');
+    newSavedTextDiv.className = 'saved-text';
+    newSavedTextDiv.setAttribute('data-fulltext', fullText);
+    newSavedTextDiv.setAttribute('data-displaytext', displayText);
+    newSavedTextDiv.setAttribute('draggable', 'true');
 
-        var textButtonsDiv = document.createElement('div');
-        textButtonsDiv.className = 'text-buttons';
-        textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
-                                   '<button class="remove-text">-</button>';
-        
-         // Append elements in the correct order
-        newSavedTextDiv.appendChild(dragHandleDiv); // Drag handle first
-        newSavedTextDiv.appendChild(spanElement);
-        newSavedTextDiv.appendChild(textButtonsDiv);
-        
-        // Append the new saved text div to the saved texts container
-        savedTexts.appendChild(newSavedTextDiv);
+    var dragHandleDiv = document.createElement('div');
+    dragHandleDiv.className = 'drag-handle';
+    dragHandleDiv.textContent = '⠿'; // Drag handle symbol
+    newSavedTextDiv.appendChild(dragHandleDiv);
+    
+    var spanElement = document.createElement('span');
+    spanElement.textContent = displayText;
+    spanElement.setAttribute('unselectable', 'on'); // Making text non-selectable
+    newSavedTextDiv.appendChild(spanElement);
 
-        applyAnimationDelays();
-        
-        localStorage.setItem('savedTexts', savedTexts.innerHTML);
-        reapplyDnDEvents();
+    var textButtonsDiv = document.createElement('div');
+    textButtonsDiv.className = 'text-buttons';
+    textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
+                               '<button class="remove-text">-</button>';
+    
+    // Append elements in the correct order
+    newSavedTextDiv.appendChild(dragHandleDiv); // Drag handle first
+    newSavedTextDiv.appendChild(spanElement);
+    newSavedTextDiv.appendChild(textButtonsDiv);
 
-        var savedTexts = document.getElementById('saved-texts'); // Ensure we're targeting the right element
-        savedTexts.classList.add('visible');
-        toggleButton.textContent = '▼'; 
-        toggleButton.style.transform = 'rotate(90deg)';
-        isRotated = true;
-    });
+    // Append the new saved text div to the appropriate container
+    if (currentMode === '🐦') {
+        twitterSaved.appendChild(newSavedTextDiv);
+    } else {
+        linkedinSaved.appendChild(newSavedTextDiv);
+    }
+
+    applyAnimationDelays();
+    
+    localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
+    reapplyDnDEvents();
+
+    // Ensure saved texts are visible and update the toggle button
+    var savedTexts = document.getElementById('saved-texts');
+    savedTexts.classList.add('visible');
+    toggleButton.textContent = '▼'; 
+    toggleButton.style.transform = 'rotate(90deg)';
+    isRotated = true;
+});
 
     document.getElementById('toggle-button').addEventListener('click', function() {
         var savedTexts = document.getElementById('saved-texts');
