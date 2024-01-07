@@ -233,32 +233,34 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     // Sort function for each section
     function sortSection(sectionId) {
         var section = document.getElementById(sectionId);
-        var savedTexts = Array.from(section.getElementsByClassName('saved-text'));
+        if (section) { // Check if the section exists
+            var savedTexts = Array.from(section.getElementsByClassName('saved-text'));
+            savedTexts.sort(function(a, b) {
+                var textA = a.getAttribute('data-displaytext').toUpperCase();
+                var textB = b.getAttribute('data-displaytext').toUpperCase();
+                return isSortedAscending ? textA.localeCompare(textB) : textB.localeCompare(textA);
+            });
 
-        savedTexts.sort(function(a, b) {
-            var textA = a.getAttribute('data-displaytext').toUpperCase();
-            var textB = b.getAttribute('data-displaytext').toUpperCase();
-            return isSortedAscending ? textA.localeCompare(textB) : textB.localeCompare(textA);
-        });
-
-        savedTexts.forEach(function(text) {
-            section.appendChild(text);
-        });
+            savedTexts.forEach(function(text) {
+                section.appendChild(text);
+            });
+        }
     }
 
-        // Call sort function for each section
-        sortSection('twitter-saved');
-        sortSection('linkedin-saved');
-            
-        isSortedAscending = !isSortedAscending; // Toggle sort order
-            
-        // Update localStorage
-    var twitterSaved = document.getElementById('twitter-saved').innerHTML;
-    var linkedinSaved = document.getElementById('linkedin-saved').innerHTML;
-    localStorage.setItem('savedTexts', JSON.stringify({ twitter: twitterSaved, linkedin: linkedinSaved }));
-            
-        applyAnimationDelays();
-    });
+    // Call sort function for each section
+    sortSection('twitter-saved');
+    sortSection('linkedin-saved');
+    
+    isSortedAscending = !isSortedAscending; // Toggle sort order
+    
+    // Update the localStorage with the sorted items
+    var savedTwitterTexts = document.getElementById('twitter-saved').innerHTML;
+    var savedLinkedInTexts = document.getElementById('linkedin-saved').innerHTML;
+
+    localStorage.setItem('savedTexts', JSON.stringify({ twitter: savedTwitterTexts, linkedin: savedLinkedInTexts }));
+    
+    applyAnimationDelays();
+});
 
     document.getElementById('clear-button').addEventListener('click', function() {
         document.getElementById('text-input').innerText = ''; // Clear the text input
