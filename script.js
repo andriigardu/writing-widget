@@ -362,10 +362,6 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     updateLocalStorage();
     dragElem.classList.remove('dragElem');
             reapplyDnDEvents();
-        }
-
-        dragElem.classList.remove('dragElem');
-        return false;
     }
     // JavaScript to add 'clicked' class on mousedown and remove it on mouseup
 document.querySelectorAll('#copy-button, #star-button, #toggle-button, #clear-button, .add-text, .remove-text, #sort-button, #toggle-social-media').forEach(button => {
