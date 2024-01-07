@@ -3,8 +3,8 @@ body {
     margin-top: 5px; 
     padding: 0; 
     overflow: hidden; 
-    font-family: 'Jost', sans-serif;
-    width: 400px; /* Fixed width */
+    font-family: 'Roboto', sans-serif;
+    width: 300px; /* Fixed width */
     height: 500px; /* Full viewport height */
     position: relative; /* For absolute positioning inside */
     border: 2px solid #000;
