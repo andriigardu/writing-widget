@@ -118,6 +118,9 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
                                '<button class="remove-text">-</button>';
     
+    var currentMode = toggleButton.textContent;
+    console.log("Current mode:", currentMode); // Debugging line
+        
     // Append elements in the correct order
     newSavedTextDiv.appendChild(dragHandleDiv); // Drag handle first
     newSavedTextDiv.appendChild(spanElement);
@@ -125,8 +128,10 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
 
     // Append the new saved text div to the appropriate container
     if (currentMode === '🐦') {
+        console.log("Appending to Twitter section"); // Debugging line
         twitterSaved.appendChild(newSavedTextDiv);
     } else {
+        console.log("Appending to LinkedIn section"); // Debugging line
         linkedinSaved.appendChild(newSavedTextDiv);
     }
 
