@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var text = this.innerText.replace(/\s/g, '');
         var charCount = text.length;
         var charCountDisplay = document.getElementById('char-count');
-        charCountDisplay.textContent = 'Characters: ' + charCount;
+        charCountDisplay.textContent = 'C: ' + charCount;
 
         if (charCount > 280) {
             charCountDisplay.style.color = 'red';
