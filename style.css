@@ -9,6 +9,7 @@ body {
     position: relative; /* For absolute positioning inside */
     border: 2px solid #000;
     box-shadow: -6px 6px;
+    transition: width 0.3s ease;
 }
 #control-panel {
     position: absolute;
