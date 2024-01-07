@@ -49,11 +49,7 @@ body {
 .add-text, .remove-text, #sort-button, #toggle-social-media {
     transition: transform 0.3s ease; /* Apply transition to normal state */
 }
-#copy-button:active, #star-button:active, #toggle-button:active, #clear-button:active,
-.add-text:active, .remove-text:active, #sort-button:active, #toggle-social-media:active {
-    transform: scale(0.95);
-    transition: transform 0.3s ease;
-}
+
 #copy-button:hover, #star-button:hover, #toggle-button:hover, #clear-button:hover,
 .add-text:hover, .remove-text:hover, #sort-button:hover, #toggle-social-media:hover {
     transform: scale(1.03);
