@@ -252,7 +252,10 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
             
         isSortedAscending = !isSortedAscending; // Toggle sort order
             
-        localStorage.setItem('savedTexts', container.innerHTML);
+        // Update localStorage
+    var twitterSaved = document.getElementById('twitter-saved').innerHTML;
+    var linkedinSaved = document.getElementById('linkedin-saved').innerHTML;
+    localStorage.setItem('savedTexts', JSON.stringify({ twitter: twitterSaved, linkedin: linkedinSaved }));
             
         applyAnimationDelays();
     });
