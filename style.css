@@ -55,7 +55,7 @@ body {
     right: 0;
     bottom: 0;
     width: 300px;
-    height: calc(100% - 50px);
+    height: calc(100% - 78px);
     padding: 8px;
     box-sizing: border-box;
     border: 1px solid #000;
@@ -167,10 +167,12 @@ body {
     user-select: none; /* Prevent text selection on drag handle */
 }
 #statistic {
-    position: absolute;
-    bottom:0;
+    margin-top: 5px;
     height: 28px;
-    width:100%;
     display: flex;
-    font-size:0.8em;
+    font-size: 0.8em;
+    justify-content: space-between;
+    padding: 0 10px;
+    background-color: #f1f1f1; /* Optional: for better visibility */
+    border-top: 1px solid #000; /* Optional: add a border at the top */
 }
