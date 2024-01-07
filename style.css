@@ -167,12 +167,15 @@ body {
     user-select: none; /* Prevent text selection on drag handle */
 }
 #statistic {
-    margin-top: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     height: 28px;
     display: flex;
     font-size: 0.8em;
     justify-content: space-between;
     padding: 0 10px;
-    background-color: #f1f1f1; /* Optional: for better visibility */
-    border-top: 1px solid #000; /* Optional: add a border at the top */
+    background-color: #f1f1f1;
+    border-top: 1px solid #000;
 }
