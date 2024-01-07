@@ -177,7 +177,7 @@ body {
     user-select: none; /* Prevent text selection on drag handle */
 }
 
-.button.clicked {
+.clicked {
     transform: scale(0.95);
 }
 
