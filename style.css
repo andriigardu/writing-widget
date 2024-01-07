@@ -48,10 +48,12 @@ body {
 #copy-button:active, #star-button:active, #toggle-button:active, #clear-button:active,
 .add-text:active, .remove-text:active, #sort-button:active, #toggle-social-media:active {
     transform: scale(0.95);
+    transition: transform 0.3s ease;
 }
 #copy-button:hover, #star-button:hover, #toggle-button:hover, #clear-button:hover,
 .add-text:hover, .remove-text:hover, #sort-button:hover, #toggle-social-media:hover {
     transform: scale(1.02);
+    transition: transform 0.3s ease;
 }
 
 #text-input {
@@ -75,6 +77,7 @@ body {
 }
 #toggle-button {
     transform: rotate(0deg);
+    transition: transform 0.3s ease;
 }
 #saved-texts {
     position: absolute;
