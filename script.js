@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('text-input').addEventListener('input', function () {
         // Update character and word count whenever the text changes
-    updateCharCount();
+        updateCharCount();
         var text = this.innerText.replace(/\s/g, '');
         var charCount = text.length;
         var charCountDisplay = document.getElementById('char-count');
-        charCountDisplay.textContent = 'C: ' + charCount;
+        charCountDisplay.textContent = 'Characters: ' + charCount;
 
         if (charCount > 280) {
             charCountDisplay.style.color = 'red';
@@ -251,7 +251,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return word.length > 0;
         }).length;  // Count words
     var charCountDisplay = document.getElementById('char-count');
-    charCountDisplay.textContent = 'C: ' + charCount;
+    charCountDisplay.textContent = 'Characters: ' + charCount;
 
         // Change color if character count exceeds 280
     if (charCount > 280) {
@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
         
        var wordCountDisplay = document.getElementById('word-count');
-    wordCountDisplay.textContent = 'W: ' + wordCount; 
+    wordCountDisplay.textContent = 'Words: ' + wordCount; 
 }
 
     function handleDragStart(e) {
