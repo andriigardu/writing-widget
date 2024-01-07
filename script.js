@@ -19,6 +19,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
     }
+    
+document.getElementById('toggle-social-media').addEventListener('click', function() {
+    var bodyElement = document.body;
+    var inputElement = document.getElementById('text-input'); // Assuming the ID of your input field is 'text-input'
+
+    if (this.textContent === '🐦') {
+        this.textContent = '💼';
+        bodyElement.style.width = '500px'; // LinkedIn width
+        inputElement.style.width = '500px'; // Set input width for LinkedIn
+    } else {
+        this.textContent = '🐦';
+        bodyElement.style.width = '300px'; // Twitter width
+        inputElement.style.width = '300px'; // Set input width for Twitter
+    }
+});
 
     document.getElementById('text-input').addEventListener('input', function () {
         // Update character and word count whenever the text changes
