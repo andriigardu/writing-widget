@@ -196,6 +196,7 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
             parent.remove();
             localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
             applyAnimationDelays();
+            updateLocalStorage();
         } else if (target.classList.contains('add-text')) {
             var fullText = parent.getAttribute('data-fulltext');
             document.getElementById('text-input').innerHTML = fullText;
@@ -221,6 +222,7 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
         if (event.target.tagName === 'SPAN' && event.target.classList.contains('editable')) {
             var parent = event.target.closest('.saved-text');
             saveText(event.target, parent);
+            updateLocalStorage();
         }
     }, true);
 
