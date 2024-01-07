@@ -3,12 +3,18 @@ document.addEventListener("DOMContentLoaded", function () {
     var isSortedAscending = true;
 
     function loadSavedTexts() {
-        var savedTexts = localStorage.getItem('savedTexts');
-        if (savedTexts) {
-            document.getElementById('saved-texts').innerHTML = savedTexts;
-            reapplyDnDEvents();
+    var savedTextsJSON = localStorage.getItem('savedTexts');
+    if (savedTextsJSON) {
+        var savedTexts = JSON.parse(savedTextsJSON);
+        if (savedTexts.twitter) {
+            document.getElementById('twitter-saved').innerHTML = savedTexts.twitter;
         }
+        if (savedTexts.linkedin) {
+            document.getElementById('linkedin-saved').innerHTML = savedTexts.linkedin;
+        }
+        reapplyDnDEvents();
     }
+}
 
     function saveText(span, parent) {
         span.setAttribute('contenteditable', 'false');
@@ -91,7 +97,7 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     var twitterSaved = document.getElementById('twitter-saved'); // Twitter section
     var linkedinSaved = document.getElementById('linkedin-saved'); // LinkedIn section
     var toggleButton = document.getElementById('toggle-button');
-    var currentMode = toggleButton.textContent;
+    var currentMode = document.getElementById('toggle-social-media').textContent;
 
     var fullText = textInput.innerHTML;
     var displayText = textInput.innerText.substring(0, 50);
