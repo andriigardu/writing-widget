@@ -251,7 +251,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return word.length > 0;
         }).length;  // Count words
     var charCountDisplay = document.getElementById('char-count');
-    charCountDisplay.textContent = 'Characters: ' + charCount;
+    charCountDisplay.textContent = 'C: ' + charCount;
 
         // Change color if character count exceeds 280
     if (charCount > 280) {
@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
         
        var wordCountDisplay = document.getElementById('word-count');
-    wordCountDisplay.textContent = 'Words: ' + wordCount; 
+    wordCountDisplay.textContent = 'W: ' + wordCount; 
 }
 
     function handleDragStart(e) {
