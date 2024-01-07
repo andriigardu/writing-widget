@@ -50,11 +50,11 @@ body {
     transition: transform 0.3s ease; /* Apply transition to normal state */
 }
 
-/*#copy-button:hover, #star-button:hover, #toggle-button:hover, #clear-button:hover,
+#copy-button:hover, #star-button:hover, #toggle-button:hover, #clear-button:hover,
 .add-text:hover, .remove-text:hover, #sort-button:hover, #toggle-social-media:hover {
     transform: scale(1.03);
     transition: transform 0.3s ease;
-}*/
+}
 
 #text-input {
     position: absolute;
