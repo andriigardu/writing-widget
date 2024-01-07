@@ -184,6 +184,6 @@ body {
     border-right: 1px solid #000;
     align-items:center;
 }
-#twitter-saved h3, #linkedin-saved h3 {
+#twitter-saved h2, #linkedin-saved h2 {
     font-size: 1em;
 }
