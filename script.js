@@ -146,7 +146,7 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     
     localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
     reapplyDnDEvents();
-
+    updateLocalStorage(); 
     // Ensure saved texts are visible and update the toggle button
     var savedTexts = document.getElementById('saved-texts');
     savedTexts.classList.add('visible');
@@ -266,6 +266,7 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     localStorage.setItem('savedTexts', JSON.stringify({ twitter: savedTwitterTexts, linkedin: savedLinkedInTexts }));
     
     applyAnimationDelays();
+        updateLocalStorage();
 });
 
     document.getElementById('clear-button').addEventListener('click', function() {
@@ -309,6 +310,12 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
        var wordCountDisplay = document.getElementById('word-count');
     wordCountDisplay.textContent = 'Words: ' + wordCount; 
 }
+    function updateLocalStorage() {
+    var twitterTexts = document.getElementById('twitter-saved').innerHTML;
+    var linkedinTexts = document.getElementById('linkedin-saved').innerHTML;
+    var savedData = { twitter: twitterTexts, linkedin: linkedinTexts };
+    localStorage.setItem('savedTexts', JSON.stringify(savedData));
+}
 
     function handleDragStart(e) {
         e.dataTransfer.effectAllowed = 'move';
@@ -324,27 +331,36 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
         return false;
     }
 
-    function handleDrop(e) {
-        if (e.stopPropagation) {
-            e.stopPropagation();
+   function handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    var dragElem = document.querySelector('.dragElem');
+    if (!dragElem) return;
+
+    // Determine the drop target section (Twitter or LinkedIn)
+    var dropTarget = e.target.closest('#twitter-saved, #linkedin-saved');
+    if (!dropTarget) return;
+
+    var dropPoint = e.target.closest('.saved-text');
+    dragElem.parentNode.removeChild(dragElem);
+
+    if (dropPoint) {
+        // If dropped on another saved text, decide based on relative position
+        var rect = dropPoint.getBoundingClientRect();
+        var relY = e.clientY - rect.top;
+        if (relY < rect.height / 2) {
+            dropTarget.insertBefore(dragElem, dropPoint);
+        } else {
+            dropTarget.insertBefore(dragElem, dropPoint.nextSibling);
         }
+    } else {
+        // If dropped in an empty area of the target section
+        dropTarget.appendChild(dragElem);
+    }
 
-        var dragElem = document.querySelector('.dragElem');
-        if (dragElem !== this) {
-            var rect = this.getBoundingClientRect();
-            var relY = e.clientY - rect.top;
-
-            dragElem.parentNode.removeChild(dragElem);
-
-            if (relY < rect.height / 2) {
-                this.parentNode.insertBefore(dragElem, this);
-            } else {
-                this.parentNode.insertBefore(dragElem, this.nextSibling);
-            }
-
-            var savedTextsContainer = document.getElementById('saved-texts');
-            localStorage.setItem('savedTexts', savedTextsContainer.innerHTML);
-
+    updateLocalStorage();
+    dragElem.classList.remove('dragElem');
             reapplyDnDEvents();
         }
 
