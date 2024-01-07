@@ -180,6 +180,11 @@ body {
     margin-right: 5px; /* Space between handle and text */
     user-select: none; /* Prevent text selection on drag handle */
 }
+
+.button.clicked {
+    transform: scale(0.95);
+}
+
 #statistic {
     position: absolute;
     bottom: 0;
