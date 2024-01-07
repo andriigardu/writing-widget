@@ -340,6 +340,18 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
         dragElem.classList.remove('dragElem');
         return false;
     }
+    // JavaScript to add 'clicked' class on mousedown and remove it on mouseup
+document.querySelectorAll('.button').forEach(button => {
+    button.addEventListener('mousedown', () => {
+        button.classList.add('clicked');
+    });
+    button.addEventListener('mouseup', () => {
+        button.classList.remove('clicked');
+    });
+    button.addEventListener('mouseleave', () => {
+        button.classList.remove('clicked');
+    });
+});
 
     loadSavedTexts();
 });
