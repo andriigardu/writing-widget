@@ -45,6 +45,10 @@ body {
     background-color: transparent;
     color: #000;
 }
+#copy-button, #star-button, #toggle-button, #clear-button,
+.add-text, .remove-text, #sort-button, #toggle-social-media {
+    transition: transform 0.3s ease; /* Apply transition to normal state */
+}
 #copy-button:active, #star-button:active, #toggle-button:active, #clear-button:active,
 .add-text:active, .remove-text:active, #sort-button:active, #toggle-social-media:active {
     transform: scale(0.95);
