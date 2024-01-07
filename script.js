@@ -230,22 +230,30 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     });
 
     document.getElementById('sort-button').addEventListener('click', function() {
-        var container = document.getElementById('saved-texts');
-        var savedTexts = Array.from(container.getElementsByClassName('saved-text'));
+    // Sort function for each section
+    function sortSection(sectionId) {
+        var section = document.getElementById(sectionId);
+        var savedTexts = Array.from(section.getElementsByClassName('saved-text'));
 
         savedTexts.sort(function(a, b) {
-            var textA = a.innerText.toUpperCase();
-            var textB = b.innerText.toUpperCase();
+            var textA = a.getAttribute('data-displaytext').toUpperCase();
+            var textB = b.getAttribute('data-displaytext').toUpperCase();
             return isSortedAscending ? textA.localeCompare(textB) : textB.localeCompare(textA);
         });
 
-        container.innerHTML = '';
         savedTexts.forEach(function(text) {
-            container.appendChild(text);
+            section.appendChild(text);
         });
+    }
 
-        localStorage.setItem('savedTexts', container.innerHTML);
+        // Call sort function for each section
+        sortSection('twitter-saved');
+        sortSection('linkedin-saved');
+            
         isSortedAscending = !isSortedAscending; // Toggle sort order
+            
+        localStorage.setItem('savedTexts', container.innerHTML);
+            
         applyAnimationDelays();
     });
 
