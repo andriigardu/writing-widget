@@ -17,7 +17,7 @@ body {
     right: 0;
     display: flex;
     align-items: center;
-    font-size:0.5em;
+    font-size:0.8em;
     justify-content: end;
     z-index: 2;
     padding: 5px;
@@ -55,7 +55,7 @@ body {
     right: 0;
     bottom: 0;
     width: 300px;
-    height: calc(100% - 78px);
+    height: calc(100% - 70px);
     padding: 8px;
     box-sizing: border-box;
     border: 1px solid #000;
@@ -173,9 +173,10 @@ body {
     right: 0;
     height: 28px;
     display: flex;
-    font-size: 0.8em;
+    font-size: 1em;
     justify-content: space-between;
     padding: 0 10px;
     background-color: #f1f1f1;
     border-top: 1px solid #000;
+    align-content:center;
 }
