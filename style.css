@@ -28,7 +28,7 @@ body {
     box-sizing: border-box; /* Ensure padding is included in the width */
     width: 100%; /* Full width of the parent element */
 }
-#char-count, #word-count, #copy-button, #star-button, #toggle-button, #clear-button, #clear-saved-texts-button, #sort-button {
+#char-count, #word-count, #copy-button, #star-button, #toggle-button, #clear-button, #sort-button, #toggle-social-media {
     font-size: 0.8em;
     padding: 5px 10px;
     background: #191836;
@@ -45,10 +45,15 @@ body {
     background-color: transparent;
     color: #000;
 }
-#copy-button:active, #star-button:active, #toggle-button:active, #clear-saved-texts-button, #clear-button:active,
-.add-text:active, .remove-text:active, #sort-button {
+#copy-button:active, #star-button:active, #toggle-button:active, #clear-button:active,
+.add-text:active, .remove-text:active, #sort-button:active, #toggle-social-media:active {
     transform: scale(0.95);
 }
+#copy-button:hover, #star-button:hover, #toggle-button:hover, #clear-button:hover,
+.add-text:hover, .remove-text:hover, #sort-button:hover, #toggle-social-media:hover {
+    transform: scale(1.02);
+}
+
 #text-input {
     position: absolute;
     top: 45px;
@@ -186,4 +191,5 @@ body {
 }
 #twitter-saved h2, #linkedin-saved h2 {
     font-size: 1em;
+    user-select: none;
 }
