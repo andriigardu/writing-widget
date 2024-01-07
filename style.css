@@ -78,7 +78,7 @@ body {
 }
 #saved-texts {
     position: absolute;
-    top: 40px;
+    top: 35px;
     right: 0;
     left: 0;
     margin-top: 15px;
@@ -91,7 +91,7 @@ body {
     align-content:justify;
     z-index: 1;
     height: flex;
-    max-height:400px;
+    max-height:380px;
     overflow-y: auto;
     transition: opacity 0.5s ease, transform 0.5s ease;
     opacity: 0;
