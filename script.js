@@ -118,7 +118,8 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
                                '<button class="remove-text">-</button>';
     
-    var currentMode = toggleButton.textContent;
+    var socialMediaToggleButton = document.getElementById('toggle-social-media');
+    var currentMode = socialMediaToggleButton.textContent;
     console.log("Current mode:", currentMode); // Debugging line
         
     // Append elements in the correct order
