@@ -341,7 +341,7 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
         return false;
     }
     // JavaScript to add 'clicked' class on mousedown and remove it on mouseup
-document.querySelectorAll('.button').forEach(button => {
+document.querySelectorAll('#copy-button, #star-button, #toggle-button, #clear-button, .add-text, .remove-text, #sort-button, #toggle-social-media').forEach(button => {
     button.addEventListener('mousedown', () => {
         button.classList.add('clicked');
     });
