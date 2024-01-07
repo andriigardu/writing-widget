@@ -66,6 +66,7 @@ body {
     white-space: pre-wrap;
     background-color: white;
     contenteditable: true;
+    transition: width 0.3s ease;
 }
 #toggle-button {
     transform: rotate(0deg);
