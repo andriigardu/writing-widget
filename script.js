@@ -32,8 +32,8 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
 
     if (this.textContent === '🐦') {
         this.textContent = '💼';
-        bodyElement.style.width = '400px'; // LinkedIn width
-        inputElement.style.width = '400px'; // Set input width for LinkedIn
+        bodyElement.style.width = '405px'; // LinkedIn width
+        inputElement.style.width = '405px'; // Set input width for LinkedIn
     } else {
         this.textContent = '🐦';
         bodyElement.style.width = '300px'; // Twitter width
