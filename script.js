@@ -1,10 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Initial LinkedIn Mode Setup
-    var bodyElement = document.body;
-    var inputElement = document.getElementById('text-input');
-    document.getElementById('toggle-social-media').textContent = '💼';
-    bodyElement.style.width = '410px'; // LinkedIn width
-    inputElement.style.width = '410px'; // Set input width for LinkedIn
     var isRotated = false;
     var isSortedAscending = true;
 
@@ -371,16 +365,6 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     dragElem.classList.remove('dragElem');
             reapplyDnDEvents();
     }
-    // Automatic save functionality
-    let timeoutId;
-    document.getElementById('text-input').addEventListener('input', function() {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(function() {
-            // Save functionality here
-            localStorage.setItem('savedTexts', document.getElementById('text-input').innerHTML);
-        }, 1000); // Auto-save after 1 second of inactivity
-    });
-    
     // JavaScript to add 'clicked' class on mousedown and remove it on mouseup
 document.querySelectorAll('#copy-button, #star-button, #toggle-button, #clear-button, .add-text, .remove-text, #sort-button, #toggle-social-media').forEach(button => {
     button.addEventListener('mousedown', () => {
