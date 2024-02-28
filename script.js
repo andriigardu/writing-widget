@@ -60,26 +60,63 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
         } else {
             charCountDisplay.style.color = '';
         }
-          // Automatic save functionality
-    let timeoutId;
-    document.getElementById('text-input').addEventListener('input', function() {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(function() {
-            // Save functionality here
-            localStorage.setItem('savedTexts', document.getElementById('text-input').innerHTML);
-        }, 1000); // Auto-save after 1 second of inactivity
-        });
-    });
+     let autoSaveTimeout;
+let currentSession = null; // Null indicates no active editing session
 
-    document.getElementById('text-input').addEventListener('paste', function(e) {
-    e.preventDefault(); // Prevent the default paste action
-
-    // Get the text content from the clipboard
-    var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-
-    // Insert the text at the current cursor position
-    document.execCommand("insertHTML", false, text);
+document.getElementById('text-input').addEventListener('input', function () {
+    clearTimeout(autoSaveTimeout); // Clear any existing timer
+    autoSaveTimeout = setTimeout(() => {
+        const mode = document.getElementById('toggle-social-media').textContent;
+        const textInputContent = document.getElementById('text-input').innerHTML;
+        
+        // Check if we are continuing an existing session or starting a new one
+        if (currentSession === null) {
+            // Start a new session
+            currentSession = {
+                mode: mode,
+                content: textInputContent,
+                timestamp: new Date().toISOString()
+            };
+            // Logic to create a new entry in the UI and localStorage
+            createOrUpdateEntryInLocalStorage(currentSession, true);
+        } else {
+            // Update the existing session
+            currentSession.content = textInputContent;
+            // Logic to update the existing entry in the UI and localStorage
+            createOrUpdateEntryInLocalStorage(currentSession, false);
+        }
+    }, 1000); // Adjust the delay as needed
 });
+
+// Reset session on clear
+document.getElementById('clear-button').addEventListener('click', function() {
+    document.getElementById('text-input').innerText = ''; // Clear the text input
+    currentSession = null; // Reset the editing session
+    // Additional logic to update character count or UI if needed
+});
+
+function createOrUpdateEntryInLocalStorage(session, isNew) {
+    let savedTexts = JSON.parse(localStorage.getItem('savedTexts')) || { twitter: [], linkedin: [] };
+    
+    if (isNew) {
+        // Create a new entry logic
+        const entry = { content: session.content, timestamp: session.timestamp };
+        savedTexts[session.mode === '💼' ? 'linkedin' : 'twitter'].push(entry);
+    } else {
+        // Update the last entry logic for the current mode
+        let modeEntries = savedTexts[session.mode === '💼' ? 'linkedin' : 'twitter'];
+        if (modeEntries.length > 0) {
+            modeEntries[modeEntries.length - 1].content = session.content;
+        }
+    }
+    
+    localStorage.setItem('savedTexts', JSON.stringify(savedTexts));
+    // Optionally, update the UI here
+}
+
+// Ensure to handle the page reload case if needed
+// This could involve checking the state when the page loads and setting up accordingly
+
     
     document.getElementById('copy-button').addEventListener('click', function () {
         var textInput = document.getElementById('text-input');
