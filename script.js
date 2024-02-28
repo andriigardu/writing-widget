@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Initial LinkedIn Mode Setup
     var bodyElement = document.body;
     var inputElement = document.getElementById('text-input');
     document.getElementById('toggle-social-media').textContent = '💼';
@@ -8,438 +7,113 @@ document.addEventListener("DOMContentLoaded", function () {
     var isRotated = false;
     var isSortedAscending = true;
 
+    loadSavedTexts();
+    setupEventListeners();
+
     function loadSavedTexts() {
-    var savedTextsJSON = localStorage.getItem('savedTexts');
-    if (savedTextsJSON) {
-        var savedTexts = JSON.parse(savedTextsJSON);
-        if (savedTexts.twitter) {
-            document.getElementById('twitter-saved').innerHTML = savedTexts.twitter;
-        }
-        if (savedTexts.linkedin) {
-            document.getElementById('linkedin-saved').innerHTML = savedTexts.linkedin;
+        var savedTextsJSON = localStorage.getItem('savedTexts');
+        if (savedTextsJSON) {
+            var savedTexts = JSON.parse(savedTextsJSON);
+            document.getElementById('twitter-saved').innerHTML = savedTexts.twitter || "";
+            document.getElementById('linkedin-saved').innerHTML = savedTexts.linkedin || "";
         }
         reapplyDnDEvents();
     }
-}
 
-    function saveText(span, parent) {
-        span.setAttribute('contenteditable', 'false');
-        span.classList.remove('editable');
-        var newText = span.innerText.trim();
-        if (newText) {
-            parent.dataset.displaytext = newText;
-        }
-        localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
+    function setupEventListeners() {
+        document.getElementById('toggle-social-media').addEventListener('click', toggleSocialMedia);
+        document.getElementById('text-input').addEventListener('input', updateCharCount);
+        document.getElementById('copy-button').addEventListener('click', copyToClipboard);
+        document.getElementById('clear-button').addEventListener('click', clearText);
+        document.getElementById('sort-button').addEventListener('click', sortTexts);
     }
-    
-document.getElementById('toggle-social-media').addEventListener('click', function() {
-    var bodyElement = document.body;
-    var inputElement = document.getElementById('text-input'); // Assuming the ID of your input field is 'text-input'
 
-    if (this.textContent === '🐦') {
-        this.textContent = '💼';
-        bodyElement.style.width = '410px'; // LinkedIn width
-        inputElement.style.width = '410px'; // Set input width for LinkedIn
-    } else {
-        this.textContent = '🐦';
-        bodyElement.style.width = '300px'; // Twitter width
-        inputElement.style.width = '300px'; // Set input width for Twitter
-    }
-});
-    
-    document.getElementById('text-input').addEventListener('input', function () {
-        // Update character and word count whenever the text changes
-        updateCharCount();
-        var text = this.innerText.replace(/\s/g, '');
-        var charCount = text.length;
-        var charCountDisplay = document.getElementById('char-count');
-        charCountDisplay.textContent = 'Characters: ' + charCount;
-
-        if (charCount > 280) {
-            charCountDisplay.style.color = 'red';
+    function toggleSocialMedia() {
+        if (this.textContent === '🐦') {
+            this.textContent = '💼';
+            bodyElement.style.width = '410px';
+            inputElement.style.width = '410px';
         } else {
-            charCountDisplay.style.color = '';
+            this.textContent = '🐦';
+            bodyElement.style.width = '300px';
+            inputElement.style.width = '300px';
         }
-     let autoSaveTimeout;
-let currentSession = null; // Null indicates no active editing session
-
-document.getElementById('text-input').addEventListener('input', function () {
-    clearTimeout(autoSaveTimeout); // Clear any existing timer
-    autoSaveTimeout = setTimeout(() => {
-        const mode = document.getElementById('toggle-social-media').textContent;
-        const textInputContent = document.getElementById('text-input').innerHTML;
-        
-        // Check if we are continuing an existing session or starting a new one
-        if (currentSession === null) {
-            // Start a new session
-            currentSession = {
-                mode: mode,
-                content: textInputContent,
-                timestamp: new Date().toISOString()
-            };
-            // Logic to create a new entry in the UI and localStorage
-            createOrUpdateEntryInLocalStorage(currentSession, true);
-        } else {
-            // Update the existing session
-            currentSession.content = textInputContent;
-            // Logic to update the existing entry in the UI and localStorage
-            createOrUpdateEntryInLocalStorage(currentSession, false);
-        }
-    }, 1000); // Adjust the delay as needed
-});
-
-// Reset session on clear
-document.getElementById('clear-button').addEventListener('click', function() {
-    document.getElementById('text-input').innerText = ''; // Clear the text input
-    currentSession = null; // Reset the editing session
-    // Additional logic to update character count or UI if needed
-});
-
-function createOrUpdateEntryInLocalStorage(session, isNew) {
-    let savedTexts = JSON.parse(localStorage.getItem('savedTexts')) || { twitter: [], linkedin: [] };
-    
-    if (isNew) {
-        // Create a new entry logic
-        const entry = { content: session.content, timestamp: session.timestamp };
-        savedTexts[session.mode === '💼' ? 'linkedin' : 'twitter'].push(entry);
-    } else {
-        // Update the last entry logic for the current mode
-        let modeEntries = savedTexts[session.mode === '💼' ? 'linkedin' : 'twitter'];
-        if (modeEntries.length > 0) {
-            modeEntries[modeEntries.length - 1].content = session.content;
-        }
-    }
-    
-    localStorage.setItem('savedTexts', JSON.stringify(savedTexts));
-    // Optionally, update the UI here
-}
-
-// Ensure to handle the page reload case if needed
-// This could involve checking the state when the page loads and setting up accordingly
-
-    
-    document.getElementById('copy-button').addEventListener('click', function () {
-        var textInput = document.getElementById('text-input');
-        var range = document.createRange();
-        range.selectNodeContents(textInput);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-        document.execCommand('copy');
-        sel.removeAllRanges();
-    });
-
-    // Define the applyAnimationDelays function here
-    function applyAnimationDelays() {
-        var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-        var delayIncrement = 0.065; // Increment delay by 0.1s for each line
-
-        savedTexts.forEach(function(savedText, index) {
-            var delay = index * delayIncrement;
-            console.log('Element index:', index, 'Delay:', delay + 's'); // Debugging line
-            savedText.style.animationDelay = delay + 's';
-            savedText.classList.remove('reverse');  // Remove reverse animation class
-        });
-    }
-
-    function applyReverseAnimationDelays() {
-    var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-    var delayIncrement = 0.05;
-    var maxDelay = (savedTexts.length - 1) * delayIncrement; // Calculate the maximum delay for the last item
-
-    savedTexts.forEach(function(savedText, index) {
-        var delay = (savedTexts.length - index - 1) * delayIncrement;
-        savedText.style.animationDelay = delay + 's';
-        savedText.classList.add('reverse');  // Apply reverse animation class
-        });
-    }
-    
-    document.getElementById('star-button').addEventListener('click', function () {
-    var textInput = document.getElementById('text-input');
-    var twitterSaved = document.getElementById('twitter-saved'); // Twitter section
-    var linkedinSaved = document.getElementById('linkedin-saved'); // LinkedIn section
-    var toggleButton = document.getElementById('toggle-button');
-    var currentMode = document.getElementById('toggle-social-media').textContent;
-
-    var fullText = textInput.innerHTML;
-    var displayText = textInput.innerText.substring(0, 50);
-    if (textInput.innerText.length > 50) displayText += '...';
-
-    var newSavedTextDiv = document.createElement('div');
-    newSavedTextDiv.className = 'saved-text';
-    newSavedTextDiv.setAttribute('data-fulltext', fullText);
-    newSavedTextDiv.setAttribute('data-displaytext', displayText);
-    newSavedTextDiv.setAttribute('draggable', 'true');
-
-    var dragHandleDiv = document.createElement('div');
-    dragHandleDiv.className = 'drag-handle';
-    dragHandleDiv.textContent = '⠿'; // Drag handle symbol
-    newSavedTextDiv.appendChild(dragHandleDiv);
-    
-    var spanElement = document.createElement('span');
-    spanElement.textContent = displayText;
-    spanElement.setAttribute('unselectable', 'on'); // Making text non-selectable
-    newSavedTextDiv.appendChild(spanElement);
-
-    var textButtonsDiv = document.createElement('div');
-    textButtonsDiv.className = 'text-buttons';
-    textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
-                               '<button class="remove-text">-</button>';
-    
-    var socialMediaToggleButton = document.getElementById('toggle-social-media');
-    var currentMode = socialMediaToggleButton.textContent;
-    console.log("Current mode:", currentMode); // Debugging line
-        
-    // Append elements in the correct order
-    newSavedTextDiv.appendChild(dragHandleDiv); // Drag handle first
-    newSavedTextDiv.appendChild(spanElement);
-    newSavedTextDiv.appendChild(textButtonsDiv);
-
-    // Append the new saved text div to the appropriate container
-    if (currentMode === '🐦') {
-        console.log("Appending to Twitter section"); // Debugging line
-        twitterSaved.appendChild(newSavedTextDiv);
-    } else {
-        console.log("Appending to LinkedIn section"); // Debugging line
-        linkedinSaved.appendChild(newSavedTextDiv);
-    }
-
-    applyAnimationDelays();
-    
-    localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
-    reapplyDnDEvents();
-    updateLocalStorage(); 
-    // Ensure saved texts are visible and update the toggle button
-    var savedTexts = document.getElementById('saved-texts');
-    savedTexts.classList.add('visible');
-    toggleButton.textContent = '▼'; 
-    toggleButton.style.transform = 'rotate(90deg)';
-    isRotated = true;
-});
-
-    document.getElementById('toggle-button').addEventListener('click', function() {
-        var savedTexts = document.getElementById('saved-texts');
-        isRotated = !isRotated;
-
-       if (isRotated) {
-        savedTexts.classList.add('visible');
-        this.textContent = '▼';
-        this.style.transform = 'rotate(90deg)';
-           applyAnimationDelays();
-    } else {
-        savedTexts.classList.remove('visible');
-        this.textContent = '▶';
-        this.style.transform = 'rotate(0deg)';
-           applyReverseAnimationDelays();
-    }
-    });
-
-    document.addEventListener('click', function(event) {
-        var savedTexts = document.getElementById('saved-texts');
-        var toggleButton = document.getElementById('toggle-button');
-        var sortButton = document.getElementById('sort-button');
-        var starButton = document.getElementById('star-button');
-        
-        if (!event.composedPath().includes(savedTexts) && 
-        !event.composedPath().includes(toggleButton) && 
-        event.target !== sortButton && 
-        event.target !== starButton) {
-        savedTexts.classList.remove('visible');
-        toggleButton.textContent = '▶';
-        toggleButton.style.transform = 'rotate(0deg)';
-        isRotated = false;
-    }
-    });
-
-    document.getElementById('saved-texts').addEventListener('click', function(event) {
-        var target = event.target;
-        var parent = target.closest('.saved-text');
-        if (target.classList.contains('remove-text')) {
-            parent.remove();
-            localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
-            applyAnimationDelays();
-            updateLocalStorage();
-        } else if (target.classList.contains('add-text')) {
-            var fullText = parent.getAttribute('data-fulltext');
-            document.getElementById('text-input').innerHTML = fullText;
-            // Hide saved-texts using the 'visible' class instead of directly manipulating style.display
-        var savedTexts = document.getElementById('saved-texts');
-        savedTexts.classList.remove('visible');
-
-            // Set toggle button and isRotated state accordingly
-        var toggleButton = document.getElementById('toggle-button');
-        toggleButton.textContent = '▶';
-        toggleButton.style.transform = 'rotate(0deg)';
-        isRotated = false;
-
-            updateCharCount();
-        } else if (target.tagName === 'SPAN' && !target.classList.contains('text-buttons')) {
-            target.setAttribute('contenteditable', 'true');
-            target.classList.add('editable');
-            target.focus();
-        }
-    });
-
-    document.getElementById('saved-texts').addEventListener('blur', function(event) {
-        if (event.target.tagName === 'SPAN' && event.target.classList.contains('editable')) {
-            var parent = event.target.closest('.saved-text');
-            saveText(event.target, parent);
-            updateLocalStorage();
-        }
-    }, true);
-
-    document.getElementById('saved-texts').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            var target = event.target;
-            var parent = target.closest('.saved-text');
-            if (target.tagName === 'SPAN' && target.classList.contains('editable')) {
-                event.preventDefault();
-                saveText(target, parent);
-            }
-        }
-    });
-
-    document.getElementById('sort-button').addEventListener('click', function() {
-    // Sort function for each section
-    function sortSection(sectionId) {
-        var section = document.getElementById(sectionId);
-        if (section) { // Check if the section exists
-            var savedTexts = Array.from(section.getElementsByClassName('saved-text'));
-            savedTexts.sort(function(a, b) {
-                var textA = a.getAttribute('data-displaytext').toUpperCase();
-                var textB = b.getAttribute('data-displaytext').toUpperCase();
-                return isSortedAscending ? textA.localeCompare(textB) : textB.localeCompare(textA);
-            });
-
-            savedTexts.forEach(function(text) {
-                section.appendChild(text);
-            });
-        }
-    }
-
-    // Call sort function for each section
-    sortSection('twitter-saved');
-    sortSection('linkedin-saved');
-    
-    isSortedAscending = !isSortedAscending; // Toggle sort order
-    
-    // Update the localStorage with the sorted items
-    var savedTwitterTexts = document.getElementById('twitter-saved').innerHTML;
-    var savedLinkedInTexts = document.getElementById('linkedin-saved').innerHTML;
-
-    localStorage.setItem('savedTexts', JSON.stringify({ twitter: savedTwitterTexts, linkedin: savedLinkedInTexts }));
-    
-    applyAnimationDelays();
-        updateLocalStorage();
-});
-
-    document.getElementById('clear-button').addEventListener('click', function() {
-        document.getElementById('text-input').innerText = ''; // Clear the text input
-        updateCharCount(); // Update the character count
-        // Reset the color of the character count display
-    var charCountDisplay = document.getElementById('char-count');
-    charCountDisplay.style.color = ''; // Reset to default color
-    });
-
-    function reapplyDnDEvents() {
-        var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-        savedTexts.forEach(function(savedText) {
-            savedText.removeEventListener('dragstart', handleDragStart);
-            savedText.removeEventListener('dragover', handleDragOver);
-            savedText.removeEventListener('drop', handleDrop);
-            savedText.addEventListener('dragstart', handleDragStart, false);
-            savedText.addEventListener('dragover', handleDragOver, false);
-            savedText.addEventListener('drop', handleDrop, false);
-        });
-        applyAnimationDelays();
     }
 
     function updateCharCount() {
-    var textInput = document.getElementById('text-input');
-    var text = textInput.textContent || textInput.innerText; // Get the text content or inner text
-    var charCount = text.replace(/\s/g, '').length; // Remove all spaces and then get the length
-    var wordCount = text.trim().split(/\s+/).filter(function(word) {
-    return word.length > 0;
-        }).length;  // Count words
-    var charCountDisplay = document.getElementById('char-count');
-    charCountDisplay.textContent = 'Characters: ' + charCount;
-
-        // Change color if character count exceeds 280
-    if (charCount > 280) {
-        charCountDisplay.style.color = 'red';
-    } else {
-        charCountDisplay.style.color = ''; // Reset to default color
+        var text = inputElement.innerText;
+        var charCount = text.length;
+        var wordCount = text.split(/\s+/).filter(Boolean).length;
+        document.getElementById('char-count').textContent = 'Characters: ' + charCount;
+        document.getElementById('word-count').textContent = 'Words: ' + wordCount;
     }
-        
-       var wordCountDisplay = document.getElementById('word-count');
-    wordCountDisplay.textContent = 'Words: ' + wordCount; 
-}
-    function updateLocalStorage() {
-    var twitterTexts = document.getElementById('twitter-saved').innerHTML;
-    var linkedinTexts = document.getElementById('linkedin-saved').innerHTML;
-    var savedData = { twitter: twitterTexts, linkedin: linkedinTexts };
-    localStorage.setItem('savedTexts', JSON.stringify(savedData));
-}
+
+    function copyToClipboard() {
+        navigator.clipboard.writeText(inputElement.innerText).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    }
+
+    function clearText() {
+        inputElement.innerHTML = '';
+        updateCharCount();
+    }
+
+    function sortTexts() {
+        var containerTwitter = document.getElementById('twitter-saved');
+        var containerLinkedIn = document.getElementById('linkedin-saved');
+        [containerTwitter, containerLinkedIn].forEach(function(container) {
+            var items = Array.from(container.querySelectorAll('.saved-text'));
+            var sortedItems = items.sort(function(a, b) {
+                return isSortedAscending ? 
+                    a.textContent.localeCompare(b.textContent) : 
+                    b.textContent.localeCompare(a.textContent);
+            });
+            sortedItems.forEach(function(item) {
+                container.appendChild(item);
+            });
+        });
+        isSortedAscending = !isSortedAscending; // Toggle sort direction
+    }
+
+    function reapplyDnDEvents() {
+        var draggables = document.querySelectorAll('.saved-text');
+        draggables.forEach(function(draggable) {
+            draggable.setAttribute('draggable', true);
+            draggable.addEventListener('dragstart', handleDragStart);
+            draggable.addEventListener('dragover', handleDragOver);
+            draggable.addEventListener('drop', handleDrop);
+            draggable.addEventListener('dragend', handleDragEnd);
+        });
+    }
 
     function handleDragStart(e) {
-        e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', this.outerHTML);
-        this.classList.add('dragElem');
+        this.classList.add('dragging');
     }
 
     function handleDragOver(e) {
-        if (e.preventDefault) {
-            e.preventDefault();
-        }
-        e.dataTransfer.dropEffect = 'move';
-        return false;
+        e.preventDefault();
+        this.classList.add('over');
     }
 
-   function handleDrop(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    var dragElem = document.querySelector('.dragElem');
-    if (!dragElem) return;
-
-    // Determine the drop target section (Twitter or LinkedIn)
-    var dropTarget = e.target.closest('#twitter-saved, #linkedin-saved');
-    if (!dropTarget) return;
-
-    var dropPoint = e.target.closest('.saved-text');
-    dragElem.parentNode.removeChild(dragElem);
-
-    if (dropPoint) {
-        // If dropped on another saved text, decide based on relative position
-        var rect = dropPoint.getBoundingClientRect();
-        var relY = e.clientY - rect.top;
-        if (relY < rect.height / 2) {
-            dropTarget.insertBefore(dragElem, dropPoint);
-        } else {
-            dropTarget.insertBefore(dragElem, dropPoint.nextSibling);
-        }
-    } else {
-        // If dropped in an empty area of the target section
-        dropTarget.appendChild(dragElem);
-    }
-
-    updateLocalStorage();
-    dragElem.classList.remove('dragElem');
+    function handleDrop(e) {
+        e.stopPropagation(); // Stops the browser from redirecting.
+        e.preventDefault();
+        var data = e.dataTransfer.getData('text/html');
+        var dropZone = e.target.closest('.saved-text');
+        if (dropZone && !dropZone.classList.contains('dragging')) {
+            dropZone.outerHTML = data;
+            dropZone.classList.remove('over');
             reapplyDnDEvents();
+        }
     }
-    
-    // JavaScript to add 'clicked' class on mousedown and remove it on mouseup
-document.querySelectorAll('#copy-button, #star-button, #toggle-button, #clear-button, .add-text, .remove-text, #sort-button, #toggle-social-media').forEach(button => {
-    button.addEventListener('mousedown', () => {
-        button.classList.add('clicked');
-    });
-    button.addEventListener('mouseup', () => {
-        button.classList.remove('clicked');
-    });
-    button.addEventListener('mouseleave', () => {
-        button.classList.remove('clicked');
-    });
-});
 
-    loadSavedTexts();
+    function handleDragEnd() {
+        this.classList.remove('dragging');
+        var over = document.querySelector('.over');
+        if (over) over.classList.remove('over');
+    }
 });
