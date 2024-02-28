@@ -63,7 +63,7 @@ body {
     transition: transform 0.3s ease;
 }
 
-#text-input {
+#text-input, .saved-text span {
     position: absolute;
     top: 44px;
     left: 0;
@@ -79,6 +79,8 @@ body {
     outline: none;
     white-space: pre-wrap;
     background-color: white;
+    color: black; /* Ensures text color is always black */
+    font-size: 16px;
     contenteditable: true;
     transition: width 0.3s ease;
 }
