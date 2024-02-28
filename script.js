@@ -46,17 +46,6 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
         inputElement.style.width = '300px'; // Set input width for Twitter
     }
 });
-
-document.getElementById('text-input').addEventListener('paste', function(e) {
-    e.preventDefault(); // Prevent the default paste action
-
-    // Get the text content from the clipboard
-    var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-
-    // Insert the text at the current cursor position
-    document.execCommand("insertHTML", false, text);
-});
-
     
     document.getElementById('text-input').addEventListener('input', function () {
         // Update character and word count whenever the text changes
@@ -73,6 +62,16 @@ document.getElementById('text-input').addEventListener('paste', function(e) {
         }
     });
 
+    document.getElementById('text-input').addEventListener('paste', function(e) {
+    e.preventDefault(); // Prevent the default paste action
+
+    // Get the text content from the clipboard
+    var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+    // Insert the text at the current cursor position
+    document.execCommand("insertHTML", false, text);
+});
+    
     document.getElementById('copy-button').addEventListener('click', function () {
         var textInput = document.getElementById('text-input');
         var range = document.createRange();
