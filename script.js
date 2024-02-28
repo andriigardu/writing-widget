@@ -1,119 +1,196 @@
 document.addEventListener("DOMContentLoaded", function () {
-    var bodyElement = document.body;
-    var inputElement = document.getElementById('text-input');
-    document.getElementById('toggle-social-media').textContent = '💼';
-    bodyElement.style.width = '410px'; // LinkedIn width
-    inputElement.style.width = '410px'; // Set input width for LinkedIn
-    var isRotated = false;
-    var isSortedAscending = true;
-
-    loadSavedTexts();
-    setupEventListeners();
-
-    function loadSavedTexts() {
-        var savedTextsJSON = localStorage.getItem('savedTexts');
-        if (savedTextsJSON) {
-            var savedTexts = JSON.parse(savedTextsJSON);
-            document.getElementById('twitter-saved').innerHTML = savedTexts.twitter || "";
-            document.getElementById('linkedin-saved').innerHTML = savedTexts.linkedin || "";
+    function saveText(span, parent) {
+        span.setAttribute('contenteditable', 'false');
+        span.classList.remove('editable');
+        var newText = span.innerText.trim();
+        if (newText) {
+            parent.dataset.displaytext = newText;
         }
-        reapplyDnDEvents();
+        localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
     }
 
-    function setupEventListeners() {
-        document.getElementById('toggle-social-media').addEventListener('click', toggleSocialMedia);
-        document.getElementById('text-input').addEventListener('input', updateCharCount);
-        document.getElementById('copy-button').addEventListener('click', copyToClipboard);
-        document.getElementById('clear-button').addEventListener('click', clearText);
-        document.getElementById('sort-button').addEventListener('click', sortTexts);
-    }
-
-    function toggleSocialMedia() {
-        if (this.textContent === '🐦') {
-            this.textContent = '💼';
-            bodyElement.style.width = '410px';
-            inputElement.style.width = '410px';
-        } else {
-            this.textContent = '🐦';
-            bodyElement.style.width = '300px';
-            inputElement.style.width = '300px';
-        }
-    }
-
-    function updateCharCount() {
-        var text = inputElement.innerText;
+    document.getElementById('text-input').addEventListener('input', function () {
+        var text = this.innerText.replace(/\s/g, '');
         var charCount = text.length;
-        var wordCount = text.split(/\s+/).filter(Boolean).length;
-        document.getElementById('char-count').textContent = 'Characters: ' + charCount;
-        document.getElementById('word-count').textContent = 'Words: ' + wordCount;
-    }
+        var charCountDisplay = document.getElementById('char-count');
+        charCountDisplay.textContent = 'Characters: ' + charCount;
 
-    function copyToClipboard() {
-        navigator.clipboard.writeText(inputElement.innerText).then(function() {
-            console.log('Async: Copying to clipboard was successful!');
-        }, function(err) {
-            console.error('Async: Could not copy text: ', err);
-        });
-    }
+        if (charCount > 280) {
+            charCountDisplay.style.color = 'red';
+        } else {
+            charCountDisplay.style.color = '';
+        }
+    });
 
-    function clearText() {
-        inputElement.innerHTML = '';
-        updateCharCount();
-    }
+    document.getElementById('copy-button').addEventListener('click', function() {
+        var textInput = document.getElementById('text-input');
+        var range = document.createRange();
+        range.selectNodeContents(textInput);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        document.execCommand('copy');
+        sel.removeAllRanges();
+    });
 
-    function sortTexts() {
-        var containerTwitter = document.getElementById('twitter-saved');
-        var containerLinkedIn = document.getElementById('linkedin-saved');
-        [containerTwitter, containerLinkedIn].forEach(function(container) {
-            var items = Array.from(container.querySelectorAll('.saved-text'));
-            var sortedItems = items.sort(function(a, b) {
-                return isSortedAscending ? 
-                    a.textContent.localeCompare(b.textContent) : 
-                    b.textContent.localeCompare(a.textContent);
-            });
-            sortedItems.forEach(function(item) {
-                container.appendChild(item);
-            });
-        });
-        isSortedAscending = !isSortedAscending; // Toggle sort direction
-    }
+    document.getElementById('star-button').addEventListener('click', function() {
+        var textInput = document.getElementById('text-input');
+        var savedTexts = document.getElementById('saved-texts');
+        savedTexts.style.display = 'block';
+
+        var fullText = textInput.innerHTML;
+        var displayText = textInput.innerText.substring(0, 50);
+        if (textInput.innerText.length > 50) displayText += '...';
+
+        var newSavedTextDiv = document.createElement('div');
+        newSavedTextDiv.className = 'saved-text';
+        newSavedTextDiv.setAttribute('data-fulltext', fullText);
+        newSavedTextDiv.setAttribute('data-displaytext', displayText);
+
+        var spanElement = document.createElement('span');
+        spanElement.textContent = displayText;
+
+        var textButtonsDiv = document.createElement('div');
+        textButtonsDiv.className = 'text-buttons';
+        textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
+                                   '<button class="remove-text">-</button>';
+
+        var container = document.getElementById('saved-texts');
+        container.insertBefore(newSavedTextDiv, container.firstChild);
+
+        newSavedTextDiv.setAttribute('draggable', 'true');
+
+        newSavedTextDiv.appendChild(spanElement);
+        newSavedTextDiv.appendChild(textButtonsDiv);
+
+        savedTexts.appendChild(newSavedTextDiv);
+
+        localStorage.setItem('savedTexts', savedTexts.innerHTML);
+        reapplyDnDEvents();
+    });
+
+    var isRotated = false;
+
+    document.getElementById('toggle-button').addEventListener('click', function() {
+        var savedTexts = document.getElementById('saved-texts');
+        savedTexts.style.display = savedTexts.style.display === 'block' ? 'none' : 'block';
+
+        isRotated = !isRotated;
+        this.style.transform = isRotated ? 'rotate(90deg)' : 'rotate(0deg)';
+    });
+
+    document.addEventListener('click', function(event) {
+        var savedTexts = document.getElementById('saved-texts');
+        var toggleButton = document.getElementById('toggle-button');
+        var withinBoundaries = event.composedPath().includes(savedTexts) || event.composedPath().includes(toggleButton);
+
+        if (!withinBoundaries && savedTexts.style.display === 'block') {
+            savedTexts.style.display = 'none';
+            toggleButton.textContent = '>';
+        }
+    });
+
+    document.getElementById('saved-texts').addEventListener('click', function(event) {
+        var target = event.target;
+        var parent = target.closest('.saved-text');
+        if (target.classList.contains('remove-text')) {
+            parent.remove();
+            localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
+        } else if (target.classList.contains('add-text')) {
+            var fullText = parent.getAttribute('data-fulltext');
+            document.getElementById('text-input').innerHTML = fullText;
+            document.getElementById('saved-texts').style.display = 'none';
+            document.getElementById('toggle-button').textContent = '>';
+        } else if (target.tagName === 'SPAN' && !target.classList.contains('text-buttons')) {
+            target.setAttribute('contenteditable', 'true');
+            target.classList.add('editable');
+            target.focus();
+        }
+    });
+
+    document.getElementById('saved-texts').addEventListener('blur', function(event) {
+        if (event.target.tagName === 'SPAN' && event.target.classList.contains('editable')) {
+            var parent = event.target.closest('.saved-text');
+            saveText(event.target, parent);
+        }
+    }, true);
+
+    document.getElementById('saved-texts').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            var target = event.target;
+            var parent = target.closest('.saved-text');
+            if (target.tagName === 'SPAN' && target.classList.contains('editable')) {
+                event.preventDefault();
+                saveText(target, parent);
+            }
+        }
+    });
+
+    document.getElementById('clear-button').addEventListener('click', function() {
+        document.getElementById('text-input').innerText = ''; // Clear the text input
+    });
 
     function reapplyDnDEvents() {
-        var draggables = document.querySelectorAll('.saved-text');
-        draggables.forEach(function(draggable) {
-            draggable.setAttribute('draggable', true);
-            draggable.addEventListener('dragstart', handleDragStart);
-            draggable.addEventListener('dragover', handleDragOver);
-            draggable.addEventListener('drop', handleDrop);
-            draggable.addEventListener('dragend', handleDragEnd);
+        var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
+        [].forEach.call(savedTexts, function (savedText) {
+            savedText.removeEventListener('dragstart', handleDragStart);
+            savedText.removeEventListener('dragover', handleDragOver);
+            savedText.removeEventListener('drop', handleDrop);
+
+            savedText.addEventListener('dragstart', handleDragStart, false);
+            savedText.addEventListener('dragover', handleDragOver, false);
+            savedText.addEventListener('drop', handleDrop, false);
         });
     }
 
     function handleDragStart(e) {
+        e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', this.outerHTML);
-        this.classList.add('dragging');
+        this.classList.add('dragElem');
     }
 
     function handleDragOver(e) {
-        e.preventDefault();
-        this.classList.add('over');
+        if (e.preventDefault) {
+            e.preventDefault();
+        }
+        e.dataTransfer.dropEffect = 'move';
+        return false;
     }
 
     function handleDrop(e) {
-        e.stopPropagation(); // Stops the browser from redirecting.
-        e.preventDefault();
-        var data = e.dataTransfer.getData('text/html');
-        var dropZone = e.target.closest('.saved-text');
-        if (dropZone && !dropZone.classList.contains('dragging')) {
-            dropZone.outerHTML = data;
-            dropZone.classList.remove('over');
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
+
+        var dragElem = document.querySelector('.dragElem');
+        if (dragElem !== this) {
+            var rect = this.getBoundingClientRect();
+            var relY = e.clientY - rect.top;
+
+            dragElem.parentNode.removeChild(dragElem);
+
+            if (relY < rect.height / 2) {
+                this.parentNode.insertBefore(dragElem, this);
+            } else {
+                this.parentNode.insertBefore(dragElem, this.nextSibling);
+            }
+
+            var savedTextsContainer = document.getElementById('saved-texts');
+            localStorage.setItem('savedTexts', savedTextsContainer.innerHTML);
+
             reapplyDnDEvents();
         }
+
+        dragElem.classList.remove('dragElem');
+        return false;
     }
 
-    function handleDragEnd() {
-        this.classList.remove('dragging');
-        var over = document.querySelector('.over');
-        if (over) over.classList.remove('over');
-    }
+    var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
+    [].forEach.call(savedTexts, function (savedText) {
+        savedText.addEventListener('dragstart', handleDragStart, false);
+        savedText.addEventListener('dragover', handleDragOver, false);
+        savedText.addEventListener('drop', handleDrop, false);
+    });
+
+    reapplyDnDEvents();
 });
