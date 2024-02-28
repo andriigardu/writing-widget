@@ -60,6 +60,15 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
         } else {
             charCountDisplay.style.color = '';
         }
+          // Automatic save functionality
+    let timeoutId;
+    document.getElementById('text-input').addEventListener('input', function() {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function() {
+            // Save functionality here
+            localStorage.setItem('savedTexts', document.getElementById('text-input').innerHTML);
+        }, 1000); // Auto-save after 1 second of inactivity
+        });
     });
 
     document.getElementById('text-input').addEventListener('paste', function(e) {
@@ -381,15 +390,6 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     dragElem.classList.remove('dragElem');
             reapplyDnDEvents();
     }
-    // Automatic save functionality
-    let timeoutId;
-    document.getElementById('text-input').addEventListener('input', function() {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(function() {
-            // Save functionality here
-            localStorage.setItem('savedTexts', document.getElementById('text-input').innerHTML);
-        }, 1000); // Auto-save after 1 second of inactivity
-    });
     
     // JavaScript to add 'clicked' class on mousedown and remove it on mouseup
 document.querySelectorAll('#copy-button, #star-button, #toggle-button, #clear-button, .add-text, .remove-text, #sort-button, #toggle-social-media').forEach(button => {
