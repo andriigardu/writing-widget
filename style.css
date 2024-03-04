@@ -85,6 +85,8 @@ body {
     font-size: 16px;
     contenteditable: true;
     transition: width 0.3s ease;
+    color: black; /* Ensures text is always black */
+    font-size: 14px; /* Adjust as needed to ensure consistent size */
 }
 #toggle-button {
     transform: rotate(0deg);
