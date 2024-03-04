@@ -35,7 +35,7 @@ body {
     box-sizing: border-box; /* Ensure padding is included in the width */
     width: 100%; /* Full width of the parent element */
 }
-#char-count, #word-count, #copy-button, #star-button, #toggle-button, #clear-button, #sort-button, #toggle-social-media {
+#char-count, #word-count, #copy-button, #star-button, #toggle-button, #clear-button, #sort-button {
     font-size: 0.8em;
     padding: 5px 10px;
     background: #191836;
@@ -48,17 +48,17 @@ body {
     align-items: center;
     justify-content: center;
 }
-#char-count, #word-count, #toggle-button, #clear-saved-texts-button, #sort-button {
+#char-count, #word-count, #toggle-button #clear-saved-texts-button, #sort-button {
     background-color: transparent;
     color: #000;
 }
 #copy-button, #star-button, #toggle-button, #clear-button,
-.add-text, .remove-text, #sort-button, #toggle-social-media {
+.add-text, .remove-text, #sort-button {
     transition: transform 0.3s ease; /* Apply transition to normal state */
 }
 
 #copy-button:hover, #star-button:hover, #toggle-button:hover, #clear-button:hover,
-.add-text:hover, .remove-text:hover, #sort-button:hover, #toggle-social-media:hover {
+.add-text:hover, .remove-text:hover, #sort-button:hover {
     transform: scale(1.03);
     transition: transform 0.3s ease;
 }
@@ -210,7 +210,7 @@ body {
     border-right: 1px solid #000;
     align-items:center;
 }
-#twitter-saved h2, #linkedin-saved h2 {
+#linkedin-saved h2 {
     font-size: 1em;
     user-select: none;
 }
