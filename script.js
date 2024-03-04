@@ -6,9 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var savedTextsJSON = localStorage.getItem('savedTexts');
     if (savedTextsJSON) {
         var savedTexts = JSON.parse(savedTextsJSON);
-        if (savedTexts.twitter) {
-            document.getElementById('twitter-saved').innerHTML = savedTexts.twitter;
-        }
         if (savedTexts.linkedin) {
             document.getElementById('linkedin-saved').innerHTML = savedTexts.linkedin;
         }
@@ -25,21 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
     }
-    
-document.getElementById('toggle-social-media').addEventListener('click', function() {
-    var bodyElement = document.body;
-    var inputElement = document.getElementById('text-input'); // Assuming the ID of your input field is 'text-input'
-
-    if (this.textContent === '🐦') {
-        this.textContent = '💼';
-        bodyElement.style.width = '410px'; // LinkedIn width
-        inputElement.style.width = '410px'; // Set input width for LinkedIn
-    } else {
-        this.textContent = '🐦';
-        bodyElement.style.width = '300px'; // Twitter width
-        inputElement.style.width = '300px'; // Set input width for Twitter
-    }
-});
 
     document.getElementById('text-input').addEventListener('input', function () {
         // Update character and word count whenever the text changes
@@ -94,10 +76,8 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     
     document.getElementById('star-button').addEventListener('click', function () {
     var textInput = document.getElementById('text-input');
-    var twitterSaved = document.getElementById('twitter-saved'); // Twitter section
     var linkedinSaved = document.getElementById('linkedin-saved'); // LinkedIn section
     var toggleButton = document.getElementById('toggle-button');
-    var currentMode = document.getElementById('toggle-social-media').textContent;
 
     var fullText = textInput.innerHTML;
     var displayText = textInput.innerText.substring(0, 50);
@@ -134,13 +114,8 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     newSavedTextDiv.appendChild(textButtonsDiv);
 
     // Append the new saved text div to the appropriate container
-    if (currentMode === '🐦') {
-        console.log("Appending to Twitter section"); // Debugging line
-        twitterSaved.appendChild(newSavedTextDiv);
-    } else {
-        console.log("Appending to LinkedIn section"); // Debugging line
-        linkedinSaved.appendChild(newSavedTextDiv);
-    }
+    console.log("Appending to LinkedIn section"); // Debugging line
+    linkedinSaved.appendChild(newSavedTextDiv);
 
     applyAnimationDelays();
     
@@ -256,13 +231,11 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     }
 
     // Call sort function for each section
-    sortSection('twitter-saved');
     sortSection('linkedin-saved');
     
     isSortedAscending = !isSortedAscending; // Toggle sort order
     
     // Update the localStorage with the sorted items
-    var savedTwitterTexts = document.getElementById('twitter-saved').innerHTML;
     var savedLinkedInTexts = document.getElementById('linkedin-saved').innerHTML;
 
     localStorage.setItem('savedTexts', JSON.stringify({ twitter: savedTwitterTexts, linkedin: savedLinkedInTexts }));
@@ -313,9 +286,8 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
     wordCountDisplay.textContent = 'Words: ' + wordCount; 
 }
     function updateLocalStorage() {
-    var twitterTexts = document.getElementById('twitter-saved').innerHTML;
     var linkedinTexts = document.getElementById('linkedin-saved').innerHTML;
-    var savedData = { twitter: twitterTexts, linkedin: linkedinTexts };
+    var savedData = { linkedin: linkedinTexts };
     localStorage.setItem('savedTexts', JSON.stringify(savedData));
 }
 
@@ -339,10 +311,6 @@ document.getElementById('toggle-social-media').addEventListener('click', functio
 
     var dragElem = document.querySelector('.dragElem');
     if (!dragElem) return;
-
-    // Determine the drop target section (Twitter or LinkedIn)
-    var dropTarget = e.target.closest('#twitter-saved, #linkedin-saved');
-    if (!dropTarget) return;
 
     var dropPoint = e.target.closest('.saved-text');
     dragElem.parentNode.removeChild(dragElem);
