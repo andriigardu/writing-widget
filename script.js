@@ -5,10 +5,31 @@ document.addEventListener("DOMContentLoaded", function () {
     function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem('savedTexts');
     if (savedTextsJSON) {
-        var savedTexts = JSON.parse(savedTextsJSON);
-        if (savedTexts.linkedin) {
-            document.getElementById('linkedin-saved').innerHTML = savedTexts.linkedin;
-        }
+        var savedTexts = JSON.parse(savedTextsJSON).linkedin; // Adjusted to access the linkedin property
+        var linkedinSaved = document.getElementById('linkedin-saved');
+
+        savedTexts.forEach(function(textData) {
+            var newSavedTextDiv = document.createElement('div');
+            newSavedTextDiv.className = 'saved-text';
+            newSavedTextDiv.setAttribute('data-fulltext', textData.fullText);
+            newSavedTextDiv.setAttribute('data-displaytext', textData.displayText);
+            newSavedTextDiv.setAttribute('draggable', 'true');
+
+            var spanElement = document.createElement('span');
+            spanElement.textContent = textData.displayText;
+            // Make text non-selectable for drag, but selectable when editable
+            spanElement.classList.add('editable-text');
+
+            var textButtonsDiv = document.createElement('div');
+            textButtonsDiv.className = 'text-buttons';
+            textButtonsDiv.innerHTML = '<button class="add-text">+</button><button class="remove-text">-</button>';
+
+            newSavedTextDiv.appendChild(spanElement);
+            newSavedTextDiv.appendChild(textButtonsDiv);
+
+            linkedinSaved.appendChild(newSavedTextDiv);
+        });
+        
         reapplyDnDEvents();
     }
 }
@@ -282,9 +303,17 @@ document.addEventListener("DOMContentLoaded", function () {
     wordCountDisplay.textContent = 'Words: ' + wordCount; 
 }
     function updateLocalStorage() {
-    var linkedinTexts = document.getElementById('linkedin-saved').innerHTML;
-    var savedData = { linkedin: linkedinTexts };
-    localStorage.setItem('savedTexts', JSON.stringify(savedData));
+    var savedTextsElements = document.querySelectorAll('#linkedin-saved .saved-text');
+    var savedTextsData = [];
+
+    savedTextsElements.forEach(function(elem) {
+        savedTextsData.push({
+            fullText: elem.getAttribute('data-fulltext'),
+            displayText: elem.getAttribute('data-displaytext')
+        });
+    });
+
+    localStorage.setItem('savedTexts', JSON.stringify({ linkedin: savedTextsData }));
 }
 
     function handleDragStart(e) {
