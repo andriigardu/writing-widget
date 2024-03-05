@@ -4,7 +4,7 @@ body {
     padding: 0; 
     overflow: hidden; 
     font-family: "Source Sans 3", sans-serif;
-    width: 340px; /* Fixed width */
+    width: 330px; /* Fixed width */
     height: 500px; /* Full viewport height */
     position: relative; /* For absolute positioning inside */
     border: 2px solid #000;
@@ -69,7 +69,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    width: 340px;
+    width: 330px;
     height: calc(100% - 70px);
     padding: 8px;
     box-sizing: border-box;
