@@ -103,10 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
     textButtonsDiv.className = 'text-buttons';
     textButtonsDiv.innerHTML = '<button class="add-text">+</button>' +
                                '<button class="remove-text">-</button>';
-    
-    var socialMediaToggleButton = document.getElementById('toggle-social-media');
-    var currentMode = socialMediaToggleButton.textContent;
-    console.log("Current mode:", currentMode); // Debugging line
         
     // Append elements in the correct order
     newSavedTextDiv.appendChild(dragHandleDiv); // Drag handle first
