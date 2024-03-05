@@ -7,8 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (savedTextsJSON) {
         var savedTexts = JSON.parse(savedTextsJSON);
         if (savedTexts.linkedin) {
-            savedTexts.linkedin.forEach(function(textData) {
-                    addSavedTextToList(textData.displayText, textData.fullText);
+            document.getElementById('linkedin-saved').innerHTML = savedTexts.linkedin;
         }
         reapplyDnDEvents();
     }
@@ -20,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
         var newText = span.innerText.trim();
         if (newText) {
             parent.dataset.displaytext = newText;
-            updateLocalStorage();
         }
         localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
     }
@@ -75,33 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
         savedText.classList.add('reverse');  // Apply reverse animation class
         });
     }
-     // Function to add saved text to the list, corrected to handle names and texts
-    function addSavedTextToList(displayText, fullText) {
-        var linkedinSaved = document.getElementById('linkedin-saved');
-        var newSavedTextDiv = document.createElement('div');
-        newSavedTextDiv.className = 'saved-text';
-        newSavedTextDiv.setAttribute('data-fulltext', fullText);
-        newSavedTextDiv.setAttribute('data-displaytext', displayText);
-        newSavedTextDiv.setAttribute('draggable', 'true');
-
-        var dragHandleDiv = document.createElement('div');
-        dragHandleDiv.className = 'drag-handle';
-        dragHandleDiv.textContent = '⠿';
-        newSavedTextDiv.appendChild(dragHandleDiv);
-        
-        var spanElement = document.createElement('span');
-        spanElement.textContent = displayText;
-        spanElement.setAttribute('unselectable', 'on');
-        spanElement.classList.add('editable-text');
-        newSavedTextDiv.appendChild(spanElement);
-
-        var textButtonsDiv = document.createElement('div');
-        textButtonsDiv.className = 'text-buttons';
-        textButtonsDiv.innerHTML = '<button class="add-text">+</button><button class="remove-text">-</button>';
-        newSavedTextDiv.appendChild(textButtonsDiv);
-
-        linkedinSaved.appendChild(newSavedTextDiv);
-    }
+    
     document.getElementById('star-button').addEventListener('click', function () {
     var textInput = document.getElementById('text-input');
     var linkedinSaved = document.getElementById('linkedin-saved'); // LinkedIn section
@@ -309,33 +281,10 @@ document.addEventListener("DOMContentLoaded", function () {
        var wordCountDisplay = document.getElementById('word-count');
     wordCountDisplay.textContent = 'Words: ' + wordCount; 
 }
- // Corrected updateLocalStorage to handle an array of texts
     function updateLocalStorage() {
-        var savedTexts = [];
-        document.querySelectorAll('#linkedin-saved .saved-text').forEach(function(textDiv) {
-            savedTexts.push({
-                displayText: textDiv.dataset.displaytext,
-                fullText: textDiv.dataset.fulltext
-            });
-        });
-        localStorage.setItem('savedTexts', JSON.stringify({linkedin: savedTexts}));
-    }
-
-    document.getElementById('saved-texts').addEventListener('click', function(event) {
-        if (event.target.classList.contains('editable-text')) {
-            event.target.setAttribute('contenteditable', 'true');
-            event.target.focus();
-        }
-    });
-
-    document.getElementById('saved-texts').addEventListener('blur', function(event) {
-        if (event.target.classList.contains('editable-text')) {
-            saveText(event.target, event.target.closest('.saved-text'));
-        }
-    }, true);
-
-    loadSavedTexts();
-});
+    var linkedinTexts = document.getElementById('linkedin-saved').innerHTML;
+    var savedData = { linkedin: linkedinTexts };
+    localStorage.setItem('savedTexts', JSON.stringify(savedData));
 }
 
     function handleDragStart(e) {
