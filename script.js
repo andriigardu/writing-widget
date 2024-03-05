@@ -269,16 +269,19 @@ document.addEventListener("DOMContentLoaded", function () {
     charCountDisplay.style.color = ''; // Reset to default color
     });
 
-    function reapplyDnDEvents() {
-        var savedTexts = document.querySelectorAll('#saved-texts .saved-text');
-        savedTexts.forEach(function(savedText) {
-            savedText.removeEventListener('dragstart', handleDragStart);
-            savedText.removeEventListener('dragover', handleDragOver);
-            savedText.removeEventListener('drop', handleDrop);
-            savedText.addEventListener('dragstart', handleDragStart, false);
-            savedText.addEventListener('dragover', handleDragOver, false);
-            savedText.addEventListener('drop', handleDrop, false);
-        });
+   function reapplyDnDEvents() {
+    var savedTexts = document.querySelectorAll('#linkedin-saved .saved-text');
+    savedTexts.forEach(function(savedText) {
+        // Remove existing event listeners to avoid duplicates
+        savedText.removeEventListener('dragstart', handleDragStart);
+        savedText.removeEventListener('dragover', handleDragOver);
+        savedText.removeEventListener('drop', handleDrop);
+
+        // Re-add event listeners
+        savedText.addEventListener('dragstart', handleDragStart, false);
+        savedText.addEventListener('dragover', handleDragOver, false);
+        savedText.addEventListener('drop', handleDrop, false);
+    });
         applyAnimationDelays();
     }
 
