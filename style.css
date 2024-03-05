@@ -63,7 +63,7 @@ body {
     transition: transform 0.3s ease;
 }
 
-#text-input, .saved-text span {
+#text-input {
     position: absolute;
     top: 44px;
     left: 0;
