@@ -58,6 +58,18 @@ document.addEventListener("DOMContentLoaded", function () {
             charCountDisplay.style.color = '';
         }
     });
+    
+     // Add the paste event listener right here
+    document.getElementById('text-input').addEventListener('paste', function(e) {
+        // Prevent the default paste behavior
+        e.preventDefault();
+
+        // Get the text content from the clipboard
+        var text = e.clipboardData.getData('text/plain');
+
+        // Insert the text at the current cursor position
+        document.execCommand("insertHTML", false, text);
+    });
 
     document.getElementById('copy-button').addEventListener('click', function () {
         var textInput = document.getElementById('text-input');
