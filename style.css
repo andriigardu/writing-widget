@@ -77,16 +77,18 @@ body {
     border-radius: 0px;
     overflow-y: auto;
     outline: none;
-    white-space: pre-wrap; /* Allows text to wrap and preserves whitespace */
-    word-wrap: break-word; /* Ensures long words do not cause layout issues */
-    overflow-wrap: break-word; /* Alternative to word-wrap for newer browsers */
     background-color: white;
-    color: black; /* Ensures text color is always black */
     font-size: 16px;
     contenteditable: true;
     transition: width 0.3s ease;
     color: black; /* Ensures text is always black */
     font-size: 14px; /* Adjust as needed to ensure consistent size */
+}
+
+#text-input {
+    white-space: pre-wrap; /* Allows text to wrap and preserves whitespace */
+    word-wrap: break-word; /* Ensures long words do not cause layout issues */
+    overflow-wrap: break-word; /* Alternative to word-wrap for newer browsers */
 }
 #toggle-button {
     transform: rotate(0deg);
