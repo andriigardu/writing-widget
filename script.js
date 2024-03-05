@@ -340,20 +340,18 @@ document.addEventListener("DOMContentLoaded", function () {
     var dragElem = document.querySelector('.dragElem');
     if (!dragElem) return;
 
+    var dropTarget = document.getElementById('linkedin-saved'); // Define dropTarget correctly
     var dropPoint = e.target.closest('.saved-text');
-    dragElem.parentNode.removeChild(dragElem);
 
     if (dropPoint) {
-        // If dropped on another saved text, decide based on relative position
         var rect = dropPoint.getBoundingClientRect();
         var relY = e.clientY - rect.top;
         if (relY < rect.height / 2) {
-            dropTarget.insertBefore(dragElem, dropPoint);
+            dropPoint.before(dragElem);
         } else {
-            dropTarget.insertBefore(dragElem, dropPoint.nextSibling);
+            dropPoint.after(dragElem);
         }
     } else {
-        // If dropped in an empty area of the target section
         dropTarget.appendChild(dragElem);
     }
 
