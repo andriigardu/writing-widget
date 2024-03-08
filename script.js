@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var isRotated = false;
     var isSortedAscending = true;
     var autoSaveTimer; // Holds the auto-save timer
+    var lastSavedText = ""; // Track the last saved or autosaved text
 
     function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem('savedTexts');
@@ -37,11 +38,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 }
 
+    // Utility function to append saved text to the UI
+    function appendSavedTextToUI(textData) {
+        var linkedinSaved = document.getElementById('linkedin-saved');
+        var newSavedTextDiv = document.createElement('div');
+        newSavedTextDiv.className = 'saved-text';
+        newSavedTextDiv.setAttribute('data-id', textData.id);
+        newSavedTextDiv.setAttribute('data-fulltext', textData.fullText);
+        newSavedTextDiv.setAttribute('data-displaytext', textData.displayText);
+        newSavedTextDiv.setAttribute('draggable', 'true');
+
+        var spanElement = document.createElement('span');
+        spanElement.textContent = textData.displayText;
+        spanElement.classList.add('editable-text');
+
+        var textButtonsDiv = document.createElement('div');
+        textButtonsDiv.className = 'text-buttons';
+        textButtonsDiv.innerHTML = '<button class="add-text">+</button><button class="remove-text">-</button>';
+
+        newSavedTextDiv.appendChild(spanElement);
+        newSavedTextDiv.appendChild(textButtonsDiv);
+
+        linkedinSaved.appendChild(newSavedTextDiv);
+    }
+    
     function saveText(span, parent) {
-        // Adjusted to correctly update the specific text being edited
+        var textId = parent.getAttribute('data-id');
         var savedTextsJSON = localStorage.getItem('savedTexts');
         var savedTexts = savedTextsJSON ? JSON.parse(savedTextsJSON).linkedin : [];
-        var textId = parent.getAttribute('data-id');
         var index = savedTexts.findIndex(text => text.id === textId);
 
         if (index !== -1) {
@@ -56,27 +80,25 @@ document.addEventListener("DOMContentLoaded", function () {
     function autoSaveOrUpdate() {
         var textInput = document.getElementById('text-input');
         var fullText = textInput.innerHTML.trim();
+        if (!fullText || fullText === lastSavedText) return; // Don't auto-save if empty or unchanged
         var displayText = textInput.innerText.trim().substring(0, 50) + (textInput.innerText.trim().length > 50 ? '...' : '');
         var existingId = textInput.getAttribute('data-current-id'); // Track if current text is being edited
 
         var savedTextsJSON = localStorage.getItem('savedTexts');
         var savedTexts = savedTextsJSON ? JSON.parse(savedTextsJSON).linkedin : [];
+        var newTextId = existingId || Date.now().toString();
         
-        if (existingId) {
-            // Update existing item
-            var existingIndex = savedTexts.findIndex(item => item.id === existingId);
-            if (existingIndex !== -1) {
-                savedTexts[existingIndex].fullText = fullText;
-                savedTexts[existingIndex].displayText = displayText;
-            }
+        var index = existingId ? savedTexts.findIndex(item => item.id === existingId) : -1;
+        if (index !== -1) {
+            savedTexts[index].fullText = fullText;
+            savedTexts[index].displayText = displayText;
         } else {
-            // Add new item
-            var newTextId = Date.now().toString(); // Simple unique ID using timestamp
             savedTexts.push({ id: newTextId, fullText: fullText, displayText: displayText });
-            textInput.setAttribute('data-current-id', newTextId); // Mark this text as saved with its ID
+            textInput.setAttribute('data-current-id', newTextId);
         }
 
         localStorage.setItem('savedTexts', JSON.stringify({linkedin: savedTexts}));
+        lastSavedText = fullText; // Update the last saved text
         loadSavedTexts(); // Reload saved texts to reflect changes
     }
 
@@ -86,33 +108,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     document.getElementById('text-input').addEventListener('input', function () {
-        // Update character and word count whenever the text changes
-        updateCharCount();
-        resetAutoSaveTimer(); // Reset the auto-save timer on input
-        var text = this.innerText.replace(/\s/g, '');
-        var charCount = text.length;
-        var charCountDisplay = document.getElementById('char-count');
-        charCountDisplay.textContent = 'Characters: ' + charCount;
+    // Update character and word count whenever the text changes
+    updateCharCount();
+    var text = this.innerText.replace(/\s/g, '');
+    var charCount = text.length;
+    var charCountDisplay = document.getElementById('char-count');
+    charCountDisplay.textContent = 'Characters: ' + charCount;
 
-        if (charCount > 3000) {
-            charCountDisplay.style.color = 'red';
-        } else {
-            charCountDisplay.style.color = '';
-        }
-        resetAutoSaveTimer(); // Reset the auto-save timer on input
-    });
-    
-     // Add the paste event listener right here
-    document.getElementById('text-input').addEventListener('paste', function(e) {
-        // Prevent the default paste behavior
-        e.preventDefault();
+    if (charCount > 3000) {
+        charCountDisplay.style.color = 'red';
+    } else {
+        charCountDisplay.style.color = '';
+    }
+    resetAutoSaveTimer(); // Reset the auto-save timer on input
+});
 
-        // Get the text content from the clipboard
-        var text = e.clipboardData.getData('text/plain');
-
-        // Insert the text at the current cursor position
-        document.execCommand("insertHTML", false, text);
-    });
+document.getElementById('text-input').addEventListener('paste', function(e) {
+    e.preventDefault();
+    var text = e.clipboardData.getData('text/plain');
+    document.execCommand("insertHTML", false, text);
+    resetAutoSaveTimer();
+});
 
     document.getElementById('copy-button').addEventListener('click', function () {
         var textInput = document.getElementById('text-input');
@@ -232,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
        if (isRotated) {
         savedTexts.classList.add('visible');
         this.textContent = '▼';
-        this.style.transform = 'rotate(45deg)';
+        this.style.transform = 'rotate(90deg)';
            applyAnimationDelays();
     } else {
         savedTexts.classList.remove('visible');
@@ -264,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var parent = target.closest('.saved-text');
         if (target.classList.contains('remove-text')) {
             parent.remove();
-            localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
+            updateLocalStorage(); // Correctly update localStorage with the current state
             applyAnimationDelays();
             updateLocalStorage();
         } else if (target.classList.contains('add-text')) {
