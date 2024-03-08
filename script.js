@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (savedTextsJSON) {
         var savedTexts = JSON.parse(savedTextsJSON).linkedin; // Adjusted to access the linkedin property
         var linkedinSaved = document.getElementById('linkedin-saved');
+        linkedinSaved.innerHTML = ''; // Clear existing items before loading
 
         savedTexts.forEach(function(textData) {
             var newSavedTextDiv = document.createElement('div');
@@ -37,13 +38,19 @@ document.addEventListener("DOMContentLoaded", function () {
 }
 
     function saveText(span, parent) {
-        span.setAttribute('contenteditable', 'false');
-        span.classList.remove('editable');
-        var newText = span.innerText.trim();
-        if (newText) {
-            parent.dataset.displaytext = newText;
+        // Adjusted to correctly update the specific text being edited
+        var savedTextsJSON = localStorage.getItem('savedTexts');
+        var savedTexts = savedTextsJSON ? JSON.parse(savedTextsJSON).linkedin : [];
+        var textId = parent.getAttribute('data-id');
+        var index = savedTexts.findIndex(text => text.id === textId);
+
+        if (index !== -1) {
+            savedTexts[index].displayText = span.innerText.trim();
+            savedTexts[index].fullText = parent.getAttribute('data-fulltext'); // Assuming fullText is stored in data-fulltext attribute
         }
+
         localStorage.setItem('savedTexts', JSON.stringify({linkedin: savedTexts}));
+        loadSavedTexts(); // Refresh the displayed list
     }
 
     function autoSaveOrUpdate() {
@@ -73,15 +80,21 @@ document.addEventListener("DOMContentLoaded", function () {
         loadSavedTexts(); // Reload saved texts to reflect changes
     }
 
+    function resetAutoSaveTimer() {
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(autoSaveOrUpdate, 5000);
+    }
+
     document.getElementById('text-input').addEventListener('input', function () {
         // Update character and word count whenever the text changes
         updateCharCount();
+        resetAutoSaveTimer(); // Reset the auto-save timer on input
         var text = this.innerText.replace(/\s/g, '');
         var charCount = text.length;
         var charCountDisplay = document.getElementById('char-count');
         charCountDisplay.textContent = 'Characters: ' + charCount;
 
-        if (charCount > 280) {
+        if (charCount > 3000) {
             charCountDisplay.style.color = 'red';
         } else {
             charCountDisplay.style.color = '';
@@ -219,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
        if (isRotated) {
         savedTexts.classList.add('visible');
         this.textContent = '▼';
-        this.style.transform = 'rotate(90deg)';
+        this.style.transform = 'rotate(45deg)';
            applyAnimationDelays();
     } else {
         savedTexts.classList.remove('visible');
@@ -327,7 +340,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
     document.getElementById('clear-button').addEventListener('click', function() {
-        document.getElementById('text-input').innerText = ''; // Clear the text input
+        document.getElementById('text-input').innerHTML = ''; // Clear the text input
         updateCharCount(); // Update the character count
         // Reset the color of the character count display
     var charCountDisplay = document.getElementById('char-count');
