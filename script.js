@@ -278,10 +278,13 @@ document.getElementById('text-input').addEventListener('paste', function(e) {
         var target = event.target;
         var parent = target.closest('.saved-text');
         if (target.classList.contains('remove-text')) {
+            var textId = parent.getAttribute('data-id');
             parent.remove();
-            updateLocalStorage(); // Correctly update localStorage with the current state
+            var savedTextsJSON = localStorage.getItem('savedTexts');
+            var savedTexts = savedTextsJSON ? JSON.parse(savedTextsJSON).linkedin : [];
+            var updatedSavedTexts = savedTexts.filter(text => text.id !== textId); // Remove the text from the array
+            localStorage.setItem('savedTexts', JSON.stringify({linkedin: updatedSavedTexts})); // Update local storage
             applyAnimationDelays();
-            updateLocalStorage();
         } else if (target.classList.contains('add-text')) {
             var fullText = parent.getAttribute('data-fulltext');
             document.getElementById('text-input').innerHTML = fullText;
