@@ -237,7 +237,7 @@ document.getElementById('text-input').addEventListener('paste', function(e) {
     toggleButton.textContent = '▼'; 
     toggleButton.style.transform = 'rotate(90deg)';
     isRotated = true;
-});
+};
 
     document.getElementById('toggle-button').addEventListener('click', function() {
         var savedTexts = document.getElementById('saved-texts');
