@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (newText) {
             parent.dataset.displaytext = newText;
         }
-        localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
+        localStorage.setItem('savedTexts', JSON.stringify({linkedin: savedTexts}));
     }
 
     function autoSaveOrUpdate() {
