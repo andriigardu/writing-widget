@@ -108,7 +108,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('text-input').addEventListener('input', function () {
     // Update character and word count whenever the text changes
-    updateCharCount();
     var text = this.innerText.replace(/\s/g, '');
     var charCount = text.length;
     var charCountDisplay = document.getElementById('char-count');
@@ -119,14 +118,16 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         charCountDisplay.style.color = '';
     }
+    updateCharCount();
     resetAutoSaveTimer(); // Reset the auto-save timer on input
 });
 
 document.getElementById('text-input').addEventListener('paste', function(e) {
-    updateCharCount();
     e.preventDefault();
     var text = e.clipboardData.getData('text/plain');
     document.execCommand("insertHTML", false, text);
+    updateCharCount();
+    resetAutoSaveTimer();
 });
 
     document.getElementById('copy-button').addEventListener('click', function () {
@@ -390,16 +391,16 @@ document.getElementById('text-input').addEventListener('paste', function(e) {
         }).length;  // Count words
     var charCountDisplay = document.getElementById('char-count');
     charCountDisplay.textContent = 'Characters: ' + charCount;
+      var wordCountDisplay = document.getElementById('word-count');
+    wordCountDisplay.textContent = 'Words: ' + wordCount; 
 
-        // Change color if character count exceeds 280
+        // Change color if character count exceeds 3000
     if (charCount > 3000) {
         charCountDisplay.style.color = 'red';
     } else {
         charCountDisplay.style.color = ''; // Reset to default color
     }
-        
-       var wordCountDisplay = document.getElementById('word-count');
-    wordCountDisplay.textContent = 'Words: ' + wordCount; 
+
 }
     function updateLocalStorage() {
     var savedTextsElements = document.querySelectorAll('#linkedin-saved .saved-text');
