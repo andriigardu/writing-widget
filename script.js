@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     var isRotated = false;
     var isSortedAscending = true;
+    var autoSaveTimer; // Holds the auto-save timer
 
     function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem('savedTexts');
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         savedTexts.forEach(function(textData) {
             var newSavedTextDiv = document.createElement('div');
             newSavedTextDiv.className = 'saved-text';
+            newSavedTextDiv.setAttribute('data-id', textData.id); // Set unique identifier
             newSavedTextDiv.setAttribute('data-fulltext', textData.fullText);
             newSavedTextDiv.setAttribute('data-displaytext', textData.displayText);
             newSavedTextDiv.setAttribute('draggable', 'true');
@@ -44,6 +46,33 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
     }
 
+    function autoSaveOrUpdate() {
+        var textInput = document.getElementById('text-input');
+        var fullText = textInput.innerHTML.trim();
+        var displayText = textInput.innerText.trim().substring(0, 50) + (textInput.innerText.trim().length > 50 ? '...' : '');
+        var existingId = textInput.getAttribute('data-current-id'); // Track if current text is being edited
+
+        var savedTextsJSON = localStorage.getItem('savedTexts');
+        var savedTexts = savedTextsJSON ? JSON.parse(savedTextsJSON).linkedin : [];
+        
+        if (existingId) {
+            // Update existing item
+            var existingIndex = savedTexts.findIndex(item => item.id === existingId);
+            if (existingIndex !== -1) {
+                savedTexts[existingIndex].fullText = fullText;
+                savedTexts[existingIndex].displayText = displayText;
+            }
+        } else {
+            // Add new item
+            var newTextId = Date.now().toString(); // Simple unique ID using timestamp
+            savedTexts.push({ id: newTextId, fullText: fullText, displayText: displayText });
+            textInput.setAttribute('data-current-id', newTextId); // Mark this text as saved with its ID
+        }
+
+        localStorage.setItem('savedTexts', JSON.stringify({linkedin: savedTexts}));
+        loadSavedTexts(); // Reload saved texts to reflect changes
+    }
+
     document.getElementById('text-input').addEventListener('input', function () {
         // Update character and word count whenever the text changes
         updateCharCount();
@@ -57,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             charCountDisplay.style.color = '';
         }
+        resetAutoSaveTimer(); // Reset the auto-save timer on input
     });
     
      // Add the paste event listener right here
@@ -112,9 +142,32 @@ document.addEventListener("DOMContentLoaded", function () {
     var linkedinSaved = document.getElementById('linkedin-saved'); // LinkedIn section
     var toggleButton = document.getElementById('toggle-button');
 
-    var fullText = textInput.innerHTML;
-    var displayText = textInput.innerText.substring(0, 50);
-    if (textInput.innerText.length > 50) displayText += '...';
+    var fullText = textInput.innerHTML.trim();
+    var displayText = textInput.innerText.trim().substring(0, 50) + (textInput.innerText.trim().length > 50 ? '...' : '');
+    var existingId = textInput.getAttribute('data-current-id'); // This line is new
+
+    var savedTextsJSON = localStorage.getItem('savedTexts');
+    var savedTexts = savedTextsJSON ? JSON.parse(savedTextsJSON).linkedin : [];
+
+    if (existingId) {
+        // Update existing item
+        var existingIndex = savedTexts.findIndex(item => item.id === existingId);
+        if (existingIndex !== -1) {
+            savedTexts[existingIndex].fullText = fullText;
+            savedTexts[existingIndex].displayText = displayText;
+        }
+    } else {
+        // This part creates a new item if there's no existingId
+        var newTextId = Date.now().toString(); // Simple unique ID using timestamp
+        textInput.setAttribute('data-current-id', newTextId); // This line is new
+        savedTexts.push({ id: newTextId, fullText: fullText, displayText: displayText });
+        
+        var newSavedTextDiv = document.createElement('div'); // Keep this part from your original code
+        newSavedTextDiv.className = 'saved-text';
+        newSavedTextDiv.setAttribute('data-id', newTextId); // This attribute assignment is crucial
+        newSavedTextDiv.setAttribute('data-fulltext', fullText);
+        newSavedTextDiv.setAttribute('data-displaytext', displayText);
+        newSavedTextDiv.setAttribute('draggable', 'true');
 
     var newSavedTextDiv = document.createElement('div');
     newSavedTextDiv.className = 'saved-text';
@@ -148,9 +201,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     applyAnimationDelays();
     
-    localStorage.setItem('savedTexts', document.getElementById('saved-texts').innerHTML);
-    reapplyDnDEvents();
-    updateLocalStorage(); 
+    localStorage.setItem('savedTexts', JSON.stringify({linkedin: savedTexts}));
+    loadSavedTexts(); // Reload saved texts to reflect changes    reapplyDnDEvents();
+    
     // Ensure saved texts are visible and update the toggle button
     var savedTexts = document.getElementById('saved-texts');
     savedTexts.classList.add('visible');
