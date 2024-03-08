@@ -36,8 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         reapplyDnDEvents();
     }
-}
-
+});
     // Utility function to append saved text to the UI
     function appendSavedTextToUI(textData) {
         var linkedinSaved = document.getElementById('linkedin-saved');
