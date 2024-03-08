@@ -123,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.getElementById('text-input').addEventListener('paste', function(e) {
+    updateCharCount();
     e.preventDefault();
     var text = e.clipboardData.getData('text/plain');
     document.execCommand("insertHTML", false, text);
@@ -391,7 +392,7 @@ document.getElementById('text-input').addEventListener('paste', function(e) {
     charCountDisplay.textContent = 'Characters: ' + charCount;
 
         // Change color if character count exceeds 280
-    if (charCount > 280) {
+    if (charCount > 3000) {
         charCountDisplay.style.color = 'red';
     } else {
         charCountDisplay.style.color = ''; // Reset to default color
