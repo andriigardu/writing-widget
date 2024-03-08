@@ -76,6 +76,28 @@ document.addEventListener("DOMContentLoaded", function () {
         loadSavedTexts(); // Refresh the displayed list
     }
 
+    function updateCharCount() {
+        var textInput = document.getElementById('text-input');
+        var text = textInput.textContent || textInput.innerText; // Get the text content or inner text
+        var charCount = text.replace(/\s/g, '').length; // Remove all spaces and then get the length
+        var wordCount = text.trim().split(/\s+/).filter(function(word) {
+        return word.length > 0;
+            }).length;  // Count words
+        var charCountDisplay = document.getElementById('char-count');
+        charCountDisplay.textContent = 'Characters: ' + charCount;
+          var wordCountDisplay = document.getElementById('word-count');
+        wordCountDisplay.textContent = 'Words: ' + wordCount; 
+    
+            // Change color if character count exceeds 3000
+        if (charCount > 3000) {
+            charCountDisplay.style.color = 'red';
+        } else {
+            charCountDisplay.style.color = ''; // Reset to default color
+        }
+
+}
+
+
     function autoSaveOrUpdate() {
         var textInput = document.getElementById('text-input');
         var fullText = textInput.innerHTML.trim();
@@ -382,26 +404,6 @@ document.getElementById('text-input').addEventListener('paste', function(e) {
         applyAnimationDelays();
     }
 
-    function updateCharCount() {
-    var textInput = document.getElementById('text-input');
-    var text = textInput.textContent || textInput.innerText; // Get the text content or inner text
-    var charCount = text.replace(/\s/g, '').length; // Remove all spaces and then get the length
-    var wordCount = text.trim().split(/\s+/).filter(function(word) {
-    return word.length > 0;
-        }).length;  // Count words
-    var charCountDisplay = document.getElementById('char-count');
-    charCountDisplay.textContent = 'Characters: ' + charCount;
-      var wordCountDisplay = document.getElementById('word-count');
-    wordCountDisplay.textContent = 'Words: ' + wordCount; 
-
-        // Change color if character count exceeds 3000
-    if (charCount > 3000) {
-        charCountDisplay.style.color = 'red';
-    } else {
-        charCountDisplay.style.color = ''; // Reset to default color
-    }
-
-}
     function updateLocalStorage() {
     var savedTextsElements = document.querySelectorAll('#linkedin-saved .saved-text');
     var savedTextsData = [];
