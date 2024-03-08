@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var lastSavedText = ""; // Track the last saved or autosaved text
 
     function loadSavedTexts() {
-    var savedTextsJSON = localStorage.getItem('savedTexts');
-    if (savedTextsJSON) {
-        var savedTexts = JSON.parse(savedTextsJSON).linkedin; // Adjusted to access the linkedin property
+        // Use a default value if 'savedTexts' is not found in localStorage
+        var savedTextsJSON = localStorage.getItem('savedTexts');
+        var savedTexts = savedTextsJSON ? JSON.parse(savedTextsJSON).linkedin : [];
         var linkedinSaved = document.getElementById('linkedin-saved');
-        linkedinSaved.innerHTML = ''; // Clear existing items before loading
+        linkedinSaved.innerHTML = ''; // Clear existing items before loading new ones
 
         savedTexts.forEach(function(textData) {
             var newSavedTextDiv = document.createElement('div');
@@ -127,7 +127,6 @@ document.getElementById('text-input').addEventListener('paste', function(e) {
     e.preventDefault();
     var text = e.clipboardData.getData('text/plain');
     document.execCommand("insertHTML", false, text);
-    resetAutoSaveTimer();
 });
 
     document.getElementById('copy-button').addEventListener('click', function () {
