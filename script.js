@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("text-input").addEventListener("input", function () {
     // Update character and word count whenever the text changes
     updateCharCount();
-    var text = this.innerText.replace(/\s/g);
+    var text = this.innerText.replace(/\s/g, "");
     var charCount = text.length;
     var charCountDisplay = document.getElementById("char-count");
     charCountDisplay.textContent = "Characters: " + charCount;
@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateCharCount() {
     var textInput = document.getElementById("text-input");
     var text = textInput.textContent || textInput.innerText; // Get the text content or inner text
-    var charCount = text.replace(/\s/g).length; // Remove all spaces and then get the length
+    var charCount = text.replace(/\s/g, "").length; // Remove all spaces and then get the length
     var wordCount = text
       .trim()
       .split(/\s+/)
