@@ -275,7 +275,6 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem(
       "savedTexts",
       JSON.stringify({
-        twitter: savedTwitterTexts,
         linkedin: savedLinkedInTexts,
       })
     );
