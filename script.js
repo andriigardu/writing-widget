@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+  var toggleButton = document.getElementById("toggle-button"); // Place this after the DOM is loaded
   var isRotated = false;
   var isSortedAscending = true;
 
