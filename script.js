@@ -167,7 +167,7 @@ document.getElementById("star-button").addEventListener("click", function () {
     // Position the tooltip near the switch
     var switchRect = this.nextElementSibling.getBoundingClientRect(); // Use nextElementSibling to get the slider
     temporaryTooltip.style.left = (switchRect.left + switchRect.width/2 - 50) + 'px'; // Center the tooltip horizontally
-    temporaryTooltip.style.top = (switchRect.top - 30) + 'px'; // Position above the toggle
+    temporaryTooltip.style.top = (switchRect.bottom + 10) + 'px'; // 10px below the bottom of the toggle
     temporaryTooltip.style.display = 'block';
 
     // Automatically remove the tooltip after 3 seconds
