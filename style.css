@@ -120,16 +120,16 @@ input:checked + .slider:before {
 
 .tooltip {
     position: absolute;
-    padding: 5px 10px;
+    display: none; // Start hidden
     background-color: black;
     color: white;
+    padding: 5px 10px;
     border-radius: 4px;
-    font-size: 12px;
-    display: none;
     z-index: 1000;
-    pointer-events: none; /* Ignore mouse events */
+    font-size: 12px;
     white-space: nowrap; // Ensure the tooltip text does not wrap
 }
+
 #text-input:empty:before {
     content: "Type something here...";
     color: grey;
