@@ -51,6 +51,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       reapplyDnDEvents();
     }
+    var savedTexts = document.getElementById("saved-texts");
+    if (!isRotated) { // Check if it should be visible
+        savedTexts.classList.remove("visible");
+    }
   }
 
   function saveText(span, parent) {
