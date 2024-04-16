@@ -524,4 +524,3 @@ document.getElementById("star-button").addEventListener("click", function () {
             });
         }, 100);
     });
-});
