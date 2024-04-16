@@ -152,6 +152,19 @@ document.addEventListener("DOMContentLoaded", function () {
         applyReverseAnimationDelays();
       }
     });
+  
+  document.addEventListener('keydown', function(event) {
+  if (event.ctrlKey && event.key === 'b') {
+    event.preventDefault();
+    var selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+      var range = selection.getRangeAt(0);
+      var span = document.createElement('span');
+      span.className = 'bold-text';
+      range.surroundContents(span);
+    }
+  }
+});
 
   document.addEventListener("click", function (event) {
     var savedTexts = document.getElementById("saved-texts");
