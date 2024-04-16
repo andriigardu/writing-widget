@@ -66,10 +66,10 @@ body {
     transition: transform 0.3s ease;
 }
 .switch {
+  display: inline-flex; /* Change display to inline-flex */
+  align-items: center; /* Align children vertically in the middle */
   position: relative;
-  display: inline-block;
-  width: 24px; /* Adjusted from 60px to 24px */
-  height: 14px; /* Adjusted from 34px to 14px */
+  height: 14px;
 }
 
 .switch input { 
@@ -79,24 +79,22 @@ body {
 }
 
 .slider {
-  position: absolute;
+  position: relative;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  width: 24px;
+  height: 14px;
   background-color: #ccc;
-  transition: .4s;
   border-radius: 14px;
+  transition: .4s;
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 10px; /* Adjusted from 26px to 10px */
-  width: 10px; /* Adjusted from 26px to 10px */
-  left: 2px; /* Adjusted for smaller size */
-  bottom: 2px; /* Adjusted for smaller size */
+  height: 10px;
+  width: 10px;
+  left: 2px;
+  bottom: 2px;
   background-color: white;
   transition: .4s;
   border-radius: 50%;
@@ -107,24 +105,17 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(10px); /* Adjusted from 26px to 10px */
-}
-
-.slider.round {
-  border-radius: 14px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
+  transform: translateX(10px);
 }
 
 .switch-label {
-  font-size: 10px; /* Adjust the font size to make it smaller */
-  color: #666; /* Text color */
-  margin-left: 5px; /* Maintain some space between the switch and the label */
-  vertical-align: top; /* Adjust if needed to align with the center of the toggle switch */
-  line-height: 14px; /* Align the text vertically with the switch */
+  font-size: 10px; 
+  color: #666;
+  margin-left: 5px; /* Adjust if needed for space between toggle and label */
+  vertical-align: top;
+  line-height: 14px; /* Helps align the text with the toggle vertically */
 }
+
 
 .tooltip {
     position: fixed;
