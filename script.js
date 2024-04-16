@@ -362,26 +362,27 @@ document.getElementById("star-button").addEventListener("click", function () {
   function updateCharCount() {
     var textInput = document.getElementById("text-input");
     var text = textInput.textContent || textInput.innerText; // Get the text content or inner text
-    var charCount = text.replace(/[\t\n\r]+/g, "").length; // Remove tabs and newlines, keep spaces
-    var wordCount = text
-      .trim()
-      .split(/\s+/)
-      .filter(function (word) {
+    var charCount = text.length; // Count all characters including spaces
+    var wordCount = text.trim().split(/\s+/).filter(function (word) {
         return word.length > 0;
-      }).length; // Count words
-    var charCountDisplay = document.getElementById("char-count");
-    charCountDisplay.textContent = "Characters: " + charCount;
+    }).length; // Count words accurately by splitting on any whitespace sequence
 
-    // Change color if character count exceeds 280
-    if (charCount > 3000) {
-      charCountDisplay.style.color = "red";
-    } else {
-      charCountDisplay.style.color = ""; // Reset to default color
-    }
+    var charCountDisplay = document.getElementById("char-count");
+    charCountDisplay.textContent = "Characters: " + charCount; // Update display with total character count including spaces
 
     var wordCountDisplay = document.getElementById("word-count");
-    wordCountDisplay.textContent = "Words: " + wordCount;
-  }
+    if (wordCountDisplay) { // Check if word count display exists and update it
+        wordCountDisplay.textContent = "Words: " + wordCount; // Update word count
+    }
+
+    // Change color if character count exceeds 3000
+    if (charCount > 3000) {
+        charCountDisplay.style.color = "red"; // Highlight with red if over limit
+    } else {
+        charCountDisplay.style.color = ""; // Reset to default color
+    }
+}
+
   function updateLocalStorage() {
     var linkedinTexts = document.getElementById("linkedin-saved").innerHTML;
     var savedData = { linkedin: linkedinTexts };
