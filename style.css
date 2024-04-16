@@ -93,8 +93,8 @@ body {
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
+  height: 13px;
+  width: 13px;
   left: 4px;
   bottom: 4px;
   background-color: white;
@@ -111,7 +111,7 @@ input:checked + .slider:before {
 }
 
 .slider.round {
-  border-radius: 34px;
+  border-radius: 17px;
 }
 
 .slider.round:before {
