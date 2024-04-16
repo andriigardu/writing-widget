@@ -479,33 +479,28 @@ document.getElementById("star-button").addEventListener("click", function () {
     var hideTimer; // Variable to hold the timeout ID
 
     function showTooltip(event) {
-        // Use data-tooltip if it exists on the element or its parents
-        var tooltipText = event.target.getAttribute('data-tooltip');
-        if (!tooltipText) {
-            var parentWithDataTooltip = event.target.closest('[data-tooltip]');
-            if (parentWithDataTooltip) {
-                tooltipText = parentWithDataTooltip.getAttribute('data-tooltip');
-            }
-        }
-
-        if (tooltipText) {
-            tooltip.textContent = tooltipText;
-            tooltip.style.display = 'block';
-            tooltip.style.left = event.pageX + 10 + 'px';
-            tooltip.style.top = event.pageY + 10 + 'px';
-
-            clearTimeout(hideTimer);
-            hideTimer = setTimeout(function() {
-                tooltip.style.display = 'none';
-            }, 3000);
-        }
+    var tooltipText = event.target.getAttribute('data-tooltip');
+    if (!tooltipText) {
+        var parentWithDataTooltip = event.target.closest('[data-tooltip]');
+        tooltipText = parentWithDataTooltip ? parentWithDataTooltip.getAttribute('data-tooltip') : null;
     }
 
-    function hideTooltip() {
+    if (tooltipText) {
+        tooltip.textContent = tooltipText;
+        tooltip.style.display = 'block';
+        tooltip.style.left = event.pageX + 10 + 'px';
+        tooltip.style.top = event.pageY + 10 + 'px';
         clearTimeout(hideTimer);
-        tooltip.style.display = 'none';
+        hideTimer = setTimeout(function() {
+            tooltip.style.display = 'none';
+        }, 3000);
     }
+}
 
+function hideTooltip() {
+    clearTimeout(hideTimer);
+    tooltip.style.display = 'none';
+}
     // Attach tooltip to static buttons
     var buttons = [
         {id: 'copy-button', text: 'Copy to clipboard'},
