@@ -362,7 +362,7 @@ document.getElementById("star-button").addEventListener("click", function () {
   function updateCharCount() {
     var textInput = document.getElementById("text-input");
     var text = textInput.textContent || textInput.innerText; // Get the text content or inner text
-    var charCount = text.replace(/\s/g, "").length; // Remove all spaces and then get the length
+    var charCount = text.length; // Count all characters including spaces
     var wordCount = text
       .trim()
       .split(/\s+/)
