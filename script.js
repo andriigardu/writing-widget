@@ -444,19 +444,10 @@ document.getElementById("star-button").addEventListener("click", function () {
         tooltip.style.display = 'block';
         tooltip.style.left = event.pageX + 10 + 'px'; // Position tooltip near the mouse
         tooltip.style.top = event.pageY + 10 + 'px';
-
-      // Clear any existing timeout to prevent multiple hide actions from queuing up
-        clearTimeout(hideTimer);
-
-        // Set timeout to hide the tooltip after 3 seconds
-        hideTimer = setTimeout(function() {
-            tooltip.style.display = 'none';
-        }, 3000);
     }
 
     // Function to hide tooltip
     function hideTooltip() {
-        clearTimeout(hideTimer); // Clear the hide timeout if the mouse leaves the button 
         tooltip.style.display = 'none';
     }
 
