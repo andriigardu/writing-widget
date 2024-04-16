@@ -65,6 +65,14 @@ body {
     transform: scale(1.03);
     transition: transform 0.3s ease;
 }
+#toggle-feature-button {
+    padding: 5px 10px;
+    background: #EDEDEB;
+    margin: 0 5px;
+    border-radius: 2.5px;
+    cursor: pointer;
+}
+
 .tooltip {
     position: fixed;
     padding: 5px 10px;
