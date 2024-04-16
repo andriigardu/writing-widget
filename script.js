@@ -142,12 +142,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (isRotated) {
         savedTexts.classList.add("visible");
-        this.textContent = "▼";
+        this.textContent = "▶️";
         this.style.transform = "rotate(90deg)";
         applyAnimationDelays();
       } else {
         savedTexts.classList.remove("visible");
-        this.textContent = "▶";
+        this.textContent = "▶️";
         this.style.transform = "rotate(0deg)";
         applyReverseAnimationDelays();
       }
