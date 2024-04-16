@@ -187,7 +187,7 @@ document.getElementById("star-button").addEventListener("click", function () {
     toggleButton.textContent = "▶️";
     toggleButton.style.transform = "rotate(90deg)";
     isRotated = true;
-  });
+  );
 
   document
     .getElementById("toggle-button")
