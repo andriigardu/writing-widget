@@ -140,9 +140,7 @@ document.getElementById("star-button").addEventListener("click", function () {
     isRotated = true;
   });
 
-  document
-    .getElementById("toggle-button")
-    .addEventListener("click", function () {
+  document.getElementById("toggle-button").addEventListener("click", function () {
       var savedTexts = document.getElementById("saved-texts");
       isRotated = !isRotated;
 
@@ -159,6 +157,16 @@ document.getElementById("star-button").addEventListener("click", function () {
       }
     });
   
+  document.getElementById("toggle-feature-button").addEventListener("click", function() {
+    var messageDiv = document.createElement('div');
+    messageDiv.textContent = "Thank you! We are working on this function.";
+    document.body.appendChild(messageDiv);
+
+    setTimeout(function() {
+        document.body.removeChild(messageDiv);
+    }, 3000); // 3000 milliseconds = 3 seconds
+});
+
   document.addEventListener('keydown', function(event) {
   if (event.ctrlKey && event.key === 'b') {
     event.preventDefault();
