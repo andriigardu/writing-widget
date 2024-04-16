@@ -157,14 +157,20 @@ document.getElementById("star-button").addEventListener("click", function () {
       }
     });
   
-  document.getElementById("toggle-feature-button").addEventListener("click", function() {
-    var messageDiv = document.createElement('div');
-    messageDiv.textContent = "Thank you! We are working on this function.";
-    document.body.appendChild(messageDiv);
+  document.getElementById("toggle-feature-switch").addEventListener('change', function() {
+    var tooltip = document.querySelector('.tooltip'); // Assuming you have a tooltip class already
+    tooltip.textContent = "Thank you! We are working on this function."; // Set the message
+    tooltip.style.display = 'block';
 
+    // Position the tooltip near the switch
+    var switchRect = this.nextSibling.getBoundingClientRect(); // nextSibling refers to the .slider
+    tooltip.style.left = switchRect.left + 'px';
+    tooltip.style.top = (switchRect.top - switchRect.height - 10) + 'px'; // Adjust 10px above the toggle
+
+    // Hide the tooltip after 3 seconds
     setTimeout(function() {
-        document.body.removeChild(messageDiv);
-    }, 3000); // 3000 milliseconds = 3 seconds
+        tooltip.style.display = 'none';
+    }, 3000);
 });
 
   document.addEventListener('keydown', function(event) {
