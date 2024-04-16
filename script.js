@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Update character and word count whenever the text changes
     updateCharCount();
     var text = this.innerText.replace(/\s/g, "");
-    var charCount = text.length;
+    var charCount = text.length; // Count all characters including all types of spaces
     var charCountDisplay = document.getElementById("char-count");
     charCountDisplay.textContent = "Characters: " + charCount;
 
