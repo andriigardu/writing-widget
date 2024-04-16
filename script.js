@@ -43,19 +43,27 @@ document.addEventListener("DOMContentLoaded", function () {
   
   function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem("savedTexts");
-    if (savedTextsJSON) {
-      var savedTexts = JSON.parse(savedTextsJSON);
-      if (savedTexts.linkedin) {
-        document.getElementById("linkedin-saved").innerHTML =
-          savedTexts.linkedin;
-      }
-      reapplyDnDEvents();
-    }
     var savedTexts = document.getElementById("saved-texts");
-    if (!isRotated) { // Check if it should be visible
-        savedTexts.classList.remove("visible");
+    var toggleButton = document.getElementById("toggle-button"); // Define toggleButton correctly
+
+    if (savedTextsJSON) {
+        var savedTextsData = JSON.parse(savedTextsJSON);
+        document.getElementById("linkedin-saved").innerHTML = savedTextsData.linkedin || "";
+        reapplyDnDEvents();
     }
-  }
+
+    // Adjust visibility based on isRotated state
+    if (!isRotated) {
+        savedTexts.classList.remove("visible");
+        toggleButton.textContent = "▶️";
+        toggleButton.style.transform = "rotate(0deg)";
+    } else {
+        savedTexts.classList.add("visible");
+        toggleButton.textContent = "▶️";
+        toggleButton.style.transform = "rotate(90deg)";
+    }
+}
+
 function saveTextsToLocalStorage() {
     var linkedinTexts = document.getElementById("linkedin-saved").innerHTML;
     localStorage.setItem("savedTexts", JSON.stringify({linkedin: linkedinTexts}));
