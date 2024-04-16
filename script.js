@@ -193,10 +193,13 @@ document.getElementById("star-button").addEventListener("click", function () {
     var sortButton = document.getElementById("sort-button");
     var starButton = document.getElementById("star-button");
 
+    // Check if the clicked target is the sort button
+    if (event.target === sortButton) return;
+
     if (
       !event.composedPath().includes(savedTexts) &&
       !event.composedPath().includes(toggleButton) &&
-      event.target !== sortButton &&
+      !event.composedPath().includes(sortButton) &&
       event.target !== starButton
     ) {
       savedTexts.classList.remove("visible");
@@ -205,6 +208,7 @@ document.getElementById("star-button").addEventListener("click", function () {
       isRotated = false;
     }
   });
+
 
   document
     .getElementById("saved-texts")
