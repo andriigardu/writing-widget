@@ -8,6 +8,72 @@ body {
     height: 500px; /* Full viewport height */
     position: relative; /* For absolute positioning inside */
     border: 0.5px solid #000;
+    border-radius: 7px;
+    box-shadow: 0;
+    transition: width 0.3s ease;
+}
+.source-sans 3-<uniquifier> {
+  font-family: "Source Sans 3", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+#control-panel {
+    position: absolute;
+    top: 0;
+    left: 1; /* Align with the left edge */
+    right: 0;
+    display: flex;
+    align-items: center;
+    font-size:0.8em;
+    justify-content: start;
+    z-index: 2;
+    padding: 5px;
+    background: #fff;
+    border: body { 
+    margin-left: 10px;
+    margin-top: 5px; 
+    padding: 0; 
+    overflow: hidden; 
+    font-family: "Source Sans 3", sans-serif;
+    width: 335px; /* Fixed width */
+    height: 500px; /* Full viewport height */
+    position: relative; /* For absolute positioning inside */
+    border: 0.5px solid #000;
+    border-radius: 5px;
+    box-shadow: 0;
+    transition: width 0.3s ease;
+}
+.source-sans 3-<uniquifier> {
+  font-family: "Source Sans 3", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+#control-panel {
+    position: absolute;
+    top: 0;
+    left: 1; /* Align with the left edge */
+    right: 0;
+    display: flex;
+    align-items: center;
+    font-size:0.8em;
+    justify-content: start;
+    z-index: 2;
+    padding: 5px;
+    background: #fff;
+    border: body { 
+    margin-left: 10px;
+    margin-top: 5px; 
+    padding: 0; 
+    overflow: hidden; 
+    font-family: "Source Sans 3", sans-serif;
+    width: 335px; /* Fixed width */
+    height: 500px; /* Full viewport height */
+    position: relative; /* For absolute positioning inside */
+    border: 0.5px solid #000;
     border-radius: 5px;
     box-shadow: 0;
     transition: width 0.3s ease;
@@ -32,6 +98,384 @@ body {
     padding: 5px;
     background: #fff;
     border: 1px solid #000;
+    border-bottom: 1px solid #000;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    box-sizing: border-box; /* Ensure padding is included in the width */
+    width: 100%; /* Full width of the parent element */
+}
+#char-count, #word-count, #copy-button, #star-button, #toggle-button, #clear-button, #sort-button {
+    font-size: 0.8em;
+    padding: 5px 10px;
+    background: #191836;
+    color: #fff;
+    margin: 0 5px;
+    border: none;
+    cursor: pointer;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#char-count, #word-count, #toggle-button, #clear-saved-texts-button, #sort-button {
+    background-color: transparent;
+    color: #000;
+}
+#copy-button, #star-button, #toggle-button, #clear-button,
+.add-text, .remove-text, #sort-button {
+    transition: transform 0.3s ease; /* Apply transition to normal state */
+}
+
+#copy-button:hover, #star-button:hover, #toggle-button:hover, #clear-button:hover,
+.add-text:hover, .remove-text:hover, #sort-button:hover {
+    transform: scale(1.03);
+    transition: transform 0.3s ease;
+}
+
+#text-input {
+    position: absolute;
+    top: 44px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 335px;
+    height: calc(100% - 70px);
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    border-radius: 0px;
+    overflow-y: auto;
+    outline: none;
+    background-color: white;
+    font-size: 16px;
+    contenteditable: true;
+    transition: width 0.3s ease;
+    color: black; /* Ensures text is always black */
+    font-size: 14px; /* Adjust as needed to ensure consistent size */
+}
+
+#text-input {
+    white-space: pre-wrap; /* Allows text to wrap and preserves whitespace */
+    word-wrap: break-word; /* Ensures long words do not cause layout issues */
+    overflow-wrap: break-word; /* Alternative to word-wrap for newer browsers */
+}
+#toggle-button {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+#saved-texts {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    left: 0;
+    margin-top: 15px;
+    margin-left: 2px;
+    margin-right: 2px;
+    background-color: #191836;
+    color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    align-content:justify;
+    z-index: 1;
+    height: flex;
+    max-height:380px;
+    overflow-y: auto;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none; /* To prevent interaction when it's invisible */
+}
+
+#saved-texts.visible {
+    opacity: 1;
+    transform: translateY(0px);
+    pointer-events: auto; /* Allow interaction when it's visible */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.saved-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    overflow: hidden;
+    width: 100%;
+    opacity: 0; /* Start with hidden text */
+    animation: fadeIn 0.3s ease forwards;
+    /* animation-delay will be set by JavaScript */
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+.saved-text.reverse {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+.saved-text span {
+    flex-grow: 1;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+.text-buttons {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+.remove-text, .add-text {
+    align-items: end;
+    padding: 3px 6px;
+    right: 5px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 3px;
+    width:24px;
+    height:24px;
+    user-select: none;
+}
+.remove-text {
+    background-color: #ff6347;
+}
+.add-text {
+    background-color: #4caf50;
+}
+.editable {
+    border-bottom: 1px dashed #ccc;
+    display: inline-block;
+    width: auto;
+    min-width: 100px;
+}
+.drag-handle {
+    cursor: move; /* Cursor indicates this element can be dragged */
+    padding: 2px 4px; /* Adjust padding as needed */
+    margin-right: 5px; /* Space between handle and text */
+    user-select: none; /* Prevent text selection on drag handle */
+}
+
+.clicked {
+    transform: scale(0.95)!important;
+}
+
+#statistic {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 28px;
+    display: flex;
+    font-size: 1em;
+    justify-content: space-between;
+    padding: 0 10px;
+    background-color: #fff;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    align-items:center;
+}
+#linkedin-saved h2 {
+    font-size: 1em;
+    user-select: none;
+} solid #000;
+    border-bottom: 1px solid #000;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    box-sizing: border-box; /* Ensure padding is included in the width */
+    width: 100%; /* Full width of the parent element */
+}
+#char-count, #word-count, #copy-button, #star-button, #toggle-button, #clear-button, #sort-button {
+    font-size: 0.8em;
+    padding: 5px 10px;
+    background: #191836;
+    color: #fff;
+    margin: 0 5px;
+    border: none;
+    cursor: pointer;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#char-count, #word-count, #toggle-button, #clear-saved-texts-button, #sort-button {
+    background-color: transparent;
+    color: #000;
+}
+#copy-button, #star-button, #toggle-button, #clear-button,
+.add-text, .remove-text, #sort-button {
+    transition: transform 0.3s ease; /* Apply transition to normal state */
+}
+
+#copy-button:hover, #star-button:hover, #toggle-button:hover, #clear-button:hover,
+.add-text:hover, .remove-text:hover, #sort-button:hover {
+    transform: scale(1.03);
+    transition: transform 0.3s ease;
+}
+
+#text-input {
+    position: absolute;
+    top: 44px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 335px;
+    height: calc(100% - 70px);
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    border-radius: 0px;
+    overflow-y: auto;
+    outline: none;
+    background-color: white;
+    font-size: 16px;
+    contenteditable: true;
+    transition: width 0.3s ease;
+    color: black; /* Ensures text is always black */
+    font-size: 14px; /* Adjust as needed to ensure consistent size */
+}
+
+#text-input {
+    white-space: pre-wrap; /* Allows text to wrap and preserves whitespace */
+    word-wrap: break-word; /* Ensures long words do not cause layout issues */
+    overflow-wrap: break-word; /* Alternative to word-wrap for newer browsers */
+}
+#toggle-button {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+#saved-texts {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    left: 0;
+    margin-top: 15px;
+    margin-left: 2px;
+    margin-right: 2px;
+    background-color: #191836;
+    color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    align-content:justify;
+    z-index: 1;
+    height: flex;
+    max-height:380px;
+    overflow-y: auto;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none; /* To prevent interaction when it's invisible */
+}
+
+#saved-texts.visible {
+    opacity: 1;
+    transform: translateY(0px);
+    pointer-events: auto; /* Allow interaction when it's visible */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.saved-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    overflow: hidden;
+    width: 100%;
+    opacity: 0; /* Start with hidden text */
+    animation: fadeIn 0.3s ease forwards;
+    /* animation-delay will be set by JavaScript */
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+.saved-text.reverse {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+.saved-text span {
+    flex-grow: 1;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+.text-buttons {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+.remove-text, .add-text {
+    align-items: end;
+    padding: 3px 6px;
+    right: 5px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 3px;
+    width:24px;
+    height:24px;
+    user-select: none;
+}
+.remove-text {
+    background-color: #ff6347;
+}
+.add-text {
+    background-color: #4caf50;
+}
+.editable {
+    border-bottom: 1px dashed #ccc;
+    display: inline-block;
+    width: auto;
+    min-width: 100px;
+}
+.drag-handle {
+    cursor: move; /* Cursor indicates this element can be dragged */
+    padding: 2px 4px; /* Adjust padding as needed */
+    margin-right: 5px; /* Space between handle and text */
+    user-select: none; /* Prevent text selection on drag handle */
+}
+
+.clicked {
+    transform: scale(0.95)!important;
+}
+
+#statistic {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 28px;
+    display: flex;
+    font-size: 1em;
+    justify-content: space-between;
+    padding: 0 10px;
+    background-color: #fff;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    align-items:center;
+}
+#linkedin-saved h2 {
+    font-size: 1em;
+    user-select: none;
+} solid #000;
     border-bottom: 1px solid #000;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
