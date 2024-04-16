@@ -1,76 +1,19 @@
-var isRotated = false;
-
-function reapplyDnDEvents() {
-    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
-    savedTexts.forEach(function (savedText) {
-      savedText.removeEventListener("dragstart", handleDragStart);
-      savedText.removeEventListener("dragover", handleDragOver);
-      savedText.removeEventListener("drop", handleDrop);
-      savedText.addEventListener("dragstart", handleDragStart, false);
-      savedText.addEventListener("dragover", handleDragOver, false);
-      savedText.addEventListener("drop", handleDrop, false);
-    });
-  }
-
 document.addEventListener("DOMContentLoaded", function () {
-  loadSavedTexts();
-  var toggleButton = document.getElementById("toggle-button"); // Place this after the DOM is loaded
+  var isRotated = false;
   var isSortedAscending = true;
 
-  // Initial call to reapplyDnDEvents after page loads
-    reapplyDnDEvents();
-  
   function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem("savedTexts");
-    var savedTexts = document.getElementById("saved-texts");
-    var toggleButton = document.getElementById("toggle-button"); // Define toggleButton correctly
-
     if (savedTextsJSON) {
-        var savedTextsData = JSON.parse(savedTextsJSON);
-        document.getElementById("linkedin-saved").innerHTML = decodeURIComponent(savedTextsData.linkedin || "");
+      var savedTexts = JSON.parse(savedTextsJSON);
+      if (savedTexts.linkedin) {
+        document.getElementById("linkedin-saved").innerHTML =
+          savedTexts.linkedin;
+      }
+      reapplyDnDEvents();
     }
-    isRotated = JSON.parse(localStorage.getItem("isRotated")) || false;  // Load isRotated state from localStorage
-
-    if (!isRotated) {
-        savedTexts.classList.remove("visible");
-        toggleButton.textContent = "▶️";
-        toggleButton.style.transform = "rotate(0deg)";
-    } else {
-        savedTexts.classList.add("visible");
-        toggleButton.textContent = "▶️";
-        toggleButton.style.transform = "rotate(90deg)";
-    }
-}
-
-  function applyReverseAnimationDelays() {
-    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
-    var delayIncrement = 0.05;
-    var maxDelay = (savedTexts.length - 1) * delayIncrement; // Calculate the maximum delay for the last item
-
-    savedTexts.forEach(function (savedText, index) {
-      var delay = (savedTexts.length - index - 1) * delayIncrement;
-      savedText.style.animationDelay = delay + "s";
-      savedText.classList.add("reverse"); // Apply reverse animation class
-    });
   }
 
-
-    // Adjust visibility based on isRotated state
-    if (!isRotated) {
-        savedTexts.classList.remove("visible");
-        toggleButton.textContent = "▶️";
-        toggleButton.style.transform = "rotate(0deg)";
-    } else {
-        savedTexts.classList.add("visible");
-        toggleButton.textContent = "▶️";
-        toggleButton.style.transform = "rotate(90deg)";
-    }
-})
-
-function saveTextsToLocalStorage() {
-    var linkedinTexts = document.getElementById("linkedin-saved").innerHTML;
-    localStorage.setItem("savedTexts", JSON.stringify({linkedin: encodeURIComponent(linkedinTexts)}));
-}
   function saveText(span, parent) {
     span.setAttribute("contenteditable", "false");
     span.classList.remove("editable");
@@ -110,7 +53,30 @@ function saveTextsToLocalStorage() {
     sel.removeAllRanges();
   });
 
-  
+  // Define the applyAnimationDelays function here
+  function applyAnimationDelays() {
+    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
+    var delayIncrement = 0.065; // Increment delay by 0.1s for each line
+
+    savedTexts.forEach(function (savedText, index) {
+      var delay = index * delayIncrement;
+      console.log("Element index:", index, "Delay:", delay + "s"); // Debugging line
+      savedText.style.animationDelay = delay + "s";
+      savedText.classList.remove("reverse"); // Remove reverse animation class
+    });
+  }
+
+  function applyReverseAnimationDelays() {
+    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
+    var delayIncrement = 0.05;
+    var maxDelay = (savedTexts.length - 1) * delayIncrement; // Calculate the maximum delay for the last item
+
+    savedTexts.forEach(function (savedText, index) {
+      var delay = (savedTexts.length - index - 1) * delayIncrement;
+      savedText.style.animationDelay = delay + "s";
+      savedText.classList.add("reverse"); // Apply reverse animation class
+    });
+  }
   
 document.getElementById("star-button").addEventListener("click", function () {
     var textInput = document.getElementById("text-input");
@@ -148,7 +114,7 @@ document.getElementById("star-button").addEventListener("click", function () {
     textButtonsDiv.innerHTML =
       '<button class="add-text">+</button>' +
       '<button class="remove-text">-</button>';
-    applyTooltips(); // Call this function right after appending the new elements to ensure tooltips are applied.
+
     // Append elements in the correct order
     newSavedTextDiv.appendChild(dragHandleDiv); // Drag handle first
     newSavedTextDiv.appendChild(spanElement);
@@ -159,23 +125,6 @@ document.getElementById("star-button").addEventListener("click", function () {
     linkedinSaved.appendChild(newSavedTextDiv);
 
     applyAnimationDelays();
-    saveTextsToLocalStorage();
-    // Add tooltips to dynamic elements here
-    function applyTooltips() {
-    var savedTextsChildren = linkedinSaved.querySelectorAll('.saved-text, .drag-handle, .add-text, .remove-text');
-    savedTextsChildren.forEach(function(elem) {
-        if (elem.classList.contains('add-text')) {
-            elem.setAttribute('data-tooltip', 'Paste the text');
-        } else if (elem.classList.contains('remove-text')) {
-            elem.setAttribute('data-tooltip', 'Delete saved text');
-        } else if (elem.classList.contains('drag-handle')) {
-            elem.setAttribute('data-tooltip', 'Drag and reorder');
-        } else if (elem.tagName === 'SPAN') {
-            elem.setAttribute('data-tooltip', 'Click to rename');
-        }
-    });
-  }
-});
 
     localStorage.setItem(
       "savedTexts",
@@ -189,6 +138,7 @@ document.getElementById("star-button").addEventListener("click", function () {
     toggleButton.textContent = "▶️";
     toggleButton.style.transform = "rotate(90deg)";
     isRotated = true;
+  });
 
   document
     .getElementById("toggle-button")
@@ -233,7 +183,6 @@ document.getElementById("star-button").addEventListener("click", function () {
       // This clears any selection, ensuring the style isn't applied again inadvertently
       window.getSelection().removeAllRanges();
     }
-    saveTextsToLocalStorage();
   }
 });
 
@@ -306,7 +255,6 @@ document.getElementById("star-button").addEventListener("click", function () {
         event.target.classList.contains("editable")
       ) {
         var parent = event.target.closest(".saved-text");
-        saveTextsToLocalStorage();
         saveText(event.target, parent);
         updateLocalStorage();
       }
@@ -326,7 +274,6 @@ document.getElementById("star-button").addEventListener("click", function () {
         ) {
           event.preventDefault();
           saveText(target, parent);
-          saveTextsToLocalStorage();
         }
       }
     });
@@ -384,6 +331,18 @@ document.getElementById("star-button").addEventListener("click", function () {
       charCountDisplay.style.color = ""; // Reset to default color
     });
 
+  function reapplyDnDEvents() {
+    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
+    savedTexts.forEach(function (savedText) {
+      savedText.removeEventListener("dragstart", handleDragStart);
+      savedText.removeEventListener("dragover", handleDragOver);
+      savedText.removeEventListener("drop", handleDrop);
+      savedText.addEventListener("dragstart", handleDragStart, false);
+      savedText.addEventListener("dragover", handleDragOver, false);
+      savedText.addEventListener("drop", handleDrop, false);
+    });
+    applyAnimationDelays();
+  }
 
   function updateCharCount() {
     var textInput = document.getElementById("text-input");
@@ -450,7 +409,7 @@ document.getElementById("star-button").addEventListener("click", function () {
   } else {
     dropTarget.appendChild(dragElem);
   }
-  saveTextsToLocalStorage();
+
   updateLocalStorage();
   dragElem.classList.remove("dragElem");
   reapplyDnDEvents();
@@ -474,36 +433,25 @@ document.getElementById("star-button").addEventListener("click", function () {
 
   loadSavedTexts();
 
-  var tooltip = document.createElement('div');
+  // Create tooltip element
+    var tooltip = document.createElement('div');
     tooltip.className = 'tooltip';
     document.body.appendChild(tooltip);
 
-    var hideTimer; // Variable to hold the timeout ID
-
+    // Function to show tooltip
     function showTooltip(event) {
-    var tooltipText = event.target.getAttribute('data-tooltip');
-    if (!tooltipText) {
-        var parentWithDataTooltip = event.target.closest('[data-tooltip]');
-        tooltipText = parentWithDataTooltip ? parentWithDataTooltip.getAttribute('data-tooltip') : null;
-    }
-
-    if (tooltipText) {
-        tooltip.textContent = tooltipText;
+        tooltip.textContent = event.target.getAttribute('data-tooltip'); // Set text from data attribute
         tooltip.style.display = 'block';
-        tooltip.style.left = event.pageX + 10 + 'px';
+        tooltip.style.left = event.pageX + 10 + 'px'; // Position tooltip near the mouse
         tooltip.style.top = event.pageY + 10 + 'px';
-        clearTimeout(hideTimer);
-        hideTimer = setTimeout(function() {
-            tooltip.style.display = 'none';
-        }, 3000);
     }
-}
 
-function hideTooltip() {
-    clearTimeout(hideTimer);
-    tooltip.style.display = 'none';
-}
-    // Attach tooltip to static buttons
+    // Function to hide tooltip
+    function hideTooltip() {
+        tooltip.style.display = 'none';
+    }
+
+    // Adding tooltips to buttons
     var buttons = [
         {id: 'copy-button', text: 'Copy to clipboard'},
         {id: 'clear-button', text: 'Clear the text'},
@@ -519,27 +467,4 @@ function hideTooltip() {
             btn.addEventListener('mouseleave', hideTooltip);
         }
     });
-
-    // Attach tooltips to dynamic elements within #saved-texts
-    var savedTexts = document.getElementById('saved-texts');
-    savedTexts.addEventListener('mouseenter', showTooltip, true);
-    savedTexts.addEventListener('mouseleave', hideTooltip, true);
-
-    // Ensure dynamic elements have data-tooltip attributes when created
-    document.getElementById('star-button').addEventListener('click', function () {
-        // Add dynamic elements here, set data-tooltip as needed
-        setTimeout(function() { // Timeout to ensure elements are added
-            var savedTextsChildren = savedTexts.querySelectorAll('.saved-text, .drag-handle, .add-text, .remove-text');
-            savedTextsChildren.forEach(function(elem) {
-                if (elem.classList.contains('add-text')) {
-                    elem.setAttribute('data-tooltip', 'Paste the text');
-                } else if (elem.classList.contains('remove-text')) {
-                    elem.setAttribute('data-tooltip', 'Delete saved text');
-                } else if (elem.classList.contains('drag-handle')) {
-                    elem.setAttribute('data-tooltip', 'Drag and reorder');
-                } else if (elem.tagName === 'SPAN') {
-                    elem.setAttribute('data-tooltip', 'Click to rename');
-                }
-            });
-        }, 100);
-    });
+});
