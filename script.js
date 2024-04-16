@@ -2,6 +2,45 @@ document.addEventListener("DOMContentLoaded", function () {
   var isRotated = false;
   var isSortedAscending = true;
 
+// Define the applyAnimationDelays function here
+  function applyAnimationDelays() {
+    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
+    var delayIncrement = 0.065; // Increment delay by 0.1s for each line
+
+    savedTexts.forEach(function (savedText, index) {
+      var delay = index * delayIncrement;
+      console.log("Element index:", index, "Delay:", delay + "s"); // Debugging line
+      savedText.style.animationDelay = delay + "s";
+      savedText.classList.remove("reverse"); // Remove reverse animation class
+    });
+  }
+
+  function applyReverseAnimationDelays() {
+    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
+    var delayIncrement = 0.05;
+    var maxDelay = (savedTexts.length - 1) * delayIncrement; // Calculate the maximum delay for the last item
+
+    savedTexts.forEach(function (savedText, index) {
+      var delay = (savedTexts.length - index - 1) * delayIncrement;
+      savedText.style.animationDelay = delay + "s";
+      savedText.classList.add("reverse"); // Apply reverse animation class
+    });
+  }
+  
+  function reapplyDnDEvents() {
+    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
+    savedTexts.forEach(function (savedText) {
+      savedText.removeEventListener("dragstart", handleDragStart);
+      savedText.removeEventListener("dragover", handleDragOver);
+      savedText.removeEventListener("drop", handleDrop);
+      savedText.addEventListener("dragstart", handleDragStart, false);
+      savedText.addEventListener("dragover", handleDragOver, false);
+      savedText.addEventListener("drop", handleDrop, false);
+    });
+    applyAnimationDelays();
+  }
+
+  
   function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem("savedTexts");
     if (savedTextsJSON) {
@@ -53,30 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
     sel.removeAllRanges();
   });
 
-  // Define the applyAnimationDelays function here
-  function applyAnimationDelays() {
-    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
-    var delayIncrement = 0.065; // Increment delay by 0.1s for each line
-
-    savedTexts.forEach(function (savedText, index) {
-      var delay = index * delayIncrement;
-      console.log("Element index:", index, "Delay:", delay + "s"); // Debugging line
-      savedText.style.animationDelay = delay + "s";
-      savedText.classList.remove("reverse"); // Remove reverse animation class
-    });
-  }
-
-  function applyReverseAnimationDelays() {
-    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
-    var delayIncrement = 0.05;
-    var maxDelay = (savedTexts.length - 1) * delayIncrement; // Calculate the maximum delay for the last item
-
-    savedTexts.forEach(function (savedText, index) {
-      var delay = (savedTexts.length - index - 1) * delayIncrement;
-      savedText.style.animationDelay = delay + "s";
-      savedText.classList.add("reverse"); // Apply reverse animation class
-    });
-  }
+  
   
 document.getElementById("star-button").addEventListener("click", function () {
     var textInput = document.getElementById("text-input");
@@ -348,18 +364,6 @@ document.getElementById("star-button").addEventListener("click", function () {
       charCountDisplay.style.color = ""; // Reset to default color
     });
 
-  function reapplyDnDEvents() {
-    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
-    savedTexts.forEach(function (savedText) {
-      savedText.removeEventListener("dragstart", handleDragStart);
-      savedText.removeEventListener("dragover", handleDragOver);
-      savedText.removeEventListener("drop", handleDrop);
-      savedText.addEventListener("dragstart", handleDragStart, false);
-      savedText.addEventListener("dragover", handleDragOver, false);
-      savedText.addEventListener("drop", handleDrop, false);
-    });
-    applyAnimationDelays();
-  }
 
   function updateCharCount() {
     var textInput = document.getElementById("text-input");
