@@ -157,24 +157,29 @@ document.addEventListener("DOMContentLoaded", function () {
   if (event.ctrlKey && event.key === 'b') {
     event.preventDefault();
     var selection = window.getSelection();
-    if (selection.rangeCount > 0) {
+    // Proceed only if there's an actual text selection
+    if (selection.rangeCount > 0 && selection.toString().length > 0) {
       var range = selection.getRangeAt(0);
       var span = document.createElement('span');
-      // Toggle between normal and bold
+      var selectedText = range.extractContents(); // Extracts the selected content
+
+      // Toggle between normal and bold by checking if the existing selection is already bold
       if (range.commonAncestorContainer.parentElement.classList.contains('bold-text')) {
-        span.className = 'normal-text'; // Switch back to normal
-        span.textContent = range.commonAncestorContainer.textContent;
-        range.deleteContents(); // Remove the current contents
+        span.className = 'normal-text';
+        span.appendChild(selectedText);
         range.insertNode(span);
       } else {
         span.className = 'bold-text';
-        span.textContent = range.commonAncestorContainer.textContent;
-        range.deleteContents(); // Remove the current contents
+        span.appendChild(selectedText);
         range.insertNode(span);
       }
+
+      // This clears any selection, ensuring the style isn't applied again inadvertently
+      window.getSelection().removeAllRanges();
     }
   }
 });
+
   
   document.addEventListener("click", function (event) {
     var savedTexts = document.getElementById("saved-texts");
