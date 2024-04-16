@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
         toggleButton.textContent = "▶️";
         toggleButton.style.transform = "rotate(90deg)";
     }
-}
+})
 
 function saveTextsToLocalStorage() {
     var linkedinTexts = document.getElementById("linkedin-saved").innerHTML;
