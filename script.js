@@ -78,63 +78,86 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   
-function openSavedList() {
-    var savedTexts = document.getElementById("saved-texts");
-    console.log(savedTexts);  // Check if the element is correctly selected
-    savedTexts.classList.toggle("visible");  // Use toggle to add/remove based on current state
+document.getElementById("star-button").addEventListener("click", function () {
+    var textInput = document.getElementById("text-input");
+    var linkedinSaved = document.getElementById("linkedin-saved"); // LinkedIn section
     var toggleButton = document.getElementById("toggle-button");
-    toggleButton.textContent = "▶️";
-    toggleButton.style.transform = "rotate(90deg)";
-    console.log("Toggle visibility.");  // Confirm function execution
-}
 
+    var fullText = textInput.innerHTML.trim();
+    var displayText = textInput.innerText.trim().substring(0, 50);
   
-  document.getElementById("star-button").addEventListener("click", function () {
-  var textInput = document.getElementById("text-input");
-  var linkedinSaved = document.getElementById("linkedin-saved"); // LinkedIn section
-  var toggleButton = document.getElementById("toggle-button");
-
-  // Ensure the textInput is not empty
-  var fullText = textInput.innerHTML.trim();
-  var displayText = textInput.innerText.trim();
+  // Check if the textInput is empty
   if (fullText.length === 0) {
     console.log("No text to save"); // Optionally provide user feedback
     return; // Exit the function if there is no text to save
   }
-  displayText = displayText.length > 50 ? displayText.substring(0, 50) + "..." : displayText;
+    if (textInput.innerText.length > 50) displayText += "...";
 
-  // Create and append the new saved text element
-  var newSavedTextDiv = document.createElement("div");
-  newSavedTextDiv.className = "saved-text";
-  newSavedTextDiv.setAttribute("data-fulltext", fullText);
-  newSavedTextDiv.setAttribute("data-displaytext", displayText);
-  newSavedTextDiv.setAttribute("draggable", "true");
+    var newSavedTextDiv = document.createElement("div");
+    newSavedTextDiv.className = "saved-text";
+    newSavedTextDiv.setAttribute("data-fulltext", fullText);
+    newSavedTextDiv.setAttribute("data-displaytext", displayText);
+    newSavedTextDiv.setAttribute("draggable", "true");
 
-  var dragHandleDiv = document.createElement("div");
-  dragHandleDiv.className = "drag-handle";
-  dragHandleDiv.textContent = "⠿";
-  newSavedTextDiv.appendChild(dragHandleDiv);
+    var dragHandleDiv = document.createElement("div");
+    dragHandleDiv.className = "drag-handle";
+    dragHandleDiv.textContent = "⠿"; // Drag handle symbol
+    newSavedTextDiv.appendChild(dragHandleDiv);
 
-  var spanElement = document.createElement("span");
-  spanElement.textContent = displayText;
-  spanElement.setAttribute("unselectable", "on");
-  newSavedTextDiv.appendChild(spanElement);
+    var spanElement = document.createElement("span");
+    spanElement.textContent = displayText;
+    spanElement.setAttribute("unselectable", "on"); // Making text non-selectable
+    newSavedTextDiv.appendChild(spanElement);
 
-  var textButtonsDiv = document.createElement("div");
-  textButtonsDiv.className = "text-buttons";
-  textButtonsDiv.innerHTML = '<button class="add-text">+</button><button class="remove-text">-</button>';
-  newSavedTextDiv.appendChild(textButtonsDiv);
+    var textButtonsDiv = document.createElement("div");
+    textButtonsDiv.className = "text-buttons";
+    textButtonsDiv.innerHTML =
+      '<button class="add-text">+</button>' +
+      '<button class="remove-text">-</button>';
 
-  linkedinSaved.appendChild(newSavedTextDiv);
+    // Append elements in the correct order
+    newSavedTextDiv.appendChild(dragHandleDiv); // Drag handle first
+    newSavedTextDiv.appendChild(spanElement);
+    newSavedTextDiv.appendChild(textButtonsDiv);
 
-  applyAnimationDelays();
-  localStorage.setItem("savedTexts", document.getElementById("saved-texts").innerHTML);
-  reapplyDnDEvents();
-  updateLocalStorage();
+    // Append the new saved text div to the appropriate container
+    console.log("Appending to LinkedIn section"); // Debugging line
+    linkedinSaved.appendChild(newSavedTextDiv);
 
-  // Show the saved texts
-  openSavedList();
-});
+    applyAnimationDelays();
+
+    localStorage.setItem(
+      "savedTexts",
+      document.getElementById("saved-texts").innerHTML
+    );
+    reapplyDnDEvents();
+    updateLocalStorage();
+    // Ensure saved texts are visible and update the toggle button
+    var savedTexts = document.getElementById("saved-texts");
+    savedTexts.classList.add("visible");
+    toggleButton.textContent = "▶️";
+    toggleButton.style.transform = "rotate(90deg)";
+    isRotated = true;
+  });
+
+  document
+    .getElementById("toggle-button")
+    .addEventListener("click", function () {
+      var savedTexts = document.getElementById("saved-texts");
+      isRotated = !isRotated;
+
+      if (isRotated) {
+        savedTexts.classList.add("visible");
+        this.textContent = "▶️";
+        this.style.transform = "rotate(90deg)";
+        applyAnimationDelays();
+      } else {
+        savedTexts.classList.remove("visible");
+        this.textContent = "▶️";
+        this.style.transform = "rotate(0deg)";
+        applyReverseAnimationDelays();
+      }
+    });
   
   document.addEventListener('keydown', function(event) {
   if (event.ctrlKey && event.key === 'b') {
