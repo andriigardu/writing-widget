@@ -32,7 +32,8 @@ body {
     padding: 5px;
     background: #fff;
     border: 1px solid #000;
-    border-bottom: 2px solid #000;
+    border-bottom: 1px solid #000;
+    border-radius-top: 5px;
     box-sizing: border-box; /* Ensure padding is included in the width */
     width: 100%; /* Full width of the parent element */
 }
@@ -208,7 +209,7 @@ body {
     justify-content: space-between;
     padding: 0 10px;
     background-color: #fff;
-    border-top: 2px solid #000;
+    border-top: 1px solid #000;
     border-left: 1px solid #000;
     border-right: 1px solid #000;
     align-items:center;
