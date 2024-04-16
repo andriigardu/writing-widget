@@ -56,7 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
         savedTexts.classList.remove("visible");
     }
   }
-
+function saveTextsToLocalStorage() {
+    var linkedinTexts = document.getElementById("linkedin-saved").innerHTML;
+    localStorage.setItem("savedTexts", JSON.stringify({linkedin: linkedinTexts}));
+}
   function saveText(span, parent) {
     span.setAttribute("contenteditable", "false");
     span.classList.remove("editable");
@@ -145,7 +148,7 @@ document.getElementById("star-button").addEventListener("click", function () {
     linkedinSaved.appendChild(newSavedTextDiv);
 
     applyAnimationDelays();
-
+    saveTextsToLocalStorage();
     // Add tooltips to dynamic elements here
     setTimeout(function() { // Timeout to ensure elements are added
         var savedTextsChildren = linkedinSaved.querySelectorAll('.saved-text, .drag-handle, .add-text, .remove-text');
@@ -220,6 +223,7 @@ document.getElementById("star-button").addEventListener("click", function () {
       // This clears any selection, ensuring the style isn't applied again inadvertently
       window.getSelection().removeAllRanges();
     }
+    saveTextsToLocalStorage();
   }
 });
 
@@ -292,6 +296,7 @@ document.getElementById("star-button").addEventListener("click", function () {
         event.target.classList.contains("editable")
       ) {
         var parent = event.target.closest(".saved-text");
+        saveTextsToLocalStorage();
         saveText(event.target, parent);
         updateLocalStorage();
       }
@@ -311,6 +316,7 @@ document.getElementById("star-button").addEventListener("click", function () {
         ) {
           event.preventDefault();
           saveText(target, parent);
+          saveTextsToLocalStorage();
         }
       }
     });
@@ -434,7 +440,7 @@ document.getElementById("star-button").addEventListener("click", function () {
   } else {
     dropTarget.appendChild(dragElem);
   }
-
+  saveTextsToLocalStorage();
   updateLocalStorage();
   dragElem.classList.remove("dragElem");
   reapplyDnDEvents();
