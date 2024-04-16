@@ -433,41 +433,46 @@ document.getElementById("star-button").addEventListener("click", function () {
 
   loadSavedTexts();
 
-  // Create tooltip element
-    var tooltip = document.createElement('div');
-    tooltip.className = 'tooltip';
-    document.body.appendChild(tooltip);
+  var tooltip = document.createElement('div');
+tooltip.className = 'tooltip';
+document.body.appendChild(tooltip);
 
-    // Function to show tooltip
-    function showTooltip(event) {
-        tooltip.textContent = event.target.getAttribute('data-tooltip'); // Set text from data attribute
+function showTooltip(event) {
+    var tooltipText = event.target.getAttribute('data-tooltip');
+    if (!tooltipText) {
+        var parentWithDataTooltip = event.target.closest('[data-tooltip]');
+        if (parentWithDataTooltip) {
+            tooltipText = parentWithDataTooltip.getAttribute('data-tooltip');
+        }
+    }
+
+    if (tooltipText) {
+        tooltip.textContent = tooltipText;
         tooltip.style.display = 'block';
-        tooltip.style.left = event.pageX + 10 + 'px'; // Position tooltip near the mouse
+        tooltip.style.left = event.pageX + 10 + 'px';
         tooltip.style.top = event.pageY + 10 + 'px';
     }
+}
 
-    // Function to hide tooltip
-    function hideTooltip() {
-        tooltip.style.display = 'none';
+function hideTooltip() {
+    tooltip.style.display = 'none';
+}
+
+var buttons = [
+    {id: 'copy-button', text: 'Copy to clipboard'},
+    {id: 'clear-button', text: 'Clear the text'},
+    {id: 'star-button', text: 'Save the text'},
+    {id: 'toggle-button', text: 'Open saved texts'},
+    {id: 'sort-button', text: 'Sort saved texts'}
+];
+
+buttons.forEach(function(button) {
+    var btn = document.getElementById(button.id);
+    if (btn) {
+        btn.setAttribute('data-tooltip', button.text);
+        btn.addEventListener('mouseenter', showTooltip);
+        btn.addEventListener('mouseleave', hideTooltip);
     }
+});
 
-    // Adding tooltips to buttons
-    var buttons = [
-        {id: 'copy-button', text: 'Copy to clipboard'},
-        {id: 'clear-button', text: 'Clear the text'},
-        {id: 'star-button', text: 'Save the text'},
-        {id: 'toggle-button', text: 'Open saved texts'},
-        {id: 'sort-button', text: 'Sort saved texts'},
-        {id: 'add-text', text: 'Paste saved text'},
-        {id: 'remove-text', text: 'Delete saved text'} 
-    ];
-
-    buttons.forEach(function(button) {
-        var btn = document.getElementById(button.id);
-        if (btn) {
-            btn.setAttribute('data-tooltip', button.text);
-            btn.addEventListener('mouseenter', showTooltip);
-            btn.addEventListener('mouseleave', hideTooltip);
-        }
-    });
 });
