@@ -373,33 +373,32 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function handleDrop(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  e.preventDefault();
+  e.stopPropagation();
 
-    var dragElem = document.querySelector(".dragElem");
-    if (!dragElem) return;
+  var dragElem = document.querySelector(".dragElem");
+  if (!dragElem) return;
 
-    var dropPoint = e.target.closest(".saved-text");
-    dragElem.parentNode.removeChild(dragElem);
+  var dropPoint = e.target.closest(".saved-text");
+  var dropTarget = document.getElementById("saved-texts"); // Ensure the drop target is correctly identified
 
-    if (dropPoint) {
-      // If dropped on another saved text, decide based on relative position
-      var rect = dropPoint.getBoundingClientRect();
-      var relY = e.clientY - rect.top;
-      if (relY < rect.height / 2) {
-        dropTarget.insertBefore(dragElem, dropPoint);
-      } else {
-        dropTarget.insertBefore(dragElem, dropPoint.nextSibling);
-      }
+  if (dropPoint) {
+    var rect = dropPoint.getBoundingClientRect();
+    var relY = e.clientY - rect.top;
+    if (relY < rect.height / 2) {
+      dropPoint.parentNode.insertBefore(dragElem, dropPoint);
     } else {
-      // If dropped in an empty area of the target section
-      dropTarget.appendChild(dragElem);
+      var nextSibling = dropPoint.nextElementSibling;
+      dropPoint.parentNode.insertBefore(dragElem, nextSibling);
     }
-
-    updateLocalStorage();
-    dragElem.classList.remove("dragElem");
-    reapplyDnDEvents();
+  } else {
+    dropTarget.appendChild(dragElem);
   }
+
+  updateLocalStorage();
+  dragElem.classList.remove("dragElem");
+  reapplyDnDEvents();
+}
   // JavaScript to add 'clicked' class on mousedown and remove it on mouseup
   document
     .querySelectorAll(
