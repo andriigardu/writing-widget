@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Ensure saved texts are visible and update the toggle button
     var savedTexts = document.getElementById("saved-texts");
     savedTexts.classList.add("visible");
-    toggleButton.textContent = "▼";
+    toggleButton.textContent = "▶️";
     toggleButton.style.transform = "rotate(90deg)";
     isRotated = true;
   });
