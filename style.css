@@ -44,7 +44,8 @@ body {
     background: #191836;
     color: #fff;
     margin: 0 5px;
-    border: none;
+    border: 0.5px;
+    border-radius: 2.5px;
     cursor: pointer;
     height: 32px;
     display: flex;
