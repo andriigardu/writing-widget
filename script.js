@@ -2,6 +2,16 @@ document.addEventListener("DOMContentLoaded", function () {
   var isRotated = false;
   var isSortedAscending = true;
 
+  function loadSavedTexts() {
+    var savedTextsJSON = localStorage.getItem("savedTexts");
+    var savedTexts = document.getElementById("saved-texts");
+    var toggleButton = document.getElementById("toggle-button"); // Define toggleButton correctly
+
+    if (savedTextsJSON) {
+        var savedTextsData = JSON.parse(savedTextsJSON);
+        document.getElementById("linkedin-saved").innerHTML = savedTextsData.linkedin || "";
+    }
+
 // Define the applyAnimationDelays function here
   function applyAnimationDelays() {
     var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
@@ -39,18 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     applyAnimationDelays();
   }
-
-  
-  function loadSavedTexts() {
-    var savedTextsJSON = localStorage.getItem("savedTexts");
-    var savedTexts = document.getElementById("saved-texts");
-    var toggleButton = document.getElementById("toggle-button"); // Define toggleButton correctly
-
-    if (savedTextsJSON) {
-        var savedTextsData = JSON.parse(savedTextsJSON);
-        document.getElementById("linkedin-saved").innerHTML = savedTextsData.linkedin || "";
-        reapplyDnDEvents();
-    }
 
     // Adjust visibility based on isRotated state
     if (!isRotated) {
