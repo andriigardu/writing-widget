@@ -78,14 +78,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   
-  function openSavedList() {
-  var savedTexts = document.getElementById("saved-texts");
-  savedTexts.classList.add("visible");
-  var toggleButton = document.getElementById("toggle-button");
-  toggleButton.textContent = "▶️";
-  toggleButton.style.transform = "rotate(90deg)";
-  isRotated = true; // Assuming isRotated is a global variable you are managing
+function openSavedList() {
+    var savedTexts = document.getElementById("saved-texts");
+    console.log(savedTexts);  // Check if the element is correctly selected
+    savedTexts.classList.toggle("visible");  // Use toggle to add/remove based on current state
+    var toggleButton = document.getElementById("toggle-button");
+    toggleButton.textContent = "▶️";
+    toggleButton.style.transform = "rotate(90deg)";
+    console.log("Toggle visibility.");  // Confirm function execution
 }
+
   
   document.getElementById("star-button").addEventListener("click", function () {
   var textInput = document.getElementById("text-input");
