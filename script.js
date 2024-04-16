@@ -3,6 +3,19 @@ document.addEventListener("DOMContentLoaded", function () {
   var isRotated = false;
   var isSortedAscending = true;
 
+
+  function reapplyDnDEvents() {
+    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
+    savedTexts.forEach(function (savedText) {
+      savedText.removeEventListener("dragstart", handleDragStart);
+      savedText.removeEventListener("dragover", handleDragOver);
+      savedText.removeEventListener("drop", handleDrop);
+      savedText.addEventListener("dragstart", handleDragStart, false);
+      savedText.addEventListener("dragover", handleDragOver, false);
+      savedText.addEventListener("drop", handleDrop, false);
+    });
+  }
+  
   function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem("savedTexts");
     var savedTexts = document.getElementById("saved-texts");
@@ -13,18 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("linkedin-saved").innerHTML = savedTextsData.linkedin || "";
     }
 
-// Define the applyAnimationDelays function here
-  function applyAnimationDelays() {
-    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
-    var delayIncrement = 0.065; // Increment delay by 0.1s for each line
-
-    savedTexts.forEach(function (savedText, index) {
-      var delay = index * delayIncrement;
-      console.log("Element index:", index, "Delay:", delay + "s"); // Debugging line
-      savedText.style.animationDelay = delay + "s";
-      savedText.classList.remove("reverse"); // Remove reverse animation class
-    });
-  }
 
   function applyReverseAnimationDelays() {
     var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
@@ -37,19 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
       savedText.classList.add("reverse"); // Apply reverse animation class
     });
   }
-  
-  function reapplyDnDEvents() {
-    var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
-    savedTexts.forEach(function (savedText) {
-      savedText.removeEventListener("dragstart", handleDragStart);
-      savedText.removeEventListener("dragover", handleDragOver);
-      savedText.removeEventListener("drop", handleDrop);
-      savedText.addEventListener("dragstart", handleDragStart, false);
-      savedText.addEventListener("dragover", handleDragOver, false);
-      savedText.addEventListener("drop", handleDrop, false);
-    });
-    applyAnimationDelays();
-  }
+
 
     // Adjust visibility based on isRotated state
     if (!isRotated) {
