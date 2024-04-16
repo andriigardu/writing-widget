@@ -7,8 +7,9 @@ body {
     width: 335px; /* Fixed width */
     height: 500px; /* Full viewport height */
     position: relative; /* For absolute positioning inside */
-    border: 2px solid #000;
-    box-shadow: -6px 6px;
+    border: 0.5px solid #000;
+    border-radius: 5px;
+    box-shadow: 0;
     transition: width 0.3s ease;
 }
 .source-sans 3-<uniquifier> {
