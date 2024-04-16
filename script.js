@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (savedTextsJSON) {
         var savedTextsData = JSON.parse(savedTextsJSON);
-        document.getElementById("linkedin-saved").innerHTML = savedTextsData.linkedin || "";
+        document.getElementById("linkedin-saved").innerHTML = decodeURIComponent(savedTextsData.linkedin || "");
     }
     isRotated = JSON.parse(localStorage.getItem("isRotated")) || false;  // Load isRotated state from localStorage
 
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function saveTextsToLocalStorage() {
     var linkedinTexts = document.getElementById("linkedin-saved").innerHTML;
-    localStorage.setItem("savedTexts", JSON.stringify({linkedin: linkedinTexts}));
+    localStorage.setItem("savedTexts", JSON.stringify({linkedin: encodeURIComponent(linkedinTexts)}));
 }
   function saveText(span, parent) {
     span.setAttribute("contenteditable", "false");
