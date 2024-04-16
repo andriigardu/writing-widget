@@ -33,7 +33,7 @@ body {
     background: #fff;
     border: 1px solid #000;
     border-bottom: 1px solid #000;
-    border-radius-top: 5px;
+    border-radius: 5px 5px;
     box-sizing: border-box; /* Ensure padding is included in the width */
     width: 100%; /* Full width of the parent element */
 }
