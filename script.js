@@ -456,7 +456,8 @@ document.getElementById("star-button").addEventListener("click", function () {
         {id: 'copy-button', text: 'Copy to clipboard'},
         {id: 'clear-button', text: 'Clear the text'},
         {id: 'star-button', text: 'Save the text'},
-        {id: 'toggle-button', text: 'Open saved texts'}
+        {id: 'toggle-button', text: 'Open saved texts'},
+        {id: 'sort-button', text: 'Sort saved texts'} 
     ];
 
     buttons.forEach(function(button) {
