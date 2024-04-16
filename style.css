@@ -76,6 +76,11 @@ body {
     z-index: 1000;
     pointer-events: none; /* Ignore mouse events */
 }
+#text-input:empty:before {
+    content: "Enter your text here...";
+    color: grey;
+    font-style: italic;
+}
 
 #text-input {
     position: absolute;
