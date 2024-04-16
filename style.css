@@ -119,15 +119,15 @@ input:checked + .slider:before {
 }
 
 .tooltip {
-    position: absolute;
-    display: none; // Start hidden
-    background-color: black;
+    position: fixed;
+    display: none;
+    z-index: 1000;
+    background: #333;
     color: white;
     padding: 5px 10px;
     border-radius: 4px;
-    z-index: 1000;
     font-size: 12px;
-    white-space: nowrap; // Ensure the tooltip text does not wrap
+    pointer-events: none; // Ensure tooltips don't block mouse events
 }
 
 #text-input:empty:before {
