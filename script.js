@@ -83,8 +83,14 @@ document.addEventListener("DOMContentLoaded", function () {
     var linkedinSaved = document.getElementById("linkedin-saved"); // LinkedIn section
     var toggleButton = document.getElementById("toggle-button");
 
-    var fullText = textInput.innerHTML;
-    var displayText = textInput.innerText.substring(0, 50);
+    var fullText = textInput.innerHTML.trim();
+    var displayText = textInput.innerText.trim().substring(0, 50);
+  
+  // Check if the textInput is empty
+  if (fullText.length === 0) {
+    console.log("No text to save"); // Optionally provide user feedback
+    return; // Exit the function if there is no text to save
+  }
     if (textInput.innerText.length > 50) displayText += "...";
 
     var newSavedTextDiv = document.createElement("div");
