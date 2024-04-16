@@ -126,6 +126,23 @@ document.getElementById("star-button").addEventListener("click", function () {
 
     applyAnimationDelays();
 
+    // Add tooltips to dynamic elements here
+    setTimeout(function() { // Timeout to ensure elements are added
+        var savedTextsChildren = linkedinSaved.querySelectorAll('.saved-text, .drag-handle, .add-text, .remove-text');
+        savedTextsChildren.forEach(function(elem) {
+            if (elem.classList.contains('add-text')) {
+                elem.setAttribute('data-tooltip', 'Paste the text');
+            } else if (elem.classList.contains('remove-text')) {
+                elem.setAttribute('data-tooltip', 'Delete saved text');
+            } else if (elem.classList.contains('drag-handle')) {
+                elem.setAttribute('data-tooltip', 'Drag and reorder');
+            } else if (elem.tagName === 'SPAN') {
+                elem.setAttribute('data-tooltip', 'Click to rename');
+            }
+        });
+    }, 100);
+});
+
     localStorage.setItem(
       "savedTexts",
       document.getElementById("saved-texts").innerHTML
