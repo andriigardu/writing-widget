@@ -1,12 +1,6 @@
 var isRotated = false;
 
-document.addEventListener("DOMContentLoaded", function () {
-  loadSavedTexts();
-  var toggleButton = document.getElementById("toggle-button"); // Place this after the DOM is loaded
-  var isSortedAscending = true;
-
-
-  function reapplyDnDEvents() {
+function reapplyDnDEvents() {
     var savedTexts = document.querySelectorAll("#saved-texts .saved-text");
     savedTexts.forEach(function (savedText) {
       savedText.removeEventListener("dragstart", handleDragStart);
@@ -17,6 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
       savedText.addEventListener("drop", handleDrop, false);
     });
   }
+
+document.addEventListener("DOMContentLoaded", function () {
+  loadSavedTexts();
+  var toggleButton = document.getElementById("toggle-button"); // Place this after the DOM is loaded
+  var isSortedAscending = true;
+
+  // Initial call to reapplyDnDEvents after page loads
+    reapplyDnDEvents();
   
   function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem("savedTexts");
