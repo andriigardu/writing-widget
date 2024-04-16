@@ -66,26 +66,23 @@ body {
     transition: transform 0.3s ease;
 }
 .switch {
-  display: inline-flex; /* Change display to inline-flex */
-  align-items: center; /* Align children vertically in the middle */
+  display: flex; /* Use flex to allow vertical stacking */
+  flex-direction: column; /* Stack children vertically */
+  align-items: flex-start; /* Align children to the start of the flex-direction axis */
   position: relative;
-  height: 14px;
-}
-
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
+  height: auto; /* Allow container to grow as needed */
+  align-self: flex-end; /* Align the switch to the bottom of its container */
 }
 
 .slider {
   position: relative;
   cursor: pointer;
-  width: 24px;
-  height: 14px;
+  width: 24px; /* Your specified width */
+  height: 14px; /* Your specified height */
   background-color: #ccc;
   border-radius: 14px;
   transition: .4s;
+  margin-top: 2px; /* Adds a small space between label and switch */
 }
 
 .slider:before {
@@ -111,11 +108,10 @@ input:checked + .slider:before {
 .switch-label {
   font-size: 10px; 
   color: #666;
-  margin-left: 5px; /* Adjust if needed for space between toggle and label */
-  vertical-align: top;
-  line-height: 14px; /* Helps align the text with the toggle vertically */
+  align-self: flex-start; /* Ensure the label aligns at the start */
+  order: -1; /* Makes label appear above the slider */
+  margin-bottom: 0; /* Removes any space below the label */
 }
-
 
 .tooltip {
     position: fixed;
