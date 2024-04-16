@@ -158,19 +158,24 @@ document.getElementById("star-button").addEventListener("click", function () {
     });
   
   document.getElementById("toggle-feature-switch").addEventListener('change', function() {
-    var tooltip = document.querySelector('.tooltip'); // Assuming you have a tooltip class already
-    tooltip.textContent = "Thank you! We are working on this function."; // Set the message
-    tooltip.style.display = 'block';
+    // Create a new tooltip element
+    var temporaryTooltip = document.createElement('div');
+    temporaryTooltip.className = 'tooltip';
+    temporaryTooltip.textContent = "Thank you! We are working on this function.";
+    document.body.appendChild(temporaryTooltip);
 
     // Position the tooltip near the switch
-    var switchRect = this.nextSibling.getBoundingClientRect(); // nextSibling refers to the .slider
-    tooltip.style.left = switchRect.left + 'px';
-    tooltip.style.top = (switchRect.top - switchRect.height - 10) + 'px'; // Adjust 10px above the toggle
+    var switchRect = this.nextSibling.getBoundingClientRect(); // nextSibling should refer to the .slider
+    temporaryTooltip.style.left = (switchRect.left + switchRect.width/2 - 50) + 'px'; // Center the tooltip
+    temporaryTooltip.style.top = (switchRect.top - 30) + 'px'; // Position above the toggle
+    temporaryTooltip.style.display = 'block';
 
-    // Hide the tooltip after 3 seconds
+    // Automatically remove the tooltip after 3 seconds
     setTimeout(function() {
-        tooltip.style.display = 'none';
-    }, 3000);
+        if (temporaryTooltip.parentNode) {
+            temporaryTooltip.parentNode.removeChild(temporaryTooltip);
+        }
+    }, 3000); // 3000 milliseconds = 3 seconds
 });
 
   document.addEventListener('keydown', function(event) {
@@ -224,9 +229,7 @@ document.getElementById("star-button").addEventListener("click", function () {
   });
 
 
-  document
-    .getElementById("saved-texts")
-    .addEventListener("click", function (event) {
+  document.getElementById("saved-texts").addEventListener("click", function (event) {
       var target = event.target;
       var parent = target.closest(".saved-text");
       if (target.classList.contains("remove-text")) {
@@ -335,9 +338,7 @@ document.getElementById("star-button").addEventListener("click", function () {
     updateLocalStorage();
   });
 
-  document
-    .getElementById("clear-button")
-    .addEventListener("click", function () {
+  document.getElementById("clear-button").addEventListener("click", function () {
       document.getElementById("text-input").innerText = ""; // Clear the text input
       updateCharCount(); // Update the character count
       // Reset the color of the character count display
