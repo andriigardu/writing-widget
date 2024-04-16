@@ -451,44 +451,77 @@ document.getElementById("star-button").addEventListener("click", function () {
   loadSavedTexts();
 
   var tooltip = document.createElement('div');
-tooltip.className = 'tooltip';
-document.body.appendChild(tooltip);
+    tooltip.className = 'tooltip';
+    document.body.appendChild(tooltip);
 
-function showTooltip(event) {
-    var tooltipText = event.target.getAttribute('data-tooltip');
-    if (!tooltipText) {
-        var parentWithDataTooltip = event.target.closest('[data-tooltip]');
-        if (parentWithDataTooltip) {
-            tooltipText = parentWithDataTooltip.getAttribute('data-tooltip');
+    var hideTimer; // Variable to hold the timeout ID
+
+    function showTooltip(event) {
+        // Use data-tooltip if it exists on the element or its parents
+        var tooltipText = event.target.getAttribute('data-tooltip');
+        if (!tooltipText) {
+            var parentWithDataTooltip = event.target.closest('[data-tooltip]');
+            if (parentWithDataTooltip) {
+                tooltipText = parentWithDataTooltip.getAttribute('data-tooltip');
+            }
+        }
+
+        if (tooltipText) {
+            tooltip.textContent = tooltipText;
+            tooltip.style.display = 'block';
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY + 10 + 'px';
+
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(function() {
+                tooltip.style.display = 'none';
+            }, 3000);
         }
     }
 
-    if (tooltipText) {
-        tooltip.textContent = tooltipText;
-        tooltip.style.display = 'block';
-        tooltip.style.left = event.pageX + 10 + 'px';
-        tooltip.style.top = event.pageY + 10 + 'px';
-    }
-}
-
-function hideTooltip() {
-    tooltip.style.display = 'none';
-}
-
-var buttons = [
-    {id: 'copy-button', text: 'Copy to clipboard'},
-    {id: 'clear-button', text: 'Clear the text'},
-    {id: 'star-button', text: 'Save the text'},
-    {id: 'toggle-button', text: 'Open saved texts'},
-    {id: 'sort-button', text: 'Sort saved texts'}
-];
-
-buttons.forEach(function(button) {
-    var btn = document.getElementById(button.id);
-    if (btn) {
-        btn.setAttribute('data-tooltip', button.text);
-        btn.addEventListener('mouseenter', showTooltip);
-        btn.addEventListener('mouseleave', hideTooltip);
+    function hideTooltip() {
+        clearTimeout(hideTimer);
+        tooltip.style.display = 'none';
     }
 
+    // Attach tooltip to static buttons
+    var buttons = [
+        {id: 'copy-button', text: 'Copy to clipboard'},
+        {id: 'clear-button', text: 'Clear the text'},
+        {id: 'star-button', text: 'Save the text'},
+        {id: 'toggle-button', text: 'Open saved texts'}
+    ];
+
+    buttons.forEach(function(button) {
+        var btn = document.getElementById(button.id);
+        if (btn) {
+            btn.setAttribute('data-tooltip', button.text);
+            btn.addEventListener('mouseenter', showTooltip);
+            btn.addEventListener('mouseleave', hideTooltip);
+        }
+    });
+
+    // Attach tooltips to dynamic elements within #saved-texts
+    var savedTexts = document.getElementById('saved-texts');
+    savedTexts.addEventListener('mouseenter', showTooltip, true);
+    savedTexts.addEventListener('mouseleave', hideTooltip, true);
+
+    // Ensure dynamic elements have data-tooltip attributes when created
+    document.getElementById('star-button').addEventListener('click', function () {
+        // Add dynamic elements here, set data-tooltip as needed
+        setTimeout(function() { // Timeout to ensure elements are added
+            var savedTextsChildren = savedTexts.querySelectorAll('.saved-text, .drag-handle, .add-text, .remove-text');
+            savedTextsChildren.forEach(function(elem) {
+                if (elem.classList.contains('add-text')) {
+                    elem.setAttribute('data-tooltip', 'Paste the text');
+                } else if (elem.classList.contains('remove-text')) {
+                    elem.setAttribute('data-tooltip', 'Delete saved text');
+                } else if (elem.classList.contains('drag-handle')) {
+                    elem.setAttribute('data-tooltip', 'Drag and reorder');
+                } else if (elem.tagName === 'SPAN') {
+                    elem.setAttribute('data-tooltip', 'Click to rename');
+                }
+            });
+        }, 100);
+    });
 });
