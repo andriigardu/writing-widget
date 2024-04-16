@@ -490,6 +490,5 @@ buttons.forEach(function(button) {
         btn.addEventListener('mouseenter', showTooltip);
         btn.addEventListener('mouseleave', hideTooltip);
     }
-});
 
 });
