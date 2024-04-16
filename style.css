@@ -77,9 +77,8 @@ body {
     pointer-events: none; /* Ignore mouse events */
 }
 #text-input:empty:before {
-    content: "Enter your text here...";
+    content: "Type something here...";
     color: grey;
-    font-style: italic;
 }
 
 #text-input {
