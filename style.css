@@ -68,7 +68,7 @@ body {
 .switch {
   display: flex; /* Use flex to allow vertical stacking */
   flex-direction: column; /* Stack children vertically */
-  align-items: flex-start; /* Align children to the start of the flex-direction axis */
+  align-items: center; /* Center-align items horizontally within the container */
   position: relative;
   height: auto; /* Allow container to grow as needed */
   align-self: flex-end; /* Align the switch to the bottom of its container */
