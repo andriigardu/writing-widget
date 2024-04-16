@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
       event.target !== starButton
     ) {
       savedTexts.classList.remove("visible");
-      toggleButton.textContent = "▶";
+      toggleButton.textContent = "▶️";
       toggleButton.style.transform = "rotate(0deg)";
       isRotated = false;
     }
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Set toggle button and isRotated state accordingly
         var toggleButton = document.getElementById("toggle-button");
-        toggleButton.textContent = "▶";
+        toggleButton.textContent = "▶️";
         toggleButton.style.transform = "rotate(0deg)";
         isRotated = false;
 
