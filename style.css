@@ -9,7 +9,7 @@ body {
     position: relative; /* For absolute positioning inside */
     border: 0.5px solid #EDEDEB;
     border-radius: 7px;
-    box-shadow: 20 20;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: width 0.3s ease;
 }
 .source-sans 3-<uniquifier> {
