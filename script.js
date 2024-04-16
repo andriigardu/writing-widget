@@ -160,12 +160,22 @@ document.addEventListener("DOMContentLoaded", function () {
     if (selection.rangeCount > 0) {
       var range = selection.getRangeAt(0);
       var span = document.createElement('span');
-      span.className = 'bold-text';
-      range.surroundContents(span);
+      // Toggle between normal and bold
+      if (range.commonAncestorContainer.parentElement.classList.contains('bold-text')) {
+        span.className = 'normal-text'; // Switch back to normal
+        span.textContent = range.commonAncestorContainer.textContent;
+        range.deleteContents(); // Remove the current contents
+        range.insertNode(span);
+      } else {
+        span.className = 'bold-text';
+        span.textContent = range.commonAncestorContainer.textContent;
+        range.deleteContents(); // Remove the current contents
+        range.insertNode(span);
+      }
     }
   }
 });
-
+  
   document.addEventListener("click", function (event) {
     var savedTexts = document.getElementById("saved-texts");
     var toggleButton = document.getElementById("toggle-button");
