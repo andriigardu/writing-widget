@@ -172,7 +172,7 @@ document.getElementById("star-button").addEventListener("click", function () {
             elem.setAttribute('data-tooltip', 'Click to rename');
         }
     });
-  }, 100);
+  }
 });
 
     localStorage.setItem(
