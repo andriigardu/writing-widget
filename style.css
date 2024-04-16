@@ -27,7 +27,7 @@ body {
     display: flex;
     align-items: center;
     font-size:0.8em;
-    justify-content: left;
+    justify-content: start;
     z-index: 2;
     padding: 5px;
     background: #fff;
