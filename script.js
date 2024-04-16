@@ -1,8 +1,8 @@
 var isRotated = false;
 
 document.addEventListener("DOMContentLoaded", function () {
+  loadSavedTexts();
   var toggleButton = document.getElementById("toggle-button"); // Place this after the DOM is loaded
-
   var isSortedAscending = true;
 
 
