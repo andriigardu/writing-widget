@@ -47,14 +47,12 @@ document.addEventListener("DOMContentLoaded", function () {
     var text = (event.clipboardData || window.clipboardData).getData('text/plain');
     var normalizedText = text.normalize("NFKD"); // Normalize unicode to ASCII equivalent where possible
 
-    this.innerText = ''; // Clear current content
-    this.innerText = normalizedText; // Set only normalized plain text
+    // Insert text at the current cursor position
+    document.execCommand('insertText', false, normalizedText);
 
     // Apply uniform style if needed
     this.style.fontSize = "16px"; // Set a consistent font size
 });
-
-
 
   document.getElementById("copy-button").addEventListener("click", function () {
     var textInput = document.getElementById("text-input");
