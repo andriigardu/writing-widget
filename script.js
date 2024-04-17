@@ -45,12 +45,15 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("text-input").addEventListener("paste", function(event) {
     event.preventDefault(); // Prevent the default paste action
     var text = (event.clipboardData || window.clipboardData).getData('text/plain');
+    var normalizedText = text.normalize("NFKD"); // Normalize unicode to ASCII equivalent where possible
+
     this.innerText = ''; // Clear current content
-    this.innerText = text; // Set only plain text
+    this.innerText = normalizedText; // Set only normalized plain text
 
     // Apply uniform style if needed
     this.style.fontSize = "16px"; // Set a consistent font size
 });
+
 
 
   document.getElementById("copy-button").addEventListener("click", function () {
