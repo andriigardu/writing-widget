@@ -43,11 +43,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("text-input").addEventListener("paste", function(event) {
-    event.preventDefault(); // Stop the default paste action
+    event.preventDefault(); // Prevent the default paste action
     var text = (event.clipboardData || window.clipboardData).getData('text/plain');
-    document.execCommand("insertText", false, text); // Insert text without any formatting
+    this.innerText = ''; // Clear current content
+    this.innerText = text; // Set only plain text
 
-    // Optional: Apply a consistent style to the entire text input
+    // Apply uniform style if needed
     this.style.fontSize = "16px"; // Set a consistent font size
 });
 
