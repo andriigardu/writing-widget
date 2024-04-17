@@ -89,20 +89,21 @@ document.addEventListener("DOMContentLoaded", function () {
       savedText.classList.add("reverse"); // Apply reverse animation class
     });
   }
+
   
 document.getElementById("star-button").addEventListener("click", function () {
     var textInput = document.getElementById("text-input");
-    var linkedinSaved = document.getElementById("linkedin-saved"); // LinkedIn section
+    var linkedinSaved = document.getElementById("linkedin-saved");
     var toggleButton = document.getElementById("toggle-button");
 
     var fullText = textInput.innerHTML.trim();
     var displayText = textInput.innerText.trim().substring(0, 50);
-  
-  // Check if the textInput is empty
-  if (fullText.length === 0) {
-    console.log("No text to save"); // Optionally provide user feedback
-    return; // Exit the function if there is no text to save
-  }
+
+    // Check if the textInput is empty
+    if (fullText.length === 0) {
+        console.log("No text to save");
+        return; // Exit the function if there is no text to save
+    }
     if (textInput.innerText.length > 50) displayText += "...";
 
     var newSavedTextDiv = document.createElement("div");
@@ -110,47 +111,26 @@ document.getElementById("star-button").addEventListener("click", function () {
     newSavedTextDiv.setAttribute("data-fulltext", fullText);
     newSavedTextDiv.setAttribute("data-displaytext", displayText);
     newSavedTextDiv.setAttribute("draggable", "true");
+    newSavedTextDiv.innerHTML = `
+        <div class="drag-handle">⠿</div>
+        <span unselectable="on">${displayText}</span>
+        <div class="text-buttons">
+            <button class="add-text">+</button>
+            <button class="remove-text">-</button>
+        </div>
+    `;
 
-    var dragHandleDiv = document.createElement("div");
-    dragHandleDiv.className = "drag-handle";
-    dragHandleDiv.textContent = "⠿"; // Drag handle symbol
-    newSavedTextDiv.appendChild(dragHandleDiv);
-
-    var spanElement = document.createElement("span");
-    spanElement.textContent = displayText;
-    spanElement.setAttribute("unselectable", "on"); // Making text non-selectable
-    newSavedTextDiv.appendChild(spanElement);
-
-    var textButtonsDiv = document.createElement("div");
-    textButtonsDiv.className = "text-buttons";
-    textButtonsDiv.innerHTML =
-      '<button class="add-text">+</button>' +
-      '<button class="remove-text">-</button>';
-
-    // Append elements in the correct order
-    newSavedTextDiv.appendChild(dragHandleDiv); // Drag handle first
-    newSavedTextDiv.appendChild(spanElement);
-    newSavedTextDiv.appendChild(textButtonsDiv);
-
-    // Append the new saved text div to the appropriate container
-    console.log("Appending to LinkedIn section"); // Debugging line
     linkedinSaved.appendChild(newSavedTextDiv);
-
     applyAnimationDelays();
+    updateLocalStorage(); // Assumes this function updates the entire localStorage and logs actions
 
-    localStorage.setItem(
-      "savedTexts",
-      document.getElementById("saved-texts").innerHTML
-    );
-    reapplyDnDEvents();
-    updateLocalStorage();
     // Ensure saved texts are visible and update the toggle button
     var savedTexts = document.getElementById("saved-texts");
     savedTexts.classList.add("visible");
     toggleButton.textContent = "▶️";
     toggleButton.style.transform = "rotate(90deg)";
-    isRotated = true;
-  });
+});
+
 
   document.getElementById("toggle-button").addEventListener("click", function () {
       var savedTexts = document.getElementById("saved-texts");
@@ -395,6 +375,7 @@ document.getElementById("star-button").addEventListener("click", function () {
     }
 }
 
+  
   function updateLocalStorage() {
     var linkedinTexts = document.getElementById("linkedin-saved").innerHTML;
     var savedData = { linkedin: linkedinTexts };
