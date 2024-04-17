@@ -42,6 +42,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  document.getElementById("text-input").addEventListener("paste", function(event) {
+    event.preventDefault(); // Stop the default paste action
+    var text = (event.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand("insertText", false, text); // Insert text without any formatting
+
+    // Optional: Apply a consistent style to the entire text input
+    this.style.fontSize = "16px"; // Set a consistent font size
+});
+
+
   document.getElementById("copy-button").addEventListener("click", function () {
     var textInput = document.getElementById("text-input");
     var range = document.createRange();
