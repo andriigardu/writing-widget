@@ -14,18 +14,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function saveText(span, parent) {
+function saveText(span, parent) {
     span.setAttribute("contenteditable", "false");
     span.classList.remove("editable");
     var newText = span.innerText.trim();
     if (newText) {
-      parent.dataset.displaytext = newText;
+        parent.dataset.displaytext = newText;
     }
-    localStorage.setItem(
-      "savedTexts",
-      document.getElementById("saved-texts").innerHTML
-    );
-  }
+    updateLocalStorage(); // Call updateLocalStorage to handle saving consistently
+}
 
   document.getElementById("text-input").addEventListener("input", function () {
     // Update character and word count whenever the text changes
@@ -374,7 +371,6 @@ document.getElementById("star-button").addEventListener("click", function () {
         charCountDisplay.style.color = ""; // Reset to default color
     }
 }
-
   
   function updateLocalStorage() {
     var linkedinTexts = document.getElementById("linkedin-saved").innerHTML;
