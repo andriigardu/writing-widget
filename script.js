@@ -87,7 +87,7 @@ function saveText(span, parent) {
     });
   }
 
-  
+
 document.getElementById("star-button").addEventListener("click", function () {
     var textInput = document.getElementById("text-input");
     var linkedinSaved = document.getElementById("linkedin-saved");
@@ -96,28 +96,27 @@ document.getElementById("star-button").addEventListener("click", function () {
     var fullText = textInput.innerHTML.trim();
     var displayText = textInput.innerText.trim().substring(0, 50);
 
-    // Check if the textInput is empty
     if (fullText.length === 0) {
         console.log("No text to save");
         return; // Exit the function if there is no text to save
     }
     if (textInput.innerText.length > 50) displayText += "...";
 
-    var newSavedTextDiv = document.createElement("div");
-    newSavedTextDiv.className = "saved-text";
-    newSavedTextDiv.setAttribute("data-fulltext", fullText);
-    newSavedTextDiv.setAttribute("data-displaytext", displayText);
-    newSavedTextDiv.setAttribute("draggable", "true");
-    newSavedTextDiv.innerHTML = `
-        <div class="drag-handle">⠿</div>
-        <span unselectable="on">${displayText}</span>
-        <div class="text-buttons">
-            <button class="add-text">+</button>
-            <button class="remove-text">-</button>
+    // Create a new container for dynamic content
+    var newContent = document.createElement("div");
+    newContent.className = "saved-text-container";
+    newContent.innerHTML = `
+        <div class="saved-text" draggable="true" data-fulltext="${fullText}" data-displaytext="${displayText}">
+            <div class="drag-handle">⠿</div>
+            <span unselectable="on">${displayText}</span>
+            <div class="text-buttons">
+                <button class="add-text">+</button>
+                <button class="remove-text">-</button>
+            </div>
         </div>
     `;
 
-    linkedinSaved.appendChild(newSavedTextDiv);
+    linkedinSaved.appendChild(newContent); // Append new content without touching existing children
     applyAnimationDelays();
     updateLocalStorage(); // Assumes this function updates the entire localStorage and logs actions
 
@@ -127,7 +126,6 @@ document.getElementById("star-button").addEventListener("click", function () {
     toggleButton.textContent = "▶️";
     toggleButton.style.transform = "rotate(90deg)";
 });
-
 
   document.getElementById("toggle-button").addEventListener("click", function () {
       var savedTexts = document.getElementById("saved-texts");
