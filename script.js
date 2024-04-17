@@ -143,6 +143,8 @@ document.getElementById("star-button").addEventListener("click", function () {
         this.textContent = "▶️";
         this.style.transform = "rotate(0deg)";
         applyReverseAnimationDelays();
+        // Use updateLocalStorage to save changes
+        updateLocalStorage();
       }
     });
   
@@ -304,6 +306,8 @@ document.getElementById("star-button").addEventListener("click", function () {
         savedTexts.forEach(function (text) {
           section.appendChild(text);
         });
+        // Use updateLocalStorage to save changes
+        updateLocalStorage();
       }
     }
 
