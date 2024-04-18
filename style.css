@@ -240,17 +240,18 @@ input:checked + .slider:before {
 }
 /* Style the button */
 .clear-all-button {
-  background-color: #fff; /* White background */
-  border: 1px solid #ddd; /* Light gray border */
-  border-radius: 4px; /* Rounded corners */
-  color: #333; /* Dark gray text color */
-  cursor: pointer; /* Indicate clickable behavior */
-  display: inline-block; /* Allow inline positioning */
-  font-size: 14px; /* Font size */
-  padding: 5px 10px; /* Padding around text */
-  margin: 5px; /* Margin around button */
-  transition: background-color 0.2s ease-in-out; /* Smooth transition on hover */
+  /* Style the button appearance (background color, border, etc.) */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  padding: 5px 10px;
+  margin: 5px 0; /* Adjust margin to position next to heading */
 }
+
 
 /* Style the button on hover */
 .clear-all-button:hover {
