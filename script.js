@@ -25,6 +25,11 @@ function saveText(span, parent) {
 }
   
   function standardizeLineBreaks(text) {
+  // Check if there are any line breaks at all
+  if (!text.includes("\n")) {
+    return text; // No line breaks, return the text as is
+  }
+  // Replace only existing line breaks with a single `\n`
   return text.replace(/\r?\n|\r/g, "\n");
 }
 
@@ -50,6 +55,9 @@ function saveText(span, parent) {
   document.getElementById("text-input").addEventListener("paste", function(event) {
     event.preventDefault(); // Prevent the default paste action
     var text = (event.clipboardData || window.clipboardData).getData('text/plain');
+     // Standardize line breaks while preserving existing ones
+    var standardizedText = standardizeLineBreaks(text);
+    this.innerText = standardizedText; // Update the innerText to preserve line breaks
     var normalizedText = text.normalize("NFKD"); // Normalize unicode to ASCII equivalent where possible
 
     // Insert text at the current cursor position
