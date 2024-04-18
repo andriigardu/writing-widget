@@ -23,6 +23,14 @@ function saveText(span, parent) {
     }
     updateLocalStorage(); // Call updateLocalStorage to handle saving consistently
 }
+  
+  function standardizeLineBreaks(text) {
+  return text.replace(/\r?\n|\r/g, "\n");
+}
+
+  function convertLineBreaksToBR(text) {
+  return text.replace(/\n/g, "<br>");
+}
 
   document.getElementById("text-input").addEventListener("input", function () {
     // Update character and word count whenever the text changes
