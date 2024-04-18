@@ -117,6 +117,7 @@ document.getElementById("star-button").addEventListener("click", function () {
     `;
 
     linkedinSaved.appendChild(newContent); // Append new content without touching existing children
+    document.getElementById("saved-texts").classList.add("visible");
     applyAnimationDelays();
     updateLocalStorage(); // Assumes this function updates the entire localStorage and logs actions
 
