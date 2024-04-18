@@ -111,7 +111,6 @@ body {
   cursor: help;  /* Display a help cursor on hover */
 }
 
-
 .tooltip {
     position: fixed;
     display: none;
