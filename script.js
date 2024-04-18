@@ -116,6 +116,13 @@ document.getElementById("star-button").addEventListener("click", function () {
         </div>
     `;
 
+  event.stopPropagation();
+
+  // Add a slight delay (e.g., 10ms) before showing the list
+  setTimeout(function() {
+    document.getElementById("saved-texts").classList.add("visible");
+  }, 10);
+  
     linkedinSaved.appendChild(newContent); // Append new content without touching existing children
     document.getElementById("saved-texts").classList.add("visible");
     applyAnimationDelays();
