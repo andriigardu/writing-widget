@@ -65,6 +65,8 @@ body {
     transform: scale(1.03);
     transition: transform 0.3s ease;
 }
+
+
 .switch {
   display: flex; /* Use flex to allow vertical stacking */
   flex-direction: column; /* Stack children vertically */
@@ -73,6 +75,7 @@ body {
   height: auto; /* Allow container to grow as needed */
   align-self: flex-end; /* Align the switch to the bottom of its container */
 }
+
 .switch input {
   opacity: 0; /* Make checkbox invisible */
   position: absolute; /* Remove it from the flow, preventing it from taking space */
@@ -85,10 +88,12 @@ body {
   cursor: pointer;
   width: 24px; /* Your specified width */
   height: 14px; /* Your specified height */
-  background-color: #ccc;
+  background-color: #cccccc; /* Set to a grey color */
   border-radius: 14px;
   transition: .4s;
   margin-top: 2px; /* Adds a small space between label and switch */
+  /* Prevent default click behavior (like changing appearance) */
+  pointer-events: none;
 }
 
 .slider:before {
@@ -104,7 +109,7 @@ body {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196F3; /* Maintains blue color on check */
 }
 
 input:checked + .slider:before {
@@ -117,6 +122,11 @@ input:checked + .slider:before {
   align-self: flex-start; /* Ensure the label aligns at the start */
   order: -1; /* Makes label appear above the slider */
   margin-bottom: 0; /* Removes any space below the label */
+}
+
+/* Add a hover effect to show the tooltip on hover (optional) */
+.switch:hover {
+  cursor: help;  /* Display a help cursor on hover */
 }
 
 .tooltip {
