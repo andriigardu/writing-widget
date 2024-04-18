@@ -478,7 +478,6 @@ document.getElementById("star-button").addEventListener("click", function () {
   
   document.getElementById("clear-all-button").addEventListener("click", function () {
   localStorage.removeItem("savedTexts");  // Clear saved texts from localStorage
-  document.getElementById("saved-texts").innerHTML = ""; // Clear the saved texts container (optional)
   // You can add additional code to reset other UI elements if needed
 });
 
