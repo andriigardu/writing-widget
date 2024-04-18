@@ -238,6 +238,32 @@ input:checked + .slider:before {
     white-space: nowrap;
     margin-right: 10px;
 }
+/* Style the button */
+.clear-all-button {
+  background-color: #fff; /* White background */
+  border: 1px solid #ddd; /* Light gray border */
+  border-radius: 4px; /* Rounded corners */
+  color: #333; /* Dark gray text color */
+  cursor: pointer; /* Indicate clickable behavior */
+  display: inline-block; /* Allow inline positioning */
+  font-size: 14px; /* Font size */
+  padding: 5px 10px; /* Padding around text */
+  margin: 5px; /* Margin around button */
+  transition: background-color 0.2s ease-in-out; /* Smooth transition on hover */
+}
+
+/* Style the button on hover */
+.clear-all-button:hover {
+  background-color: #f2f2f2; /* Light gray background on hover */
+}
+
+/* Style the button icon */
+.clear-all-button::before {
+  content: ""; /* Use the soap icon character */
+  font-size: 16px; /* Icon size slightly larger than text */
+  margin-right: 5px; /* Add space between icon and text */
+}
+
 .text-buttons {
     display: flex;
     align-items: center;
