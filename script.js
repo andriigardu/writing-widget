@@ -334,6 +334,7 @@ document.getElementById("star-button").addEventListener("click", function () {
       })
     );
     document.getElementById("saved-texts").classList.add("visible");
+    document.getElementById("toggle-button").style.transform = "rotate(90deg)";
     applyAnimationDelays();
     updateLocalStorage();
   });
