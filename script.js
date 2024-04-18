@@ -141,6 +141,7 @@ document.getElementById("star-button").addEventListener("click", function () {
         savedTexts.classList.remove("visible");
         this.textContent = "▶️";
         this.style.transform = "rotate(0deg)";
+        document.getElementById("saved-texts").classList.add("visible");
         applyReverseAnimationDelays();
         // Use updateLocalStorage to save changes
         updateLocalStorage();
