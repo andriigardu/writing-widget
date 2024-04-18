@@ -135,14 +135,15 @@ document.getElementById("star-button").addEventListener("click", function () {
     toggleButton.style.transform = "rotate(90deg)";
 });
 
+
   document.getElementById("toggle-button").addEventListener("click", function () {
       var savedTexts = document.getElementById("saved-texts");
-      isRotated = !isRotated;
+      savedTexts.classList.toggle("visible"); // Toggle the visibility class based on current state
 
-      if (isRotated) {
-        savedTexts.classList.add("visible");
-        this.textContent = "▶️";
-        this.style.transform = "rotate(90deg)";
+      // Update toggle button text and icon based on visibility
+  if (savedTexts.classList.contains("visible")) {
+    this.textContent = "▶️";
+    this.style.transform = "rotate(90deg)";
         applyAnimationDelays();
       } else {
         savedTexts.classList.remove("visible");
