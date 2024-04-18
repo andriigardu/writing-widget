@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   var isRotated = false;
   var isSortedAscending = true;
+  var timeoutId = null; // Variable to store the timeout reference
 
   function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem("savedTexts");
@@ -14,28 +15,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-function saveText(span, parent) {
+  function saveText(span, parent) {
     span.setAttribute("contenteditable", "false");
     span.classList.remove("editable");
     var newText = span.innerText.trim();
     if (newText) {
-        parent.dataset.displaytext = newText;
+      parent.dataset.displaytext = newText;
+      updateLocalStorage(); // Call updateLocalStorage to handle saving consistently
     }
-    updateLocalStorage(); // Call updateLocalStorage to handle saving consistently
-}
-  
-  function standardizeLineBreaks(text) {
-  // Check if there are any line breaks at all
-  if (!text.includes("\n")) {
-    return text; // No line breaks, return the text as is
   }
-  // Replace only existing line breaks with a single `\n`
-  return text.replace(/\r?\n|\r/g, "\n");
-}
+
+  function standardizeLineBreaks(text) {
+    // Check if there are any line breaks at all
+    if (!text.includes("\n")) {
+      return text; // No line breaks, return the text as is
+    }
+    // Replace only existing line breaks with a single `\n`
+    return text.replace(/\r?\n|\r/g, "\n");
+  }
 
   function convertLineBreaksToBR(text) {
-  return text.replace(/\n/g, "<br>");
-}
+    return text.replace(/\n/g, "<br>");
+  }
 
   document.getElementById("text-input").addEventListener("input", function () {
     // Update character and word count whenever the text changes
@@ -50,12 +51,56 @@ function saveText(span, parent) {
     } else {
       charCountDisplay.style.color = "";
     }
+
+    // Clear any existing timeout before setting a new one
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () {
+      if (text.trim() !== "") {
+        // Save the text after 5 seconds of inactivity
+        saveCurrentText();
+      }
+    }, 5000); // 5000 milliseconds = 5 seconds
   });
 
-  document.getElementById("text-input").addEventListener("paste", function(event) {
+  function saveCurrentText() {
+    var textInput = document.getElementById("text-input");
+    var fullText = textInput.innerHTML.trim();
+    var linkedinSaved = document.getElementById("linkedin-saved");
+
+    // Check if existing saved text with same content exists
+    var existingSavedText = linkedinSaved.querySelector(
+      `.saved-text[data-fulltext="${fullText}"]`
+    );
+
+    if (existingSavedText) {
+      // Update the existing saved text content
+      existingSavedText.querySelector("span").textContent = fullText;
+    } else {
+      // Create a new saved text element if it doesn't exist
+      var newContent = document.createElement("div");
+      newContent.className = "saved-text-container";
+      newContent.innerHTML = `
+        <div class="saved-text" draggable="true" data-fulltext="<span class="math-inline">\{fullText\}" data\-displaytext\="</span>{fullText.substring(
+          0,
+          50
+        )}">
+          <div class="drag-handle">⠿</div>
+          <span unselectable="on">${fullText.substring(0, 50)}</span>
+          <div class="text-buttons">
+            <button class="add-text">+</button>
+            <button class="remove-text">-</button>
+          </div>
+        </div>
+      `;
+      linkedinSaved.appendChild(newContent);
+    }
+
+    updateLocalStorage();
+  }
+
+  document.getElementById("text-input").addEventListener("paste", function (event) {
     event.preventDefault(); // Prevent the default paste action
     var text = (event.clipboardData || window.clipboardData).getData('text/plain');
-     // Standardize line breaks while preserving existing ones
     var standardizedText = standardizeLineBreaks(text);
     this.innerText = standardizedText; // Update the innerText to preserve line breaks
     var normalizedText = text.normalize("NFKD"); // Normalize unicode to ASCII equivalent where possible
