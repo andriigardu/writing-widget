@@ -37,20 +37,6 @@ function saveText(span, parent) {
   return text.replace(/\n/g, "<br>");
 }
 
-  document.getElementById("text-input").addEventListener("input", function () {
-    // Update character and word count whenever the text changes
-    updateCharCount();
-    var text = this.innerText; // Get all text including spaces
-    var charCount = text.length; // Count all characters including spaces
-    var charCountDisplay = document.getElementById("char-count");
-    charCountDisplay.textContent = "Characters: " + charCount;
-
-    if (charCount > 3000) {
-      charCountDisplay.style.color = "red";
-    } else {
-      charCountDisplay.style.color = "";
-    }
-  });
 
   document.getElementById("text-input").addEventListener("paste", function(event) {
     event.preventDefault(); // Prevent the default paste action
@@ -67,6 +53,22 @@ function saveText(span, parent) {
     this.style.fontSize = "14px"; // Set a consistent font size
 });
 
+  document.getElementById("text-input").addEventListener("input", function () {
+    // Update character and word count whenever the text changes
+    updateCharCount();
+    var text = this.innerText; // Get all text including spaces
+    var charCount = text.length; // Count all characters including spaces
+    var charCountDisplay = document.getElementById("char-count");
+    charCountDisplay.textContent = "Characters: " + charCount;
+
+    if (charCount > 3000) {
+      charCountDisplay.style.color = "red";
+    } else {
+      charCountDisplay.style.color = "";
+    }
+  });
+
+  
   document.getElementById("copy-button").addEventListener("click", function () {
     var textInput = document.getElementById("text-input");
     var range = document.createRange();
