@@ -37,13 +37,11 @@ function saveText(span, parent) {
   return text.replace(/\n/g, "<br>");
 }
 
-
   document.getElementById("text-input").addEventListener("paste", function(event) {
     event.preventDefault(); // Prevent the default paste action
     var text = (event.clipboardData || window.clipboardData).getData('text/plain');
      // Standardize line breaks while preserving existing ones
     var standardizedText = standardizeLineBreaks(text);
-    this.innerText = standardizedText; // Update the innerText to preserve line breaks
     var normalizedText = text.normalize("NFKD"); // Normalize unicode to ASCII equivalent where possible
 
     // Insert text at the current cursor position
