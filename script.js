@@ -7,20 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
   textInput.innerHTML = ""; // Ensures it starts empty
   textInput.focus(); // Focus to set cursor at start
 
- function insertTextAtCursor(text) {
-  const sel = window.getSelection();
-  if (sel.rangeCount) {
-    const range = sel.getRangeAt(0);
-    range.deleteContents(); // Delete any selected text
-    const textNode = document.createTextNode(text);
-    range.insertNode(textNode);
-    range.setStartAfter(textNode);
-    range.setEndAfter(textNode);
-    sel.removeAllRanges();
-    sel.addRange(range);
-  }
-}
-
   function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem("savedTexts");
     if (savedTextsJSON) {
@@ -59,7 +45,7 @@ function saveText(span, parent) {
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
     var originalText = textInput.textContent; // Use textContent for direct text manipulation
-    insertTextAtCursor(modifiedText);
+
     // Define shortcuts and their replacements
     const shortcuts = {
     '->': '→',
@@ -227,24 +213,17 @@ function handleShortcutInput() {
   
   document.getElementById("text-input").addEventListener("paste", function(event) {
     event.preventDefault(); // Prevent the default paste action
-
-    // Get the plain text from the clipboard
     var text = (event.clipboardData || window.clipboardData).getData('text/plain');
+     // Standardize line breaks while preserving existing ones
+    var standardizedText = standardizeLineBreaks(text);
+    var normalizedText = text.normalize("NFKD"); // Normalize unicode to ASCII equivalent where possible
 
-    // Normalize text to remove special characters and multiple line breaks
-    var cleanText = text.normalize("NFKD");
-    cleanText = cleanText.replace(/[\u2018\u2019\u201C\u201D\u2026]/g, m => ({
-      '\u2018': "'", '\u2019': "'", '\u201C': '"', '\u201D': '"', '\u2026': '...'
-    }[m]));
-    cleanText = cleanText.replace(/\n\s*\n/g, '\n'); // Reduce multiple newlines to a single newline
+    // Insert text at the current cursor position
+    document.execCommand('insertText', false, normalizedText);
 
-    // Insert text at the cursor position without formatting
-    insertTextAtCursor(cleanText);
-
-    // Apply a uniform style
-    this.style.fontSize = "14px";
+    // Apply uniform style if needed
+    this.style.fontSize = "14px"; // Set a consistent font size
 });
-
 
   document.getElementById("text-input").addEventListener("input", function () {
     // Debounce input to handle rapid typing
@@ -315,7 +294,6 @@ function insertEmojiAtRange(emoji, index, textElement) {
     const content = textElement.textContent;
     const newText = content.slice(0, index) + emoji + ' ' + content.slice(index + 1);
     textElement.textContent = newText; // Replace text content with new text including emoji
-    insertTextAtCursor(modifiedText);
 
     const sel = window.getSelection();
     const range = document.createRange();
