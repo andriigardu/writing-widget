@@ -87,7 +87,10 @@ function handleShortcutInput() {
 });
 
   document.getElementById("text-input").addEventListener("input", function () {
-    handleShortcutInput(); // Call the shortcut handler on every input event
+    // Introduce a slight delay to ensure the DOM has updated
+    setTimeout(() => {
+        handleShortcutInput(); // Process shortcut replacement after a slight delay
+    }, 10); // A delay of 10 milliseconds
     // Update character and word count whenever the text changes
     updateCharCount();
     var text = this.innerText; // Get all text including spaces
