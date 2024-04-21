@@ -39,24 +39,37 @@ function saveText(span, parent) {
   
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
-    var text = textInput.innerHTML;
+    var sel = window.getSelection();
+    if (sel.rangeCount > 0) {
+        var range = sel.getRangeAt(0);
+        var text = textInput.innerHTML;
 
-    // Define shortcuts and their replacements
-    const shortcuts = {
-        '->': '→',
-        '<-': '←',
-        '=>': '⇒',
-        '<=': '⇐'
-    };
+        // Define shortcuts and their replacements
+        const shortcuts = {
+            '->': '→',
+            '<-': '←',
+            '=>': '⇒',
+            '<=': '⇐'
+        };
 
-    // Replace shortcuts with corresponding symbols
-    Object.keys(shortcuts).forEach(shortcut => {
-        if (text.includes(shortcut)) {
-            text = text.replace(new RegExp(shortcut, 'g'), shortcuts[shortcut]);
-        }
-    });
+        // Replace shortcuts with corresponding symbols and maintain cursor position
+        Object.keys(shortcuts).forEach(shortcut => {
+            if (text.includes(shortcut)) {
+                var startPos = range.startOffset;
+                var endPos = range.endOffset;
+                text = text.replace(new RegExp(shortcut, 'g'), shortcuts[shortcut]);
 
-    textInput.innerHTML = text;
+                // Update the innerHTML without losing the selection
+                textInput.innerHTML = text;
+
+                // Restore the selection
+                range.setStart(textInput.childNodes[0], startPos);
+                range.setEnd(textInput.childNodes[0], endPos);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        });
+    }
 }
   
   document.getElementById("text-input").addEventListener("paste", function(event) {
