@@ -171,7 +171,7 @@ input:checked + .slider:before {
     height: calc(100% - 70px);
     padding: 8px;
     box-sizing: border-box;
-    border: 1px solid #ccc;
+    border: 0.5px solid #ccc;
     border-radius: 0px;
     overflow-y: auto;
     outline: none;
