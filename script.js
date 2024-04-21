@@ -7,6 +7,21 @@ document.addEventListener("DOMContentLoaded", function () {
   textInput.innerHTML = ""; // Ensures it starts empty
   textInput.focus(); // Focus to set cursor at start
 
+  // Function to insert text at cursor position
+  function insertTextAtCursor(text) {
+      const sel = window.getSelection();
+      if (sel.rangeCount) {
+          const range = sel.getRangeAt(0);
+          range.deleteContents(); // Delete any selected text
+          const textNode = document.createTextNode(text);
+          range.insertNode(textNode);
+          range.setStartAfter(textNode);
+          range.setEndAfter(textNode);
+          sel.removeAllRanges();
+          sel.addRange(range);
+      }
+  }
+
   function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem("savedTexts");
     if (savedTextsJSON) {
@@ -218,8 +233,8 @@ function handleShortcutInput() {
     var standardizedText = standardizeLineBreaks(text);
     var normalizedText = text.normalize("NFKD"); // Normalize unicode to ASCII equivalent where possible
 
-    // Insert text at the current cursor position
-    document.execCommand('insertText', false, normalizedText);
+    // Insert text at the current cursor position using the new function
+      insertTextAtCursor(normalizedText);
 
     // Apply uniform style if needed
     this.style.fontSize = "14px"; // Set a consistent font size
