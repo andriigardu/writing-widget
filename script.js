@@ -43,10 +43,37 @@ function handleShortcutInput() {
 
     // Define shortcuts and their replacements
     const shortcuts = {
-        '->': '→',
-        '<-': '←',
-        '=>': '⇒',
-        '<=': '⇐'
+    '->': '→',
+    '<-': '←',
+    '=>': '⇒',
+    '<=': '⇐',
+    '==': '≡',
+    '!=': '≠',
+    '>=': '≥',
+    '<=': '≤',
+    '++': '⧺', // Increment
+    '--': '⧻', // Decrement
+    '&&': '∧', // Logical AND
+    '||': '∨', // Logical OR
+    '...': '…', // Ellipsis
+    '(c)': '©', // Copyright symbol
+    '(r)': '®', // Registered trademark symbol
+    '(tm)': '™', // Trademark symbol
+    '(p)': '℗', // Sound recording copyright
+    '1/4': '¼', // Fraction 1/4
+    '1/2': '½', // Fraction 1/2
+    '3/4': '¾', // Fraction 3/4
+    '1/3': '⅓', // Fraction 1/3
+    '2/3': '⅔', // Fraction 2/3
+    '1/8': '⅛', // Fraction 1/8
+    '3/8': '⅜', // Fraction 3/8
+    '5/8': '⅝', // Fraction 5/8
+    '7/8': '⅞', // Fraction 7/8
+    'mu': 'µ',  // Greek letter mu, micro
+    'ohm': 'Ω', // Greek letter Omega, symbol for resistance
+    'deg': '°', // Degree symbol
+    'squared': '²',
+    'cubed': '³'
     };
 
     // Calculate initial cursor position
