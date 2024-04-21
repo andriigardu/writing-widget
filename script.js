@@ -301,7 +301,8 @@ function insertEmojiAtRange(emoji, index, textElement) {
     sel.removeAllRanges();
     sel.addRange(range);
 
-    hideEmojiPopup();
+    setTimeout(hideEmojiPopup, 10); // Delay hiding the popup slightly
+
     textElement.focus(); // Focus back on text input
     textElement.lastTypedColon = false; // Reset flag to enable popup on new colon
 }
