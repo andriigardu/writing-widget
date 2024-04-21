@@ -250,18 +250,15 @@ document.getElementById("text-input").addEventListener("input", function () {
     const lastChar = text.charAt(text.length - 1);
     const lastColonPos = text.lastIndexOf(':');
 
-    // Ensure emoji selection does not inhibit further popup appearances
+    // Adjusting logic to ensure popup can reappear after emoji insertion
     if (lastChar === ' ' && this.lastTypedColon) {
         hideEmojiPopup();
-        this.lastTypedColon = false; // Reset the flag
-        return; // Exit early to avoid showing the popup again
-    }
-
-    if (lastChar === ':' && (lastColonPos === 0 || text[lastColonPos - 1] === ' ')) {
+        this.lastTypedColon = false; // Reset the flag after a space follows a colon
+    } else if (lastChar === ':' && (lastColonPos === 0 || text[lastColonPos - 1] === ' ')) {
         showEmojiPopupBasedOnPosition(lastColonPos, this);
         this.lastTypedColon = true; // Set a flag that a colon was last typed
-    } else {
-        this.lastTypedColon = false;
+    } else if (!this.lastTypedColon) { // Hide the popup if conditions are not met
+        hideEmojiPopup();
     }
 });
 
@@ -269,45 +266,46 @@ function showEmojiPopupBasedOnPosition(index, textElement) {
     const emojiPopup = document.getElementById("emoji-popup");
     if (!emojiPopup) return; // Safety check
 
-    const range = document.createRange();
-    const textNode = textElement.childNodes[0] || textElement;
-    range.setStart(textNode, index);
-    range.setEnd(textNode, index + 1);
-
-    const rect = range.getBoundingClientRect();
-    emojiPopup.style.left = `${rect.left + window.pageXOffset}px`;
-    emojiPopup.style.top = `${rect.top + rect.height + window.pageYOffset}px`;
-    emojiPopup.style.display = 'block';
-    emojiPopup.innerHTML = '<span>😊</span> <span>😂</span> <span>➡️</span> <span>🔴</span>';
-
-    Array.from(emojiPopup.children).forEach(child => {
-        child.onclick = function() {
-            insertEmojiAtRange(range, child.textContent);
-            hideEmojiPopup();
-            textElement.lastTypedColon = false; // Reset the flag on emoji selection
+    // Clear previous emojis to prevent multiple bindings
+    emojiPopup.innerHTML = '';
+    const emojis = ['😊', '😂', '➡️', '🔴'];
+    emojis.forEach(emoji => {
+        let span = document.createElement('span');
+        span.textContent = emoji;
+        span.onclick = () => {
+            insertEmojiAtRange(emoji, index, textElement);
         };
+        emojiPopup.appendChild(span);
     });
+
+    const rect = textElement.getBoundingClientRect();
+    emojiPopup.style.left = `${rect.left}px`;
+    emojiPopup.style.top = `${rect.bottom}px`;
+    emojiPopup.style.display = 'block';
 }
 
-function insertEmojiAtRange(range, emoji) {
-    const textInput = document.getElementById("text-input");
-    range.deleteContents();
-    const emojiNode = document.createTextNode(emoji + ' ');
-    range.insertNode(emojiNode);
-    range.setStartAfter(emojiNode);
-    range.setEndAfter(emojiNode);
+function insertEmojiAtRange(emoji, index, textElement) {
+    const content = textElement.textContent;
+    const newText = content.slice(0, index) + emoji + ' ' + content.slice(index + 1);
+    textElement.textContent = newText; // Replace text content with new text including emoji
+
     const sel = window.getSelection();
+    const range = document.createRange();
+    range.setStart(textElement, index + 2); // Set cursor after the emoji
+    range.collapse(true);
     sel.removeAllRanges();
     sel.addRange(range);
-    textInput.focus(); // Refocus on the text input after inserting an emoji
-    textInput.lastTypedColon = false; // Ensure this is reset here too
+
+    hideEmojiPopup();
+    textElement.focus(); // Focus back on text input
+    textElement.lastTypedColon = false; // Reset flag to enable popup on new colon
 }
 
 function hideEmojiPopup() {
     const emojiPopup = document.getElementById("emoji-popup");
     emojiPopup.style.display = 'none';
-    emojiPopup.lastTypedColon = false; // Reset this flag on hide too
 }
+
   
   document.getElementById("copy-button").addEventListener("click", function () {
     var textInput = document.getElementById("text-input");
