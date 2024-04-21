@@ -267,7 +267,23 @@ function checkAndTriggerEmojiPopup() {
 }
 
 function showEmojiPopupBasedOnPosition(index, textElement) {
-    // Your existing logic to display the emoji popup
+    const emojiPopup = document.getElementById("emoji-popup");
+    emojiPopup.innerHTML = ''; // Clear existing emojis to ensure fresh setup
+    const emojis = ['😊', '😂', '➡️', '🔴'];
+    emojis.forEach(emoji => {
+        let span = document.createElement('span');
+        span.textContent = emoji;
+        span.style.cursor = 'pointer'; // Ensure cursor changes to pointer
+        span.onclick = () => {
+            insertEmojiAtRange(emoji, index, textElement);
+        };
+        emojiPopup.appendChild(span);
+    });
+
+    const rect = textElement.getBoundingClientRect();
+    emojiPopup.style.left = `${rect.left + window.pageXOffset}px`;
+    emojiPopup.style.top = `${rect.bottom + window.pageYOffset}px`;
+    emojiPopup.style.display = 'block';
 }
 
 function insertEmojiAtRange(emoji, index, textElement) {
