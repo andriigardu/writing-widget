@@ -239,6 +239,54 @@ function handleShortcutInput() {
       charCountDisplay.style.color = "";
     }
   });
+  
+document.getElementById("text-input").addEventListener("input", function(event) {
+    const textInput = event.target;
+    const text = textInput.value;
+    const cursorPosition = textInput.selectionStart;
+
+    // Check if the last character is a colon and it's a single colon or followed by a whitespace
+    if (text[cursorPosition - 1] === ':' && (cursorPosition === 1 || text[cursorPosition - 2] === ' ')) {
+        showEmojiPopup(cursorPosition, textInput);
+    } else {
+        hideEmojiPopup();
+    }
+});
+
+function showEmojiPopup(position, textInput) {
+    const emojiPopup = document.getElementById("emoji-popup");
+    const rect = textInput.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    // Set the position of the popup
+    emojiPopup.style.left = `${rect.left + window.pageXOffset}px`;
+    emojiPopup.style.top = `${rect.bottom + scrollTop + 5}px`; // 5px below the input
+    emojiPopup.style.display = 'block';
+
+    // Populate popup with emojis and symbols (this part can be dynamic based on your preference)
+    emojiPopup.innerHTML = '<span>😊</span> <span>😂</span> <span>➡️</span> <span>🔴</span>'; // Example content
+    // Attach click events to each emoji/span to insert them into the input
+    Array.from(emojiPopup.children).forEach(child => {
+        child.addEventListener('click', function() {
+            insertAtCursor(textInput, child.textContent);
+            hideEmojiPopup();
+        });
+    });
+}
+
+function hideEmojiPopup() {
+    const emojiPopup = document.getElementById("emoji-popup");
+    emojiPopup.style.display = 'none';
+}
+
+function insertAtCursor(input, text) {
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    input.value = input.value.substring(0, start) + text + input.value.substring(end);
+    input.selectionStart = input.selectionEnd = start + text.length; // Move cursor after the emoji
+}
+
+// Additional utility to handle cursor position and input updates
 
   
   document.getElementById("copy-button").addEventListener("click", function () {
