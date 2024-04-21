@@ -41,7 +41,7 @@ function saveText(span, parent) {
   function convertLineBreaksToBR(text) {
   return text.replace(/\n/g, "<br>");
 }
-  
+
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
     var originalHTML = textInput.innerHTML; // Use innerHTML to keep formatting
@@ -79,7 +79,7 @@ function handleShortcutInput() {
     'deg': '°', // Degree symbol
     'squared': '²',
     'cubed': '³',
-      // Adding emoji shortcuts
+    // Adding emoji shortcuts
     ':)': '😊',
     ':(': '😞',
     ':D': '😄',
@@ -166,50 +166,19 @@ function handleShortcutInput() {
     ':red_triangle_down:': '🔻'
     };
 
-    // Calculate initial cursor position
-    const sel = window.getSelection();
-    const range = sel.getRangeAt(0);
-    let startOffset = range.startOffset;
-
-    // Check and replace shortcuts in the text
-    let modifiedText = originalText;
+    let modifiedHTML = originalHTML;
     Object.keys(shortcuts).forEach(shortcut => {
-        const replacement = shortcuts[shortcut];
-        if (modifiedText.includes(shortcut)) {
-            const parts = modifiedText.split(shortcut);
-            const positions = [];
-            let currentPosition = 0;
-
-            // Calculate positions of shortcuts in the original text
-            parts.forEach((part, index) => {
-                if (index < parts.length - 1) { // Not the last part
-                    positions.push(currentPosition + part.length);
-                    currentPosition += part.length + shortcut.length;
-                }
-            });
-
-            // Adjust cursor position if it's after a replaced shortcut
-            positions.forEach(pos => {
-                if (startOffset > pos) {
-                    startOffset += replacement.length - shortcut.length;
-                }
-            });
-
-            // Replace all occurrences
-            modifiedText = modifiedText.split(shortcut).join(replacement);
-        }
+        // Replace each shortcut globally
+        const regex = new RegExp(shortcut, 'g');
+        modifiedHTML = modifiedHTML.replace(regex, shortcuts[shortcut]);
     });
 
-    // Update the text area without losing cursor position
-    if (modifiedText !== originalText) {
-        textInput.textContent = modifiedText; // Set the modified text
-        sel.removeAllRanges();
-        const newRange = document.createRange();
-        newRange.setStart(textInput.firstChild, startOffset);
-        newRange.setEnd(textInput.firstChild, startOffset);
-        sel.addRange(newRange);
+    // Update the text area only if changes were made
+    if (modifiedHTML !== originalHTML) {
+        textInput.innerHTML = modifiedHTML;
     }
 }
+
 
   document.getElementById("text-input").addEventListener("paste", function(event) {
     event.preventDefault(); // Prevent the default paste action
@@ -291,25 +260,20 @@ function showEmojiPopupBasedOnPosition(index, textElement) {
 }
 
 function insertEmojiAtRange(emoji, index, textElement) {
-    var textInput = document.getElementById("text-input"); // Ensure you are targeting the text input element
-    textInput.focus(); // Focus on the text input to ensure that the cursor position is active
-
+    var textInput = document.getElementById("text-input");
+    textInput.focus();
     var sel = window.getSelection();
     if (sel.rangeCount > 0) {
         var range = sel.getRangeAt(0);
-        range.deleteContents(); // Clear the contents of the current range
-
-        var textNode = document.createTextNode(emoji);
-        range.insertNode(textNode); // Insert the emoji as a text node
-
-        var spaceNode = document.createTextNode(' '); // Create a space node
-        range.insertNode(spaceNode); // Insert space after emoji for better formatting
-
-        range.setStartAfter(spaceNode); // Move the cursor after the emoji and space
-        range.setEndAfter(spaceNode);
-
+        range.setStart(textInput.childNodes[0], index);
+        range.setEnd(textInput.childNodes[0], index + 1); // Set end to index + 1 to replace the colon
+        range.deleteContents();
+        var emojiNode = document.createTextNode(emoji + ' ');
+        range.insertNode(emojiNode);
+        range.setStartAfter(emojiNode);
+        range.setEndAfter(emojiNode);
         sel.removeAllRanges();
-        sel.addRange(range); // Update the selection range to the new position
+        sel.addRange(range);
     }
 }
 
