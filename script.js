@@ -169,7 +169,6 @@ function handleShortcutInput() {
     let modifiedHTML = originalHTML;
 
     Object.keys(shortcuts).forEach(shortcut => {
-        // Escape special characters for regex
         const escapedShortcut = shortcut.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
         const regex = new RegExp(escapedShortcut, 'g');
         modifiedHTML = modifiedHTML.replace(regex, shortcuts[shortcut]);
@@ -177,7 +176,16 @@ function handleShortcutInput() {
 
     if (modifiedHTML !== originalHTML) {
         textInput.innerHTML = modifiedHTML;
+        restoreCaretPosition(textInput); // Restore caret position after changing innerHTML
     }
+}
+
+function restoreCaretPosition(elem) {
+    var sel = window.getSelection(), range = document.createRange();
+    range.setStart(elem, 0);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
 }
 
 
@@ -262,22 +270,24 @@ function showEmojiPopupBasedOnPosition(index, textElement) {
 
 function insertEmojiAtRange(emoji, index, textElement) {
     var textInput = document.getElementById("text-input");
-    textInput.focus();
+    textInput.focus();  // Focus on the text input
     var sel = window.getSelection();
     if (sel.rangeCount > 0) {
         var range = sel.getRangeAt(0);
-        range.deleteContents(); // Clear the selected contents first
+        range.deleteContents(); // Clear the contents where the emoji will be inserted
 
-        var emojiNode = document.createTextNode(emoji + ' ');
-        range.insertNode(emojiNode);
+        var emojiNode = document.createTextNode(emoji + ' '); // Create text node for emoji
+        range.insertNode(emojiNode); // Insert emoji
 
-        // Move the selection point right after the newly inserted emoji
-        range.setStartAfter(emojiNode);
-        range.setEndAfter(emojiNode);
-        sel.removeAllRanges();
-        sel.addRange(range);
+        range = document.createRange(); // Create a new range
+        range.setStartAfter(emojiNode); // Set the start of the range right after the inserted emoji
+        range.setEndAfter(emojiNode); // Set the end of the range right after the inserted emoji
+
+        sel.removeAllRanges(); // Remove all ranges
+        sel.addRange(range); // Add the new range
     }
 }
+
 
 
 
