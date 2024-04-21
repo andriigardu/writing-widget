@@ -292,24 +292,16 @@ function showEmojiPopupBasedOnPosition(index, textElement) {
 }
 
 function insertEmojiAtRange(emoji, index, textElement) {
-    const range = document.createRange();
     const sel = window.getSelection();
-    const textNode = textElement.childNodes[0] || textElement;
+    const range = sel.getRangeAt(0);
+    range.setStart(textElement.firstChild, index);
+    range.setEnd(textElement.firstChild, index + 1); // Include the colon in the range
 
-    // Adjust range to insert emoji
-    range.setStart(textNode, index);
-    range.setEnd(textNode, index);
-    sel.removeAllRanges();
-    sel.addRange(range);
+    const emojiNode = document.createTextNode(emoji + ' '); // Create a text node for the emoji
+    range.deleteContents(); // Remove the colon
+    range.insertNode(emojiNode); // Insert emoji node at the caret position
 
-    // Create a text node for the emoji
-    const emojiNode = document.createTextNode(emoji + ' '); // add space after emoji
-
-    // Insert emoji node at the caret position
-    range.insertNode(emojiNode);
-
-    // Move the caret immediately after the inserted emoji
-    range.setStartAfter(emojiNode);
+    range.setStartAfter(emojiNode); // Move the caret immediately after the inserted emoji
     range.setEndAfter(emojiNode);
     sel.removeAllRanges();
     sel.addRange(range);
@@ -319,10 +311,38 @@ function insertEmojiAtRange(emoji, index, textElement) {
     textElement.lastTypedColon = false; // Reset flag to enable popup on new colon
 }
 
+function handleShortcutInput() {
+    var textInput = document.getElementById("text-input");
+    var originalText = textInput.textContent; // Use textContent for direct text manipulation
+    const shortcuts = { /* your shortcuts map */ };
+
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return; // No selection, likely nothing to replace
+
+    let startOffset = sel.getRangeAt(0).startOffset;
+
+    let modifiedText = originalText;
+    Object.keys(shortcuts).forEach(shortcut => {
+        const replacement = shortcuts[shortcut];
+        while (modifiedText.includes(shortcut)) {
+            modifiedText = modifiedText.replace(shortcut, replacement);
+        }
+    });
+
+    textInput.textContent = modifiedText;
+
+    // Restore the selection
+    const range = document.createRange();
+    range.setStart(textInput.firstChild, Math.min(startOffset, textInput.textContent.length));
+    range.setEnd(textInput.firstChild, Math.min(startOffset, textInput.textContent.length));
+    sel.removeAllRanges();
+    sel.addRange(range);
+}
+
 function hideEmojiPopup() {
     const emojiPopup = document.getElementById("emoji-popup");
     if (emojiPopup) {
-        emojiPopup.style.display = 'none'; // Ensure the display is set to none
+        emojiPopup.style.display = 'none';
     }
 }
 
