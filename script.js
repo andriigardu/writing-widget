@@ -73,7 +73,7 @@ function handleShortcutInput() {
     'ohm': 'Ω', // Greek letter Omega, symbol for resistance
     'deg': '°', // Degree symbol
     'squared': '²',
-    'cubed': '³'
+    'cubed': '³',
       // Adding emoji shortcuts
     ':)': '😊',
     ':(': '😞',
