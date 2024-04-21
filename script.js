@@ -249,8 +249,13 @@ document.getElementById("text-input").addEventListener("input", function(event) 
     const text = textInput.innerText;
     const position = range.startOffset;
 
-    // Determine if ':' is typed as a standalone or followed by space
-    if (position > 0 && text[position - 1] === ':' && (position === 1 || text[position - 2] === ' ')) {
+    // Check the entire text for a standalone colon
+    const lastColonPos = text.lastIndexOf(':');
+    if (lastColonPos !== -1 && (lastColonPos === 0 || text[lastColonPos - 1] === ' ')) {
+        // If colon is the first character or preceded by a space, show popup
+        const range = document.createRange();
+        range.setStart(textInput.childNodes[0], lastColonPos + 1);
+        range.setEnd(textInput.childNodes[0], lastColonPos + 1);
         showEmojiPopup(textInput, range);
     } else {
         hideEmojiPopup();
@@ -260,13 +265,9 @@ document.getElementById("text-input").addEventListener("input", function(event) 
 function showEmojiPopup(textInput, range) {
     const emojiPopup = document.getElementById("emoji-popup");
     const rect = range.getBoundingClientRect();
-
-    // Positioning the popup right at the cursor position
     emojiPopup.style.left = `${rect.left + window.pageXOffset}px`;
     emojiPopup.style.top = `${rect.top + rect.height + window.pageYOffset}px`;
     emojiPopup.style.display = 'block';
-
-    // Example content, ideally dynamically generated based on available emojis
     emojiPopup.innerHTML = '<span>😊</span> <span>😂</span> <span>➡️</span> <span>🔴</span>';
     Array.from(emojiPopup.children).forEach(child => {
         child.addEventListener('click', function() {
@@ -276,20 +277,22 @@ function showEmojiPopup(textInput, range) {
     });
 }
 
-function hideEmojiPopup() {
-    const emojiPopup = document.getElementById("emoji-popup");
-    emojiPopup.style.display = 'none';
-}
-
 function insertEmojiAtRange(range, emoji) {
+    // Adjusting the range to replace the colon
+    range.setStart(range.startContainer, range.startOffset - 1);
     range.deleteContents();
-    range.insertNode(document.createTextNode(emoji + ' '));  // Insert emoji and add a space
-    // Collapse the range to the end so typing continues after the emoji
-    range.collapse(false);
-
+    const emojiNode = document.createTextNode(emoji + ' ');
+    range.insertNode(emojiNode);
+    range.setStartAfter(emojiNode);
+    range.setEndAfter(emojiNode);
     const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
+}
+
+function hideEmojiPopup() {
+    const emojiPopup = document.getElementById("emoji-popup");
+    emojiPopup.style.display = 'none';
 }
 
   
