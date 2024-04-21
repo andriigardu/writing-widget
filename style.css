@@ -51,7 +51,7 @@ body {
     z-index: 2;
     padding: 5px;
     background: #fff;
-    border: 1px solid #ccc;
+    border: 0.5px solid #ccc;
     border-bottom: 1px solid #ccc;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -63,7 +63,6 @@ body {
     padding: 5px 10px;
     background: #EDEDEB;
     margin: 0 5px;
-    border: 1px solid #ccc;
     border-radius: 2.5px;
     cursor: pointer;
     height: 32px;
@@ -71,6 +70,11 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+#copy-button, #star-button, #clear-button, #toggle-button {
+    border: 0.5px solid #ccc;
+}
+
 #char-count, #word-count, #clear-saved-texts-button, #sort-button {
     background-color: transparent;
     color: #000;
