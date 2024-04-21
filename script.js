@@ -41,14 +41,12 @@ function saveText(span, parent) {
   function convertLineBreaksToBR(text) {
   return text.replace(/\n/g, "<br>");
 }
-
+  
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
-    var originalHTML = textInput.innerHTML; // Use innerHTML to keep formatting
+    var originalHTML = textInput.innerHTML;  // Use innerHTML to keep formatting
 
-    // Define shortcuts and their replacements
-    const shortcuts = {
-    '->': '→',
+    const shortcuts = { '->': '→',
     '<-': '←',
     '=>': '⇒',
     '<=': '⇐',
@@ -163,22 +161,21 @@ function handleShortcutInput() {
     ':small_orange_diamond:': '🔸',
     ':small_blue_diamond:': '🔹',
     ':red_triangle_up:': '🔺',
-    ':red_triangle_down:': '🔻'
-    };
-
+    ':red_triangle_down:': '🔻'};
     let modifiedHTML = originalHTML;
 
     Object.keys(shortcuts).forEach(shortcut => {
-        const escapedShortcut = shortcut.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        const escapedShortcut = shortcut.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');  // Escape regex special characters
         const regex = new RegExp(escapedShortcut, 'g');
         modifiedHTML = modifiedHTML.replace(regex, shortcuts[shortcut]);
     });
 
     if (modifiedHTML !== originalHTML) {
         textInput.innerHTML = modifiedHTML;
-        restoreCaretPosition(textInput); // Restore caret position after changing innerHTML
+        // Optionally, you might want to restore the cursor position, which may require additional logic
     }
 }
+
 
 function restoreCaretPosition(elem) {
     var sel = window.getSelection(), range = document.createRange();
@@ -269,26 +266,24 @@ function showEmojiPopupBasedOnPosition(index, textElement) {
 }
 
 function insertEmojiAtRange(emoji, index, textElement) {
-    var textInput = document.getElementById("text-input");
-    textInput.focus();  // Focus on the text input
-    var sel = window.getSelection();
+    const textInput = document.getElementById("text-input");
+    textInput.focus();  // Ensure the text input is focused
+    const sel = window.getSelection();
     if (sel.rangeCount > 0) {
-        var range = sel.getRangeAt(0);
-        range.deleteContents(); // Clear the contents where the emoji will be inserted
+        const range = sel.getRangeAt(0);
+        range.deleteContents(); // Clear the selected contents
+        
+        // Insert the emoji directly at the range's current position
+        const emojiNode = document.createTextNode(emoji + ' ');
+        range.insertNode(emojiNode);
 
-        var emojiNode = document.createTextNode(emoji + ' '); // Create text node for emoji
-        range.insertNode(emojiNode); // Insert emoji
-
-        range = document.createRange(); // Create a new range
-        range.setStartAfter(emojiNode); // Set the start of the range right after the inserted emoji
-        range.setEndAfter(emojiNode); // Set the end of the range right after the inserted emoji
-
-        sel.removeAllRanges(); // Remove all ranges
-        sel.addRange(range); // Add the new range
+        // Set the cursor right after the inserted emoji
+        range.setStartAfter(emojiNode);
+        range.setEndAfter(emojiNode);
+        sel.removeAllRanges();  // Clear existing selections
+        sel.addRange(range);  // Set the new range with the cursor positioned correctly
     }
 }
-
-
 
 
 function hideEmojiPopup() {
