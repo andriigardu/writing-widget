@@ -89,7 +89,7 @@ function handleShortcutInput() {
     ':O': '😮',
     ':-/': '😕',
     ':thumbsup:': '👍',
-    ':heart:': '❤️'
+    ':heart:': '❤️',
     ':exclamation:': '❗',
     ':question:': '❓',
     ':grey_exclamation:': '❕',
