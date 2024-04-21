@@ -28,7 +28,15 @@ body {
     width: auto;
     height: auto;
 }
+#emoji-popup span {
+    cursor: pointer;
+    padding: 5px;
+    display: inline-block; /* Ensures padding and background are applied correctly */
+}
 
+#emoji-popup span:hover {
+    background-color: #ccc; /* Grey background on hover */
+}
 #control-panel {
     position: absolute;
     top: 0;
