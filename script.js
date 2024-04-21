@@ -44,7 +44,7 @@ function saveText(span, parent) {
   
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
-    var originalText = textInput.textContent; // Use textContent for direct text manipulation
+    var originalHTML = textInput.innerHTML; // Use innerHTML to keep formatting
 
     // Define shortcuts and their replacements
     const shortcuts = {
@@ -210,7 +210,7 @@ function handleShortcutInput() {
         sel.addRange(newRange);
     }
 }
-  
+
   document.getElementById("text-input").addEventListener("paste", function(event) {
     event.preventDefault(); // Prevent the default paste action
     var text = (event.clipboardData || window.clipboardData).getData('text/plain');
@@ -219,7 +219,7 @@ function handleShortcutInput() {
     var normalizedText = text.normalize("NFKD"); // Normalize unicode to ASCII equivalent where possible
 
     // Insert text at the current cursor position
-    document.execCommand('insertText', false, normalizedText);
+    document.execCommand('insertHTML', false, standardizedText.replace(/\n/g, '<br>')); // Insert standardized text with line breaks converted to <br>
 
     // Apply uniform style if needed
     this.style.fontSize = "14px"; // Set a consistent font size
