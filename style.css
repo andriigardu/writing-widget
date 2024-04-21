@@ -7,7 +7,7 @@ body {
     width: 335px; /* Fixed width */
     height: 500px; /* Full viewport height */
     position: relative; /* For absolute positioning inside */
-    border: 0.5px solid #EDEDEB;
+    border: 1px solid #ccc;
     border-radius: 7px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: width 0.3s ease;
@@ -24,6 +24,8 @@ body {
     z-index: 1000;
     background: white;
     border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
     padding: 10px;
     width: auto;
     height: auto;
@@ -49,8 +51,8 @@ body {
     z-index: 2;
     padding: 5px;
     background: #fff;
-    border: 1px solid #EDEDEB;
-    border-bottom: 1px solid #EDEDEB;
+    border: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     box-sizing: border-box; /* Ensure padding is included in the width */
@@ -61,7 +63,7 @@ body {
     padding: 5px 10px;
     background: #EDEDEB;
     margin: 0 5px;
-    border: 0.5px;
+    border: 1px solid #ccc;
     border-radius: 2.5px;
     cursor: pointer;
     height: 32px;
@@ -165,7 +167,7 @@ input:checked + .slider:before {
     height: calc(100% - 70px);
     padding: 8px;
     box-sizing: border-box;
-    border: 1px solid #EDEDEB;
+    border: 1px solid #ccc;
     border-radius: 0px;
     overflow-y: auto;
     outline: none;
@@ -214,7 +216,9 @@ input:checked + .slider:before {
     margin-right: 2px;
     background-color: #F6F5F4;
     color: #000;
-    border: 0.5px solid #EDEDEB;
+    border: 1px solid #ccc;
+    border-radius:5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 10px;
     align-content:justify;
     z-index: 1;
@@ -335,10 +339,10 @@ input:checked + .slider:before {
     justify-content: space-between;
     padding: 0 10px;
     background-color: #fff;
-    border-top: 1px solid #EDEDEB;
-    border-bottom: 1px solid #EDEDEB;
-    border-left: 1px solid #EDEDEB;
-    border-right: 1px solid #EDEDEB;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     align-items:center;
