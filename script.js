@@ -39,7 +39,7 @@ function saveText(span, parent) {
   
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
-    var text = textInput.textContent; // Use textContent for direct text manipulation
+    var originalText = textInput.textContent; // Use textContent for direct text manipulation
 
     // Define shortcuts and their replacements
     const shortcuts = {
@@ -49,27 +49,48 @@ function handleShortcutInput() {
         '<=': '⇐'
     };
 
-    // Use a flag to check if any replacement has been made
-    let modified = false;
+    // Calculate initial cursor position
+    const sel = window.getSelection();
+    const range = sel.getRangeAt(0);
+    let startOffset = range.startOffset;
+
+    // Check and replace shortcuts in the text
+    let modifiedText = originalText;
     Object.keys(shortcuts).forEach(shortcut => {
-        let regex = new RegExp(shortcut, "g");
-        if (text.match(regex)) {
-            modified = true;
-            text = text.replace(regex, shortcuts[shortcut]);
+        const replacement = shortcuts[shortcut];
+        if (modifiedText.includes(shortcut)) {
+            const parts = modifiedText.split(shortcut);
+            const positions = [];
+            let currentPosition = 0;
+
+            // Calculate positions of shortcuts in the original text
+            parts.forEach((part, index) => {
+                if (index < parts.length - 1) { // Not the last part
+                    positions.push(currentPosition + part.length);
+                    currentPosition += part.length + shortcut.length;
+                }
+            });
+
+            // Adjust cursor position if it's after a replaced shortcut
+            positions.forEach(pos => {
+                if (startOffset > pos) {
+                    startOffset += replacement.length - shortcut.length;
+                }
+            });
+
+            // Replace all occurrences
+            modifiedText = modifiedText.split(shortcut).join(replacement);
         }
     });
 
-    if (modified) {
-        // Update the text area without losing cursor position
-        const sel = window.getSelection();
-        const range = sel.getRangeAt(0);
-        const startOffset = range.startOffset;
-        const endOffset = range.endOffset;
-
-        textInput.textContent = text; // Set the modified text
-
-        // Restore cursor position
-        document.getSelection().setBaseAndExtent(textInput, startOffset, textInput, endOffset);
+    // Update the text area without losing cursor position
+    if (modifiedText !== originalText) {
+        textInput.textContent = modifiedText; // Set the modified text
+        sel.removeAllRanges();
+        const newRange = document.createRange();
+        newRange.setStart(textInput.firstChild, startOffset);
+        newRange.setEnd(textInput.firstChild, startOffset);
+        sel.addRange(newRange);
     }
 }
   
