@@ -245,71 +245,15 @@ function handleShortcutInput() {
     }
   });
   
-document.getElementById("text-input").addEventListener("input", function () {
-    const text = this.innerText;
-    const lastChar = text.charAt(text.length - 1);
-    const lastColonPos = text.lastIndexOf(':');
-
-    // Adjusting logic to ensure popup can reappear after emoji insertion
-    if (lastChar === ' ' && this.lastTypedColon) {
-        hideEmojiPopup();
-        this.lastTypedColon = false; // Reset the flag after a space follows a colon
-    } else if (lastChar === ':' && (lastColonPos === 0 || text[lastColonPos - 1] === ' ')) {
-        showEmojiPopupBasedOnPosition(lastColonPos, this);
-        this.lastTypedColon = true; // Set a flag that a colon was last typed
-    } else if (!this.lastTypedColon) { // Hide the popup if conditions are not met
-        hideEmojiPopup();
+document.getElementById("text-input").addEventListener("input", function(event) {
+    if (event.inputType === "insertParagraph") {
+        event.preventDefault(); // Prevent default Enter key behavior
+        document.execCommand('insertHTML', false, '<br><br>'); // Insert double line-breaks
+    } else {
+        handleShortcutInput(); // Handle replacements
+        checkAndTriggerEmojiPopup(); // Handle emoji popup display
     }
 });
-
-function showEmojiPopupBasedOnPosition(index, textElement) {
-    const emojiPopup = document.getElementById("emoji-popup");
-    emojiPopup.style.display = 'block'; // Ensures it shows up
-    if (!emojiPopup) return; // Safety check
-
-    // Clear previous emojis to prevent multiple bindings
-    emojiPopup.innerHTML = '';
-    const emojis = ['😊', '😂', '➡️', '🔴'];
-    emojis.forEach(emoji => {
-        let span = document.createElement('span');
-        span.textContent = emoji;
-        span.style.cursor = 'pointer'; // Ensure cursor changes to pointer
-        span.onclick = () => {
-            insertEmojiAtRange(emoji, index, textElement);
-        };
-        emojiPopup.appendChild(span);
-    });
-
-    // Calculate the position of the popup based on the range
-    const range = document.createRange();
-    const textNode = textElement.childNodes[0] || textElement;
-    range.setStart(textNode, index);
-    range.setEnd(textNode, index + 1);
-    const rect = range.getBoundingClientRect();
-    emojiPopup.style.left = `${rect.left + window.pageXOffset}px`;
-    emojiPopup.style.top = `${rect.bottom + window.pageYOffset}px`;
-    emojiPopup.style.display = 'block';
-}
-
-function insertEmojiAtRange(emoji, index, textElement) {
-    const sel = window.getSelection();
-    const range = sel.getRangeAt(0);
-    range.setStart(textElement.firstChild, index);
-    range.setEnd(textElement.firstChild, index + 1); // Include the colon in the range
-
-    const emojiNode = document.createTextNode(emoji + ' '); // Create a text node for the emoji
-    range.deleteContents(); // Remove the colon
-    range.insertNode(emojiNode); // Insert emoji node at the caret position
-
-    range.setStartAfter(emojiNode); // Move the caret immediately after the inserted emoji
-    range.setEndAfter(emojiNode);
-    sel.removeAllRanges();
-    sel.addRange(range);
-
-    hideEmojiPopup(); // Hide emoji popup
-    textElement.focus(); // Focus back on text input
-    textElement.lastTypedColon = false; // Reset flag to enable popup on new colon
-}
 
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
@@ -317,26 +261,61 @@ function handleShortcutInput() {
     const shortcuts = { /* your shortcuts map */ };
 
     const sel = window.getSelection();
-    if (!sel.rangeCount) return; // No selection, likely nothing to replace
+    if (!sel.rangeCount) return;
 
     let startOffset = sel.getRangeAt(0).startOffset;
 
-    let modifiedText = originalText;
     Object.keys(shortcuts).forEach(shortcut => {
         const replacement = shortcuts[shortcut];
-        while (modifiedText.includes(shortcut)) {
-            modifiedText = modifiedText.replace(shortcut, replacement);
-        }
+        originalText = originalText.replace(new RegExp(shortcut, 'g'), replacement);
     });
 
-    textInput.textContent = modifiedText;
+    textInput.textContent = originalText; // Update the text content with replacements
 
     // Restore the selection
+    sel.removeAllRanges();
     const range = document.createRange();
-    range.setStart(textInput.firstChild, Math.min(startOffset, textInput.textContent.length));
-    range.setEnd(textInput.firstChild, Math.min(startOffset, textInput.textContent.length));
+    range.setStart(textInput.firstChild, startOffset);
+    range.setEnd(textInput.firstChild, startOffset);
+    sel.addRange(range);
+}
+
+function checkAndTriggerEmojiPopup() {
+    const textInput = document.getElementById("text-input");
+    const text = textInput.textContent;
+    const sel = window.getSelection();
+    const range = sel.getRangeAt(0);
+    const index = range.startOffset;
+
+    // Logic to display emoji popup based on current cursor position
+    if (text[index - 1] === ':') { // Adjust this condition as necessary
+        showEmojiPopupBasedOnPosition(index, textInput);
+    } else {
+        hideEmojiPopup();
+    }
+}
+
+function showEmojiPopupBasedOnPosition(index, textElement) {
+    // Your existing logic to display the emoji popup
+}
+
+function insertEmojiAtRange(emoji, index, textElement) {
+    // Adjust the insertion logic to correctly handle cursor and text position
+    const sel = window.getSelection();
+    const range = sel.getRangeAt(0);
+    range.setStart(textElement, index - 1); // Adjust to replace ':'
+    range.setEnd(textElement, index);
+
+    const emojiNode = document.createTextNode(emoji + ' ');
+    range.deleteContents(); // Delete the colon
+    range.insertNode(emojiNode); // Insert emoji
+
+    range.setStartAfter(emojiNode); // Update cursor position
+    range.setEndAfter(emojiNode);
     sel.removeAllRanges();
     sel.addRange(range);
+
+    hideEmojiPopup(); // Ensure popup is hidden after insertion
 }
 
 function hideEmojiPopup() {
@@ -346,6 +325,12 @@ function hideEmojiPopup() {
     }
 }
 
+document.getElementById("text-input").addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault(); // Handle Enter separately from the input event
+        document.execCommand('insertHTML', false, '<br><br>'); // Insert line break
+    }
+});
 
   
   document.getElementById("copy-button").addEventListener("click", function () {
