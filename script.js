@@ -41,14 +41,12 @@ function saveText(span, parent) {
   function convertLineBreaksToBR(text) {
   return text.replace(/\n/g, "<br>");
 }
-  
+
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
     var originalText = textInput.textContent; // Use textContent for direct text manipulation
-
-    // Define shortcuts and their replacements
     const shortcuts = {
-    '->': '→',
+       '->': '→',
     '<-': '←',
     '=>': '⇒',
     '<=': '⇐',
@@ -166,50 +164,23 @@ function handleShortcutInput() {
     ':red_triangle_down:': '🔻'
     };
 
-    // Calculate initial cursor position
-    const sel = window.getSelection();
-    const range = sel.getRangeAt(0);
-    let startOffset = range.startOffset;
-
-    // Check and replace shortcuts in the text
-    let modifiedText = originalText;
-    Object.keys(shortcuts).forEach(shortcut => {
-        const replacement = shortcuts[shortcut];
-        if (modifiedText.includes(shortcut)) {
-            const parts = modifiedText.split(shortcut);
-            const positions = [];
-            let currentPosition = 0;
-
-            // Calculate positions of shortcuts in the original text
-            parts.forEach((part, index) => {
-                if (index < parts.length - 1) { // Not the last part
-                    positions.push(currentPosition + part.length);
-                    currentPosition += part.length + shortcut.length;
-                }
-            });
-
-            // Adjust cursor position if it's after a replaced shortcut
-            positions.forEach(pos => {
-                if (startOffset > pos) {
-                    startOffset += replacement.length - shortcut.length;
-                }
-            });
-
-            // Replace all occurrences
-            modifiedText = modifiedText.split(shortcut).join(replacement);
-        }
+    Object.entries(shortcuts).forEach(([shortcut, replacement]) => {
+        originalText = originalText.split(shortcut).join(replacement);
     });
 
-    // Update the text area without losing cursor position
-    if (modifiedText !== originalText) {
-        textInput.textContent = modifiedText; // Set the modified text
+    textInput.textContent = originalText; // Update the text content with replacements
+
+    // Manage cursor position correctly after text manipulation
+    const sel = window.getSelection();
+    if (sel.rangeCount > 0) {
+        const range = sel.getRangeAt(0);
+        range.setStart(textInput.firstChild, Math.min(range.startOffset, textInput.textContent.length));
+        range.setEnd(textInput.firstChild, Math.min(range.startOffset, textInput.textContent.length));
         sel.removeAllRanges();
-        const newRange = document.createRange();
-        newRange.setStart(textInput.firstChild, startOffset);
-        newRange.setEnd(textInput.firstChild, startOffset);
-        sel.addRange(newRange);
+        sel.addRange(range);
     }
 }
+
   
   document.getElementById("text-input").addEventListener("paste", function(event) {
     event.preventDefault(); // Prevent the default paste action
