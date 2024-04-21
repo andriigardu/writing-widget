@@ -167,13 +167,14 @@ function handleShortcutInput() {
     };
 
     let modifiedHTML = originalHTML;
+
     Object.keys(shortcuts).forEach(shortcut => {
-        // Replace each shortcut globally
-        const regex = new RegExp(shortcut, 'g');
+        // Escape special characters for regex
+        const escapedShortcut = shortcut.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        const regex = new RegExp(escapedShortcut, 'g');
         modifiedHTML = modifiedHTML.replace(regex, shortcuts[shortcut]);
     });
 
-    // Update the text area only if changes were made
     if (modifiedHTML !== originalHTML) {
         textInput.innerHTML = modifiedHTML;
     }
@@ -265,17 +266,19 @@ function insertEmojiAtRange(emoji, index, textElement) {
     var sel = window.getSelection();
     if (sel.rangeCount > 0) {
         var range = sel.getRangeAt(0);
-        range.setStart(textInput.childNodes[0], index);
-        range.setEnd(textInput.childNodes[0], index + 1); // Set end to index + 1 to replace the colon
-        range.deleteContents();
+        range.deleteContents(); // Clear the selected contents first
+
         var emojiNode = document.createTextNode(emoji + ' ');
         range.insertNode(emojiNode);
+
+        // Move the selection point right after the newly inserted emoji
         range.setStartAfter(emojiNode);
         range.setEndAfter(emojiNode);
         sel.removeAllRanges();
         sel.addRange(range);
     }
 }
+
 
 
 function hideEmojiPopup() {
