@@ -250,14 +250,13 @@ document.getElementById("text-input").addEventListener("input", function () {
     const lastChar = text.charAt(text.length - 1);
     const lastColonPos = text.lastIndexOf(':');
 
-    // Hide the popup if the last character typed is a space and last visible character was a colon
+    // Ensure emoji selection does not inhibit further popup appearances
     if (lastChar === ' ' && this.lastTypedColon) {
         hideEmojiPopup();
         this.lastTypedColon = false; // Reset the flag
         return; // Exit early to avoid showing the popup again
     }
 
-    // Show the popup if the last character is a colon and it's either the first character or preceded by a space
     if (lastChar === ':' && (lastColonPos === 0 || text[lastColonPos - 1] === ' ')) {
         showEmojiPopupBasedOnPosition(lastColonPos, this);
         this.lastTypedColon = true; // Set a flag that a colon was last typed
@@ -269,11 +268,6 @@ document.getElementById("text-input").addEventListener("input", function () {
 function showEmojiPopupBasedOnPosition(index, textElement) {
     const emojiPopup = document.getElementById("emoji-popup");
     if (!emojiPopup) return; // Safety check
-
-    // Clear any previous event listeners on emoji children
-    while (emojiPopup.firstChild) {
-        emojiPopup.removeChild(emojiPopup.firstChild);
-    }
 
     const range = document.createRange();
     const textNode = textElement.childNodes[0] || textElement;
@@ -306,13 +300,14 @@ function insertEmojiAtRange(range, emoji) {
     sel.removeAllRanges();
     sel.addRange(range);
     textInput.focus(); // Refocus on the text input after inserting an emoji
+    textInput.lastTypedColon = false; // Ensure this is reset here too
 }
 
 function hideEmojiPopup() {
     const emojiPopup = document.getElementById("emoji-popup");
     emojiPopup.style.display = 'none';
+    emojiPopup.lastTypedColon = false; // Reset this flag on hide too
 }
-
   
   document.getElementById("copy-button").addEventListener("click", function () {
     var textInput = document.getElementById("text-input");
