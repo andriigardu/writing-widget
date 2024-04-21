@@ -39,44 +39,37 @@ function saveText(span, parent) {
   
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
-    var sel = window.getSelection();
-    if (sel.rangeCount > 0) {
-        var range = sel.getRangeAt(0);
-        var startPos = range.startOffset;
-        var endPos = range.endOffset;
-        var text = textInput.innerHTML;
+    var text = textInput.textContent; // Use textContent for direct text manipulation
 
-        // Define shortcuts and their replacements
-        const shortcuts = {
-            '->': '→',
-            '<-': '←',
-            '=>': '⇒',
-            '<=': '⇐'
-        };
+    // Define shortcuts and their replacements
+    const shortcuts = {
+        '->': '→',
+        '<-': '←',
+        '=>': '⇒',
+        '<=': '⇐'
+    };
 
-        // Check if any replacements are needed
-        let replacementMade = false;
-        Object.keys(shortcuts).forEach(shortcut => {
-            if (text.includes(shortcut)) {
-                text = text.replace(new RegExp(shortcut, 'g'), shortcuts[shortcut]);
-                replacementMade = true;
-            }
-        });
-
-        if (replacementMade) {
-            // Update the innerHTML without losing the selection
-            textInput.innerHTML = text;
-
-            // Correct the cursor position after replacement
-            try {
-                range.setStart(textInput.childNodes[0], startPos);
-                range.setEnd(textInput.childNodes[0], endPos);
-                sel.removeAllRanges();
-                sel.addRange(range);
-            } catch (error) {
-                console.error("Error adjusting cursor after input: ", error);
-            }
+    // Use a flag to check if any replacement has been made
+    let modified = false;
+    Object.keys(shortcuts).forEach(shortcut => {
+        let regex = new RegExp(shortcut, "g");
+        if (text.match(regex)) {
+            modified = true;
+            text = text.replace(regex, shortcuts[shortcut]);
         }
+    });
+
+    if (modified) {
+        // Update the text area without losing cursor position
+        const sel = window.getSelection();
+        const range = sel.getRangeAt(0);
+        const startOffset = range.startOffset;
+        const endOffset = range.endOffset;
+
+        textInput.textContent = text; // Set the modified text
+
+        // Restore cursor position
+        document.getSelection().setBaseAndExtent(textInput, startOffset, textInput, endOffset);
     }
 }
   
@@ -95,7 +88,11 @@ function handleShortcutInput() {
 });
 
   document.getElementById("text-input").addEventListener("input", function () {
-    handleShortcutInput(); // Call the shortcut handler immediately on input
+    // Debounce input to handle rapid typing
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+        handleShortcutInput(); // Process after a short delay to batch updates
+    }, 20);
     // Update character and word count whenever the text changes
     updateCharCount();
     var text = this.innerText; // Get all text including spaces
