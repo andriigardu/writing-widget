@@ -264,6 +264,7 @@ document.getElementById("text-input").addEventListener("input", function () {
 
 function showEmojiPopupBasedOnPosition(index, textElement) {
     const emojiPopup = document.getElementById("emoji-popup");
+    emojiPopup.style.display = 'block'; // Ensures it shows up
     if (!emojiPopup) return; // Safety check
 
     // Clear previous emojis to prevent multiple bindings
