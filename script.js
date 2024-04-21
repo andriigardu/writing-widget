@@ -273,6 +273,7 @@ function showEmojiPopupBasedOnPosition(index, textElement) {
     emojis.forEach(emoji => {
         let span = document.createElement('span');
         span.textContent = emoji;
+        span.style.cursor = 'pointer'; // Ensure cursor changes to pointer
         span.onclick = () => {
             insertEmojiAtRange(emoji, index, textElement);
         };
@@ -302,7 +303,7 @@ function insertEmojiAtRange(emoji, index, textElement) {
     sel.removeAllRanges();
     sel.addRange(range);
 
-    setTimeout(hideEmojiPopup, 10); // Delay hiding the popup slightly
+    hideEmojiPopup(); // Hide emoji popup
 
     textElement.focus(); // Focus back on text input
     textElement.lastTypedColon = false; // Reset flag to enable popup on new colon
@@ -310,7 +311,9 @@ function insertEmojiAtRange(emoji, index, textElement) {
 
 function hideEmojiPopup() {
     const emojiPopup = document.getElementById("emoji-popup");
-    emojiPopup.style.display = 'none';
+    if (emojiPopup) {
+        emojiPopup.style.display = 'none'; // Ensure the display is set to none
+    }
 }
 
   
