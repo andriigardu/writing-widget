@@ -19,7 +19,7 @@ body {
   font-style: normal;
 }
 #emoji-popup {
-    display: none !important; /* Hidden by default */
+    display: none; /* Hidden by default */
     position: absolute;
     z-index: 1000;
     background: white;
