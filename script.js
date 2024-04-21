@@ -278,9 +278,14 @@ function showEmojiPopupBasedOnPosition(index, textElement) {
         emojiPopup.appendChild(span);
     });
 
-    const rect = textElement.getBoundingClientRect();
-    emojiPopup.style.left = `${rect.left}px`;
-    emojiPopup.style.top = `${rect.bottom}px`;
+    // Calculate the position of the popup based on the range
+    const range = document.createRange();
+    const textNode = textElement.childNodes[0] || textElement;
+    range.setStart(textNode, index);
+    range.setEnd(textNode, index + 1);
+    const rect = range.getBoundingClientRect();
+    emojiPopup.style.left = `${rect.left + window.pageXOffset}px`;
+    emojiPopup.style.top = `${rect.bottom + window.pageYOffset}px`;
     emojiPopup.style.display = 'block';
 }
 
