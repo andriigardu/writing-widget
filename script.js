@@ -248,9 +248,9 @@ function handleShortcutInput() {
 document.getElementById("text-input").addEventListener("input", function () {
     // Enhanced check for colon presence to improve popup handling
     const text = this.innerText;
-    const lastChar = text[text.length - 1];
-    if (lastChar === ':') {
-      showEmojiPopupBasedOnLastChar(text, this);
+    const colonIndex = text.lastIndexOf(':');
+    if (colonIndex !== -1 && (colonIndex === 0 || text[colonIndex - 1] === ' ')) {
+      showEmojiPopupBasedOnPosition(colonIndex, this);
     } else {
       hideEmojiPopup();
     }
@@ -258,20 +258,22 @@ document.getElementById("text-input").addEventListener("input", function () {
     updateCharCount();
   });
 
-  function showEmojiPopupBasedOnLastChar(text, textElement) {
-    // Determine position based on text length to place popup near the last character
+function showEmojiPopupBasedOnPosition(index, textElement) {
+    // Determine position based on the index of the colon
     const range = document.createRange();
-    const textNode = textElement.childNodes[0];
+    const textNode = textElement.firstChild || textElement;
     if (textNode) {
-      range.setStart(textNode, text.length - 1);
-      range.setEnd(textNode, text.length);
+      range.setStart(textNode, index);
+      range.setEnd(textNode, index + 1);
       showEmojiPopup(textElement, range);
     }
-  }
+}
 
 function insertEmojiAtRange(range, emoji) {
     // Adjusting the range to replace the colon
-    range.setStart(range.startContainer, range.startOffset - 1);
+    if (range.startOffset > 0) {  // Ensure there is a character to replace
+        range.setStart(range.startContainer, range.startOffset - 1);
+    }
     range.deleteContents();
     const emojiNode = document.createTextNode(emoji + ' ');
     range.insertNode(emojiNode);
@@ -280,6 +282,21 @@ function insertEmojiAtRange(range, emoji) {
     const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
+}
+
+function showEmojiPopup(textElement, range) {
+    const emojiPopup = document.getElementById("emoji-popup");
+    const rect = range.getBoundingClientRect();
+    emojiPopup.style.left = `${rect.left + window.pageXOffset}px`;
+    emojiPopup.style.top = `${rect.top + rect.height + window.pageYOffset}px`;
+    emojiPopup.style.display = 'block';
+    emojiPopup.innerHTML = '<span>😊</span> <span>😂</span> <span>➡️</span> <span>🔴</span>';
+    Array.from(emojiPopup.children).forEach(child => {
+        child.addEventListener('click', function() {
+            insertEmojiAtRange(range, child.textContent);
+            hideEmojiPopup();
+        });
+    });
 }
 
 function hideEmojiPopup() {
