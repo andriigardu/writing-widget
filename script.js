@@ -291,21 +291,17 @@ function showEmojiPopupBasedOnPosition(index, textElement) {
 }
 
 function insertEmojiAtRange(emoji, index, textElement) {
-    const content = textElement.textContent;
-    const newText = content.slice(0, index) + emoji + ' ' + content.slice(index + 1);
-    textElement.textContent = newText; // Replace text content with new text including emoji
-
-    const sel = window.getSelection();
-    const range = document.createRange();
-    range.setStart(textElement, index + 2); // Set cursor after the emoji
-    range.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(range);
-
-    setTimeout(hideEmojiPopup, 10); // Delay hiding the popup slightly
-
-    textElement.focus(); // Focus back on text input
-    textElement.lastTypedColon = false; // Reset flag to enable popup on new colon
+    var sel = window.getSelection();
+    if (sel.rangeCount > 0) {
+        var range = sel.getRangeAt(0);
+        range.deleteContents(); // Remove the existing content in the range
+        var textNode = document.createTextNode(emoji + ' ');
+        range.insertNode(textNode);
+        range.setStartAfter(textNode); // Move the cursor after the newly inserted text node
+        range.setEndAfter(textNode); // Adjust the range to reflect the new cursor position
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
 }
 
 function hideEmojiPopup() {
