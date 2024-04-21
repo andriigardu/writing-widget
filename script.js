@@ -315,6 +315,7 @@ function insertEmojiAtRange(emoji, index, textElement) {
     const content = textElement.textContent;
     const newText = content.slice(0, index) + emoji + ' ' + content.slice(index + 1);
     textElement.textContent = newText; // Replace text content with new text including emoji
+    insertTextAtCursor(modifiedText);
 
     const sel = window.getSelection();
     const range = document.createRange();
