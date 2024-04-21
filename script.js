@@ -250,25 +250,30 @@ document.getElementById("text-input").addEventListener("input", function () {
     const lastChar = text.charAt(text.length - 1);
     const lastColonPos = text.lastIndexOf(':');
 
-    // Show the popup if the last character is a colon and it's either the first character or preceded by a space.
-    if (lastColonPos !== -1 && (lastColonPos === 0 || text[lastColonPos - 1] === ' ')) {
+    // Hide the popup if the last character typed is a space and last visible character was a colon
+    if (lastChar === ' ' && this.lastTypedColon) {
+        hideEmojiPopup();
+        this.lastTypedColon = false; // Reset the flag
+        return; // Exit early to avoid showing the popup again
+    }
+
+    // Show the popup if the last character is a colon and it's either the first character or preceded by a space
+    if (lastChar === ':' && (lastColonPos === 0 || text[lastColonPos - 1] === ' ')) {
         showEmojiPopupBasedOnPosition(lastColonPos, this);
+        this.lastTypedColon = true; // Set a flag that a colon was last typed
     } else {
-        hideEmojiPopup();
+        this.lastTypedColon = false;
     }
-
-    // Hide the popup if the last character typed is a space
-    if (lastChar === ' ') {
-        hideEmojiPopup();
-    }
-
-    handleShortcutInput();
-    updateCharCount();
 });
 
 function showEmojiPopupBasedOnPosition(index, textElement) {
     const emojiPopup = document.getElementById("emoji-popup");
     if (!emojiPopup) return; // Safety check
+
+    // Clear any previous event listeners on emoji children
+    while (emojiPopup.firstChild) {
+        emojiPopup.removeChild(emojiPopup.firstChild);
+    }
 
     const range = document.createRange();
     const textNode = textElement.childNodes[0] || textElement;
@@ -280,10 +285,12 @@ function showEmojiPopupBasedOnPosition(index, textElement) {
     emojiPopup.style.top = `${rect.top + rect.height + window.pageYOffset}px`;
     emojiPopup.style.display = 'block';
     emojiPopup.innerHTML = '<span>😊</span> <span>😂</span> <span>➡️</span> <span>🔴</span>';
+
     Array.from(emojiPopup.children).forEach(child => {
         child.onclick = function() {
             insertEmojiAtRange(range, child.textContent);
             hideEmojiPopup();
+            textElement.lastTypedColon = false; // Reset the flag on emoji selection
         };
     });
 }
