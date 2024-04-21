@@ -19,7 +19,7 @@ body {
   font-style: normal;
 }
 #emoji-popup {
-    display: none; /* Hidden by default */
+    display: none!important; /* Hidden by default */
     position: absolute;
     z-index: 1000;
     background: white;
@@ -73,6 +73,7 @@ body {
 
 #copy-button, #star-button, #clear-button, #toggle-button {
     border: 0.5px solid #ccc;
+    cursor: pointer; /* Ensures cursor changes to pointer on hover over these elements */
 }
 
 #char-count, #word-count, #clear-saved-texts-button, #sort-button {
@@ -82,8 +83,12 @@ body {
 #copy-button, #star-button, #toggle-button, #clear-button,
 .add-text, .remove-text, #sort-button {
     transition: transform 0.3s ease; /* Apply transition to normal state */
+    cursor: pointer; /* Ensures cursor changes to pointer on hover over these elements */
 }
-
+#sort-button {
+    border: none; /* Removes any border from the sort button */
+    background-color: transparent; /* Optional: Ensures the button has no background color */
+}
 #copy-button:hover, #star-button:hover, #toggle-button:hover, #clear-button:hover,
 .add-text:hover, .remove-text:hover, #sort-button:hover {
     transform: scale(1.03);
