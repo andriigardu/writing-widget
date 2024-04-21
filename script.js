@@ -242,33 +242,33 @@ function handleShortcutInput() {
   
 document.getElementById("text-input").addEventListener("input", function(event) {
     const textInput = event.target;
-    const text = textInput.value;
-    const cursorPosition = textInput.selectionStart;
+    const text = textInput.textContent;  // Changed from value to textContent
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    
+    const range = sel.getRangeAt(0);
+    const position = range.startOffset;
 
-    // Check if the last character is a colon and it's a single colon or followed by a whitespace
-    if (text[cursorPosition - 1] === ':' && (cursorPosition === 1 || text[cursorPosition - 2] === ' ')) {
-        showEmojiPopup(cursorPosition, textInput);
+    // Check if ':' was typed and it's standalone or followed by a space
+    if (text[position - 1] === ':' && (position === 1 || text[position - 2] === ' ')) {
+        showEmojiPopup(range, textInput);
     } else {
         hideEmojiPopup();
     }
 });
 
-function showEmojiPopup(position, textInput) {
+function showEmojiPopup(range, textInput) {
     const emojiPopup = document.getElementById("emoji-popup");
-    const rect = textInput.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const rect = range.getBoundingClientRect(); // Use the range to position the popup near the text
 
-    // Set the position of the popup
     emojiPopup.style.left = `${rect.left + window.pageXOffset}px`;
-    emojiPopup.style.top = `${rect.bottom + scrollTop + 5}px`; // 5px below the input
+    emojiPopup.style.top = `${rect.bottom + window.pageYOffset + 5}px`; // 5px below the range
     emojiPopup.style.display = 'block';
 
-    // Populate popup with emojis and symbols (this part can be dynamic based on your preference)
     emojiPopup.innerHTML = '<span>😊</span> <span>😂</span> <span>➡️</span> <span>🔴</span>'; // Example content
-    // Attach click events to each emoji/span to insert them into the input
     Array.from(emojiPopup.children).forEach(child => {
         child.addEventListener('click', function() {
-            insertAtCursor(textInput, child.textContent);
+            insertTextAtRange(range, child.textContent);
             hideEmojiPopup();
         });
     });
@@ -279,14 +279,16 @@ function hideEmojiPopup() {
     emojiPopup.style.display = 'none';
 }
 
-function insertAtCursor(input, text) {
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
-    input.value = input.value.substring(0, start) + text + input.value.substring(end);
-    input.selectionStart = input.selectionEnd = start + text.length; // Move cursor after the emoji
+function insertTextAtRange(range, text) {
+    range.deleteContents();  // Clears the content at the range (delete the ':')
+    range.insertNode(document.createTextNode(text));
+    const space = document.createTextNode(' ');
+    range.insertNode(space); // Optionally add a space after the emoji
+    // Move the cursor after the inserted text
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
 }
-
-// Additional utility to handle cursor position and input updates
 
   
   document.getElementById("copy-button").addEventListener("click", function () {
