@@ -41,281 +41,101 @@ function saveText(span, parent) {
   function convertLineBreaksToBR(text) {
   return text.replace(/\n/g, "<br>");
 }
+ 
+  document.getElementById("text-input").addEventListener("paste", function(event) {
+    event.preventDefault();
+    var text = (event.clipboardData || window.clipboardData).getData('text/plain');
+    text = standardizeLineBreaks(text);
+    text = text.normalize("NFKD");
+    document.execCommand('insertText', false, text);
+    this.style.fontSize = "14px";
+});
+
+document.getElementById("text-input").addEventListener("input", function() {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+        handleShortcutInput();
+        updateCharCount(this);
+    }, 20);
+});
+
+document.getElementById("text-input").addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        document.execCommand('insertHTML', false, '<br><br>');
+    } else if (event.key === ":") {
+        // Trigger emoji popup when colon is typed
+        checkAndTriggerEmojiPopup(event.target);
+    }
+});
+
+function updateCharCount(element) {
+    var text = element.value;
+    var charCount = text.length;
+    var charCountDisplay = document.getElementById("char-count");
+    charCountDisplay.textContent = "Characters: " + charCount;
+    charCountDisplay.style.color = (charCount > 3000) ? "red" : "";
+}
 
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
-    var originalText = textInput.textContent; // Use textContent for direct text manipulation
+    var originalText = textInput.value;
     const shortcuts = {
-       '->': '→',
-    '<-': '←',
-    '=>': '⇒',
-    '<=': '⇐',
-    '==': '≡',
-    '!=': '≠',
-    '>=': '≥',
-    '<=': '≤',
-    '++': '⧺', // Increment
-    '--': '⧻', // Decrement
-    '&&': '∧', // Logical AND
-    '||': '∨', // Logical OR
-    '...': '…', // Ellipsis
-    '(c)': '©', // Copyright symbol
-    '(r)': '®', // Registered trademark symbol
-    '(tm)': '™', // Trademark symbol
-    '(p)': '℗', // Sound recording copyright
-    '1/4': '¼', // Fraction 1/4
-    '1/2': '½', // Fraction 1/2
-    '3/4': '¾', // Fraction 3/4
-    '1/3': '⅓', // Fraction 1/3
-    '2/3': '⅔', // Fraction 2/3
-    '1/8': '⅛', // Fraction 1/8
-    '3/8': '⅜', // Fraction 3/8
-    '5/8': '⅝', // Fraction 5/8
-    '7/8': '⅞', // Fraction 7/8
-    'mu': 'µ',  // Greek letter mu, micro
-    'ohm': 'Ω', // Greek letter Omega, symbol for resistance
-    'deg': '°', // Degree symbol
-    'squared': '²',
-    'cubed': '³',
-      // Adding emoji shortcuts
-    ':)': '😊',
-    ':(': '😞',
-    ':D': '😄',
-    'xD': '😆',
-    ';)': '😉',
-    ':P': '😛',
-    ':\'(': '😢',
-    ':*': '😘',
-    '>:(': '😠',
-    'o_O': '😳',
-    'B)': '😎',
-    ':O': '😮',
-    ':-/': '😕',
-    ':thumbsup:': '👍',
-    ':heart:': '❤️',
-    ':exclamation:': '❗',
-    ':question:': '❓',
-    ':grey_exclamation:': '❕',
-    ':grey_question:': '❔',
-    ':fire:': '🔥',
-    ':poop:': '💩',
-    ':thumbsup:': '👍',
-    ':thumbsdown:': '👎',
-    ':ok_hand:': '👌',
-    ':punch:': '👊',
-    ':fist:': '✊',
-    ':v:': '✌',
-    ':wave:': '👋',
-    ':hand:': '✋',
-    ':open_hands:': '👐',
-    ':point_up:': '☝',
-    ':point_down:': '👇',
-    ':point_left:': '👈',
-    ':point_right:': '👉',
-    ':raised_hands:': '🙌',
-    ':pray:': '🙏',
-    ':point_up_2:': '👆',
-    ':clap:': '👏',
-    ':zap:': '⚡',
-    ':recycle:': '♻️',
-    ':check_mark:': '✅',
-    ':cross_mark:': '❌',
-    ':star:': '⭐',
-    ':sparkles:': '✨',
-    ':arrow_right:': '➡️',
-    ':arrow_left:': '⬅️',
-    ':arrow_up:': '⬆️',
-    ':arrow_down:': '⬇️',
-    ':arrow_forward:': '▶️',
-    ':arrow_backward:': '◀️',
-    ':arrow_up_small:': '🔼',
-    ':arrow_down_small:': '🔽',
-    ':double_arrow_up:': '⏫',
-    ':double_arrow_down:': '⏬',
-    ':double_exclamation:': '‼️',
-    ':exclamation_question:': '⁉️',
-    ':red_circle:': '🔴',
-    ':blue_circle:': '🔵',
-    ':green_circle:': '🟢',
-    ':yellow_circle:': '🟡',
-    ':purple_circle:': '🟣',
-    ':brown_circle:': '🟤',
-    ':black_circle:': '⚫',
-    ':white_circle:': '⚪',
-    ':red_square:': '🟥',
-    ':blue_square:': '🟦',
-    ':green_square:': '🟩',
-    ':yellow_square:': '🟨',
-    ':purple_square:': '🟪',
-    ':brown_square:': '🟫',
-    ':black_large_square:': '⬛',
-    ':white_large_square:': '⬜',
-    ':black_medium_square:': '◼️',
-    ':white_medium_square:': '◻️',
-    ':black_medium_small_square:': '◾',
-    ':white_medium_small_square:': '◽',
-    ':black_small_square:': '▪️',
-    ':white_small_square:': '▫️',
-    ':large_orange_diamond:': '🔶',
-    ':large_blue_diamond:': '🔷',
-    ':small_orange_diamond:': '🔸',
-    ':small_blue_diamond:': '🔹',
-    ':red_triangle_up:': '🔺',
-    ':red_triangle_down:': '🔻'
+        // Define shortcuts map here
     };
 
     Object.entries(shortcuts).forEach(([shortcut, replacement]) => {
-        originalText = originalText.split(shortcut).join(replacement);
+        var regex = new RegExp("\\b" + RegExp.escape(shortcut) + "\\b", "g");
+        originalText = originalText.replace(regex, replacement);
     });
 
-    textInput.textContent = originalText; // Update the text content with replacements
-
-    // Manage cursor position correctly after text manipulation
-    const sel = window.getSelection();
-    if (sel.rangeCount > 0) {
-        const range = sel.getRangeAt(0);
-        range.setStart(textInput.firstChild, Math.min(range.startOffset, textInput.textContent.length));
-        range.setEnd(textInput.firstChild, Math.min(range.startOffset, textInput.textContent.length));
-        sel.removeAllRanges();
-        sel.addRange(range);
-    }
+    textInput.value = originalText;
 }
 
-  
-  document.getElementById("text-input").addEventListener("paste", function(event) {
-    event.preventDefault(); // Prevent the default paste action
-    var text = (event.clipboardData || window.clipboardData).getData('text/plain');
-     // Standardize line breaks while preserving existing ones
-    var standardizedText = standardizeLineBreaks(text);
-    var normalizedText = text.normalize("NFKD"); // Normalize unicode to ASCII equivalent where possible
+RegExp.escape = function(s) {
+    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+};
 
-    // Insert text at the current cursor position
-    document.execCommand('insertText', false, normalizedText);
-
-    // Apply uniform style if needed
-    this.style.fontSize = "14px"; // Set a consistent font size
-});
-
-  document.getElementById("text-input").addEventListener("input", function () {
-    // Debounce input to handle rapid typing
-    clearTimeout(this.inputTimeout);
-    this.inputTimeout = setTimeout(() => {
-        handleShortcutInput(); // Process after a short delay to batch updates
-    }, 20);
-    // Update character and word count whenever the text changes
-    updateCharCount();
-    var text = this.innerText; // Get all text including spaces
-    var charCount = text.length; // Count all characters including spaces
-    var charCountDisplay = document.getElementById("char-count");
-    charCountDisplay.textContent = "Characters: " + charCount;
-
-    if (charCount > 3000) {
-      charCountDisplay.style.color = "red";
-    } else {
-      charCountDisplay.style.color = "";
-    }
-  });
-  
-document.getElementById("text-input").addEventListener("input", function(event) {
-    if (event.inputType === "insertParagraph") {
-        event.preventDefault(); // Prevent default Enter key behavior
-        document.execCommand('insertHTML', false, '<br><br>'); // Insert double line-breaks
-    } else {
-        handleShortcutInput(); // Handle replacements
-        checkAndTriggerEmojiPopup(); // Handle emoji popup display
-    }
-});
-
-function handleShortcutInput() {
-    var textInput = document.getElementById("text-input");
-    var originalText = textInput.textContent; // Use textContent for direct text manipulation
-    const shortcuts = { /* your shortcuts map */ };
-
-    const sel = window.getSelection();
-    if (!sel.rangeCount) return;
-
-    let startOffset = sel.getRangeAt(0).startOffset;
-
-    Object.keys(shortcuts).forEach(shortcut => {
-        const replacement = shortcuts[shortcut];
-        originalText = originalText.replace(new RegExp(shortcut, 'g'), replacement);
-    });
-
-    textInput.textContent = originalText; // Update the text content with replacements
-
-    // Restore the selection
-    sel.removeAllRanges();
-    const range = document.createRange();
-    range.setStart(textInput.firstChild, startOffset);
-    range.setEnd(textInput.firstChild, startOffset);
-    sel.addRange(range);
+function standardizeLineBreaks(text) {
+    return text.replace(/\r\n?/g, '\n');
 }
 
-function checkAndTriggerEmojiPopup() {
-    const textInput = document.getElementById("text-input");
-    const text = textInput.textContent;
-    const sel = window.getSelection();
-    const range = sel.getRangeAt(0);
-    const index = range.startOffset;
-
-    // Logic to display emoji popup based on current cursor position
-    if (text[index - 1] === ':') { // Adjust this condition as necessary
-        showEmojiPopupBasedOnPosition(index, textInput);
+function checkAndTriggerEmojiPopup(inputElement) {
+    const cursorPos = inputElement.selectionStart;
+    if (inputElement.value[cursorPos - 1] === ':') {
+        showEmojiPopup(inputElement, cursorPos);
     } else {
         hideEmojiPopup();
     }
 }
 
-function showEmojiPopupBasedOnPosition(index, textElement) {
+function showEmojiPopup(inputElement, position) {
     const emojiPopup = document.getElementById("emoji-popup");
-    emojiPopup.innerHTML = ''; // Clear existing emojis to ensure fresh setup
-    const emojis = ['😊', '😂', '➡️', '🔴'];
-    emojis.forEach(emoji => {
-        let span = document.createElement('span');
-        span.textContent = emoji;
-        span.style.cursor = 'pointer'; // Ensure cursor changes to pointer
-        span.onclick = () => {
-            insertEmojiAtRange(emoji, index, textElement);
-        };
-        emojiPopup.appendChild(span);
-    });
-
-    const rect = textElement.getBoundingClientRect();
+    const rect = inputElement.getBoundingClientRect();
     emojiPopup.style.left = `${rect.left + window.pageXOffset}px`;
     emojiPopup.style.top = `${rect.bottom + window.pageYOffset}px`;
     emojiPopup.style.display = 'block';
 }
 
-function insertEmojiAtRange(emoji, index, textElement) {
-    // Adjust the insertion logic to correctly handle cursor and text position
-    const sel = window.getSelection();
-    const range = sel.getRangeAt(0);
-    range.setStart(textElement, index - 1); // Adjust to replace ':'
-    range.setEnd(textElement, index);
-
-    const emojiNode = document.createTextNode(emoji + ' ');
-    range.deleteContents(); // Delete the colon
-    range.insertNode(emojiNode); // Insert emoji
-
-    range.setStartAfter(emojiNode); // Update cursor position
-    range.setEndAfter(emojiNode);
-    sel.removeAllRanges();
-    sel.addRange(range);
-
-    hideEmojiPopup(); // Ensure popup is hidden after insertion
-}
-
 function hideEmojiPopup() {
     const emojiPopup = document.getElementById("emoji-popup");
-    if (emojiPopup) {
-        emojiPopup.style.display = 'none';
-    }
+    emojiPopup.style.display = 'none';
 }
 
-document.getElementById("text-input").addEventListener("keydown", function(event) {
-    if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault(); // Handle Enter separately from the input event
-        document.execCommand('insertHTML', false, '<br><br>'); // Insert line break
+function insertEmojiAtPosition(emoji, inputElement, position) {
+    let text = inputElement.value;
+    inputElement.value = text.substring(0, position) + emoji + text.substring(position);
+    inputElement.selectionStart = inputElement.selectionEnd = position + emoji.length;
+    hideEmojiPopup();
+}
+
+// Assuming emoji popup HTML structure and interaction logic
+document.getElementById("emoji-popup").addEventListener("click", function(event) {
+    if (event.target.tagName === "SPAN") {
+        const emoji = event.target.textContent;
+        const inputElement = document.getElementById("text-input");
+        const position = inputElement.selectionStart;
+        insertEmojiAtPosition(emoji, inputElement, position);
     }
 });
 
