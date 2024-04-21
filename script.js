@@ -42,6 +42,8 @@ function handleShortcutInput() {
     var sel = window.getSelection();
     if (sel.rangeCount > 0) {
         var range = sel.getRangeAt(0);
+        var startPos = range.startOffset;
+        var endPos = range.endOffset;
         var text = textInput.innerHTML;
 
         // Define shortcuts and their replacements
@@ -52,23 +54,29 @@ function handleShortcutInput() {
             '<=': '⇐'
         };
 
-        // Replace shortcuts with corresponding symbols and maintain cursor position
+        // Check if any replacements are needed
+        let replacementMade = false;
         Object.keys(shortcuts).forEach(shortcut => {
             if (text.includes(shortcut)) {
-                var startPos = range.startOffset;
-                var endPos = range.endOffset;
                 text = text.replace(new RegExp(shortcut, 'g'), shortcuts[shortcut]);
+                replacementMade = true;
+            }
+        });
 
-                // Update the innerHTML without losing the selection
-                textInput.innerHTML = text;
+        if (replacementMade) {
+            // Update the innerHTML without losing the selection
+            textInput.innerHTML = text;
 
-                // Restore the selection
+            // Correct the cursor position after replacement
+            try {
                 range.setStart(textInput.childNodes[0], startPos);
                 range.setEnd(textInput.childNodes[0], endPos);
                 sel.removeAllRanges();
                 sel.addRange(range);
+            } catch (error) {
+                console.error("Error adjusting cursor after input: ", error);
             }
-        });
+        }
     }
 }
   
@@ -87,10 +95,7 @@ function handleShortcutInput() {
 });
 
   document.getElementById("text-input").addEventListener("input", function () {
-    // Introduce a slight delay to ensure the DOM has updated
-    setTimeout(() => {
-        handleShortcutInput(); // Process shortcut replacement after a slight delay
-    }, 10); // A delay of 10 milliseconds
+    handleShortcutInput(); // Call the shortcut handler immediately on input
     // Update character and word count whenever the text changes
     updateCharCount();
     var text = this.innerText; // Get all text including spaces
