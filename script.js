@@ -36,7 +36,29 @@ function saveText(span, parent) {
   function convertLineBreaksToBR(text) {
   return text.replace(/\n/g, "<br>");
 }
+  
+function handleShortcutInput() {
+    var textInput = document.getElementById("text-input");
+    var text = textInput.innerHTML;
 
+    // Define shortcuts and their replacements
+    const shortcuts = {
+        '->': '→',
+        '<-': '←',
+        '=>': '⇒',
+        '<=': '⇐'
+    };
+
+    // Replace shortcuts with corresponding symbols
+    Object.keys(shortcuts).forEach(shortcut => {
+        if (text.includes(shortcut)) {
+            text = text.replace(new RegExp(shortcut, 'g'), shortcuts[shortcut]);
+        }
+    });
+
+    textInput.innerHTML = text;
+}
+  
   document.getElementById("text-input").addEventListener("paste", function(event) {
     event.preventDefault(); // Prevent the default paste action
     var text = (event.clipboardData || window.clipboardData).getData('text/plain');
@@ -52,6 +74,7 @@ function saveText(span, parent) {
 });
 
   document.getElementById("text-input").addEventListener("input", function () {
+    handleShortcutInput(); // Call the shortcut handler on every input event
     // Update character and word count whenever the text changes
     updateCharCount();
     var text = this.innerText; // Get all text including spaces
