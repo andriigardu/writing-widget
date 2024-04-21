@@ -73,7 +73,7 @@ body {
 
 #copy-button, #star-button, #clear-button, #toggle-button {
     border: 0.5px solid #ccc;
-    cursor: pointer; /* Ensures cursor changes to pointer on hover over these elements */
+    cursor: pointer !important; /* Ensures cursor changes to pointer on hover over these elements */
 }
 
 #char-count, #word-count, #clear-saved-texts-button, #sort-button {
