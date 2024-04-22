@@ -72,7 +72,6 @@ function handleShortcutInput() {
     '3/8': '⅜', // Fraction 3/8
     '5/8': '⅝', // Fraction 5/8
     '7/8': '⅞', // Fraction 7/8
-    'mu': 'µ',  // Greek letter mu, micro
     'ohm': 'Ω', // Greek letter Omega, symbol for resistance
     'deg': '°', // Degree symbol
     'squared': '²',
@@ -161,7 +160,9 @@ function handleShortcutInput() {
     ':small_orange_diamond:': '🔸',
     ':small_blue_diamond:': '🔹',
     ':red_triangle_up:': '🔺',
-    ':red_triangle_down:': '🔻'};
+    ':red_triangle_down:': '🔻'
+    };
+  
     let modifiedHTML = originalHTML;
 
     Object.keys(shortcuts).forEach(shortcut => {
