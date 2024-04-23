@@ -43,17 +43,17 @@ function saveText(span, parent) {
   
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
-    var originalHTML = textInput.innerHTML;
     var sel = window.getSelection();
 
-    if (!sel.rangeCount) return;
+    if (!sel.rangeCount) return;  // Exit if no selection is made
 
     var range = sel.getRangeAt(0);
-    var marker = document.createElement("span");
-    marker.appendChild(document.createTextNode("\ufeff")); // Using a zero-width non-breaking space
-    range.insertNode(marker);
+    var startNode = range.startContainer;
+    var startOffset = range.startOffset;
 
-    const replacements = {
+    // Function to replace text in a text node
+    function replaceText(node) {
+        const replacements = {
         ' -> ': ' → ',
         ' <- ': ' ← ',
         ' => ': ' ⇒ ',
@@ -177,30 +177,48 @@ function handleShortcutInput() {
     ':red_triangle_down:': '🔻'
     };
   
-    Object.keys(replacements).forEach(key => {
-        originalHTML = originalHTML.split(key).join(replacements[key]);
-    });
+    let nodeValue = node.nodeValue;
+        let modifiedText = nodeValue;
 
-    textInput.innerHTML = originalHTML;
+        Object.keys(replacements).forEach(pattern => {
+            modifiedText = modifiedText.split(pattern).join(replacements[pattern]);
+        });
 
-    // Restore cursor position
-    var newRange = document.createRange();
-    var markerParent = marker.parentNode;
-    newRange.setStart(markerParent, Array.prototype.indexOf.call(markerParent.childNodes, marker));
-    newRange.collapse(true);
+        if (nodeValue !== modifiedText) {
+            node.nodeValue = modifiedText;
+            return true;
+        }
+        return false;
+    }
 
-    sel.removeAllRanges();
-    sel.addRange(newRange);
-    markerParent.removeChild(marker);
-}
+    // Traverse all text nodes and replace text
+    var walker = document.createTreeWalker(
+        textInput,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+    );
+    let currentNode = walker.firstChild();
+    let textModified = false;
 
-function restoreCursor(container, anchorNode, anchorOffset) {
-    const range = document.createRange();
-    const selection = window.getSelection();
-    range.setStart(anchorNode, anchorOffset);
-    range.collapse(true);
-    selection.removeAllRanges();
-    selection.addRange(range);
+    while (currentNode) {
+        if (replaceText(currentNode)) {
+            textModified = true;
+        }
+        currentNode = walker.nextSibling();
+    }
+
+    // Restore the selection
+    if (textModified) {
+        try {
+            range.setStart(startNode, startOffset);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } catch (e) {
+            console.error("Error restoring the cursor position:", e);
+        }
+    }
 }
 
 
