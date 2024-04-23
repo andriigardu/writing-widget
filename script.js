@@ -174,38 +174,64 @@ function handleShortcutInput() {
     ':red_triangle_up:': '🔺',
     ':red_triangle_down:': '🔻'
     };
-  // Function to handle text node replacement
+ // Helper function to process text nodes and apply replacements
     function processTextNode(node) {
-        let text = node.nodeValue;
-        let modifiedText = text;
-        Object.entries(replacements).forEach(([key, value]) => {
-            let index = text.indexOf(key);
-            while (index !== -1) {
-                modifiedText = modifiedText.substring(0, index) + value + modifiedText.substring(index + key.length);
-                if (startNode === node && startOffset > index) {
-                    startOffset = startOffset - key.length + value.length;
+        let nodeValue = node.nodeValue;
+        let modifiedText = nodeValue;
+        let adjustment = 0;
+
+        Object.keys(replacements).forEach(pattern => {
+            const regex = new RegExp(pattern, 'g');
+            modifiedText = modifiedText.replace(regex, (match, p1, p2) => {
+                let position = regex.lastIndex - match.length;
+                if (position !== -1) {
+                    let replacementText = replacements[pattern].replace('$1', p1).replace('$2', p2);
+                    if (startNode === node && startOffset > position) {
+                        adjustment += replacementText.length - match.length;
+                    }
                 }
-                text = modifiedText;
-                index = text.indexOf(key, index + value.length);
-            }
+                return replacements[pattern].replace('$1', p1).replace('$2', p2);
+            });
         });
-        node.nodeValue = modifiedText;
+
+        if (nodeValue !== modifiedText) {
+            node.nodeValue = modifiedText;
+            if (startNode === node) {
+                startOffset += adjustment;
+            }
+        }
     }
 
-    // Use a TreeWalker to process all text nodes
-    var walker = document.createTreeWalker(textInput, NodeFilter.SHOW_TEXT, null, false);
-    let currentNode = walker.currentNode;
-    while (currentNode) {
-        processTextNode(currentNode);
-        currentNode = walker.nextNode();
+    // Traverse and apply changes to all text nodes
+    var walker = document.createTreeWalker(
+        textInput,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+    );
+
+    walker.currentNode = range.startContainer;
+    // Process forward from the cursor
+    while (walker.currentNode) {
+        processTextNode(walker.currentNode);
+        walker.nextNode();
     }
 
-    // Set the cursor position correctly after modifications
-    if (startNode.nodeType === Node.TEXT_NODE) {
+    // Process backward from the cursor
+    walker.currentNode = range.startContainer;
+    while (walker.currentNode) {
+        processTextNode(walker.currentNode);
+        walker.previousNode();
+    }
+
+    // Restore the cursor position
+    try {
+        range.setStart(startNode, startOffset);
+        range.setEnd(startNode, startOffset);
         sel.removeAllRanges();
-        range.setStart(startNode, Math.min(startOffset, startNode.length));
-        range.collapse(true);
         sel.addRange(range);
+    } catch (e) {
+        console.error("Error adjusting the cursor position:", e);
     }
 }
 
