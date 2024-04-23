@@ -46,36 +46,37 @@ function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
     var originalHTML = textInput.innerHTML;  // Use innerHTML to keep formatting
 
-    const shortcuts = { '->': '→',
-    '<-': '←',
-    '=>': '⇒',
-    '<=': '⇐',
-    '==': '≡',
-    '!=': '≠',
-    '>=': '≥',
-    '<=': '≤',
-    '++': '⧺', // Increment
-    '--': '⧻', // Decrement
-    '&&': '∧', // Logical AND
-    '||': '∨', // Logical OR
-    '...': '…', // Ellipsis
-    '(c)': '©', // Copyright symbol
-    '(r)': '®', // Registered trademark symbol
-    '(tm)': '™', // Trademark symbol
-    '(p)': '℗', // Sound recording copyright
-    '1/4': '¼', // Fraction 1/4
-    '1/2': '½', // Fraction 1/2
-    '3/4': '¾', // Fraction 3/4
-    '1/3': '⅓', // Fraction 1/3
-    '2/3': '⅔', // Fraction 2/3
-    '1/8': '⅛', // Fraction 1/8
-    '3/8': '⅜', // Fraction 3/8
-    '5/8': '⅝', // Fraction 5/8
-    '7/8': '⅞', // Fraction 7/8
-    'ohm': 'Ω', // Greek letter Omega, symbol for resistance
-    'deg': '°', // Degree symbol
-    'squared': '²',
-    'cubed': '³',
+    const shortcuts = { 
+    '(^|\\s)->(\\s|$)': '→',
+    '(^|\\s)<-(\\s|$)': '←',
+    '(^|\\s)=>(\\s|$)': '⇒',
+    '(^|\\s)<=\\s': '⇐',  // Note: at start or followed by a space
+    '(^|\\s)==(\\s|$)': '≡',
+    '(^|\\s)!=\\s': '≠',  // Note: at start or followed by a space
+    '(^|\\s)>=(\\s|$)': '≥',
+    '(^|\\s)<=\\s': '≤',  // Note: at start or followed by a space
+    '(^|\\s)\\+\\+(\\s|$)': '⧺',
+    '(^|\\s)--(\\s|$)': '⧻',
+    '(^|\\s)&&(\\s|$)': '∧',
+    '(^|\\s)\\|\\|(\\s|$)': '∨',
+    '(^|\\s)\\.\\.\\.(\\s|$)': '…',
+    '(^|\\s)\\(c\\)(\\s|$)': '©',
+    '(^|\\s)\\(r\\)(\\s|$)': '®',
+    '(^|\\s)\\(tm\\)(\\s|$)': '™',
+    '(^|\\s)\\(p\\)(\\s|$)': '℗',
+    '(^|\\s)1/4(\\s|$)': '¼',
+    '(^|\\s)1/2(\\s|$)': '½',
+    '(^|\\s)3/4(\\s|$)': '¾',
+    '(^|\\s)1/3(\\s|$)': '⅓',
+    '(^|\\s)2/3(\\s|$)': '⅔',
+    '(^|\\s)1/8(\\s|$)': '⅛',
+    '(^|\\s)3/8(\\s|$)': '⅜',
+    '(^|\\s)5/8(\\s|$)': '⅝',
+    '(^|\\s)7/8(\\s|$)': '⅞',
+    '(^|\\s)ohm(\\s|$)': 'Ω',
+    '(^|\\s)deg(\\s|$)': '°',
+    '(^|\\s)squared(\\s|$)': '²',
+    '(^|\\s)cubed(\\s|$)': '³',
     // Adding emoji shortcuts
     ':)': '😊',
     ':(': '😞',
