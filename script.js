@@ -44,7 +44,12 @@ function saveText(span, parent) {
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
     var originalHTML = textInput.innerHTML;  // Use innerHTML to keep formatting
-
+    var sel = window.getSelection();
+    var savedRange;
+    if (sel.rangeCount > 0) {
+        savedRange = sel.getRangeAt(0);
+    }
+  
     const shortcuts = { 
     '(^|\\s)->(\\s|$)': '→',
     '(^|\\s)<-(\\s|$)': '←',
@@ -168,20 +173,25 @@ function handleShortcutInput() {
     Object.keys(shortcuts).forEach(shortcut => {
         const escapedShortcut = shortcut.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');  // Escape regex special characters
         const regex = new RegExp(escapedShortcut, 'g');
-        modifiedHTML = modifiedHTML.replace(regex, shortcuts[shortcut]);
+        modifiedHTML = modifiedHTML.replace(regex, function(match) {
+            return match.replace(shortcut, shortcuts[shortcut]);
+        });
     });
 
     if (modifiedHTML !== originalHTML) {
         textInput.innerHTML = modifiedHTML;
-        // Optionally, you might want to restore the cursor position, which may require additional logic
+        restoreCaretPosition(textInput, savedRange);
     }
 }
 
 
-function restoreCaretPosition(elem) {
-    var sel = window.getSelection(), range = document.createRange();
-    range.setStart(elem, 0);
-    range.collapse(true);
+function restoreCaretPosition(textInput, savedRange) {
+    if (!savedRange) return;
+
+    const range = document.createRange();
+    range.setStart(textInput, savedRange.startOffset);
+    range.setEnd(textInput, savedRange.endOffset);
+    var sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
 }
