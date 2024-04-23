@@ -174,24 +174,22 @@ function handleShortcutInput() {
     ':red_triangle_up:': '🔺',
     ':red_triangle_down:': '🔻'
     };
- // Helper function to process text nodes and apply replacements
+ // Helper function to process text replacements and cursor management
     function processTextNode(node) {
         let nodeValue = node.nodeValue;
         let modifiedText = nodeValue;
         let adjustment = 0;
 
         Object.keys(replacements).forEach(pattern => {
-            const regex = new RegExp(pattern, 'g');
-            modifiedText = modifiedText.replace(regex, (match, p1, p2) => {
-                let position = regex.lastIndex - match.length;
-                if (position !== -1) {
-                    let replacementText = replacements[pattern].replace('$1', p1).replace('$2', p2);
-                    if (startNode === node && startOffset > position) {
-                        adjustment += replacementText.length - match.length;
-                    }
+            let position = modifiedText.indexOf(pattern);
+            if (position !== -1) {
+                let originalLength = pattern.length;
+                let replacementText = replacements[pattern];
+                modifiedText = modifiedText.replace(pattern, replacementText);
+                if (startNode === node && startOffset > position) {
+                    adjustment += replacementText.length - originalLength;
                 }
-                return replacements[pattern].replace('$1', p1).replace('$2', p2);
-            });
+            }
         });
 
         if (nodeValue !== modifiedText) {
@@ -202,7 +200,12 @@ function handleShortcutInput() {
         }
     }
 
-    // Traverse and apply changes to all text nodes
+    // Traverse text nodes from the current selection backwards and forwards
+    var currentNode = range.startContainer;
+    if (currentNode.nodeType === Node.TEXT_NODE) {
+        processTextNode(currentNode);
+    }
+
     var walker = document.createTreeWalker(
         textInput,
         NodeFilter.SHOW_TEXT,
@@ -210,28 +213,30 @@ function handleShortcutInput() {
         false
     );
 
-    walker.currentNode = range.startContainer;
-    // Process forward from the cursor
-    while (walker.currentNode) {
-        processTextNode(walker.currentNode);
-        walker.nextNode();
+    // Set the walker to the selection node and process all nodes forwards
+    walker.currentNode = currentNode;
+    while (currentNode) {
+        processTextNode(currentNode);
+        currentNode = walker.nextNode();
     }
 
-    // Process backward from the cursor
-    walker.currentNode = range.startContainer;
-    while (walker.currentNode) {
-        processTextNode(walker.currentNode);
-        walker.previousNode();
+    // Process nodes backwards from the initial node
+    currentNode = walker.currentNode = range.startContainer;
+    while (currentNode) {
+        processTextNode(currentNode);
+        currentNode = walker.previousNode();
     }
 
-    // Restore the cursor position
-    try {
-        range.setStart(startNode, startOffset);
-        range.setEnd(startNode, startOffset);
-        sel.removeAllRanges();
-        sel.addRange(range);
-    } catch (e) {
-        console.error("Error adjusting the cursor position:", e);
+    // Reset cursor position
+    if (startNode.nodeType === Node.TEXT_NODE) {
+        try {
+            range.setStart(startNode, startOffset);
+            range.setEnd(startNode, startOffset);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } catch (e) {
+            console.error("Error adjusting the cursor position:", e);
+        }
     }
 }
 
