@@ -51,8 +51,6 @@ function handleShortcutInput() {
     var startNode = range.startContainer;
     var startOffset = range.startOffset;
 
-    // Function to replace text in a text node
-    function replaceText(node) {
         const replacements = {
         ' -> ': ' → ',
         ' <- ': ' ← ',
@@ -176,51 +174,71 @@ function handleShortcutInput() {
     ':red_triangle_up:': '🔺',
     ':red_triangle_down:': '🔻'
     };
-  
-    let nodeValue = node.nodeValue;
+  // Helper function to process text replacements and cursor management
+    function processTextNode(node) {
+        let nodeValue = node.nodeValue;
         let modifiedText = nodeValue;
+        let adjustment = 0;
 
         Object.keys(replacements).forEach(pattern => {
-            modifiedText = modifiedText.split(pattern).join(replacements[pattern]);
+            let position = modifiedText.indexOf(pattern);
+            if (position !== -1) {
+                let originalLength = pattern.length;
+                let replacementText = replacements[pattern];
+                modifiedText = modifiedText.replace(pattern, replacementText);
+                if (startNode === node && startOffset > position) {
+                    adjustment += replacementText.length - originalLength;
+                }
+            }
         });
 
         if (nodeValue !== modifiedText) {
             node.nodeValue = modifiedText;
-            return true;
+            if (startNode === node) {
+                startOffset += adjustment;
+            }
         }
-        return false;
     }
 
-    // Traverse all text nodes and replace text
+    // Traverse text nodes from the current selection backwards and forwards
+    var currentNode = range.startContainer;
+    if (currentNode.nodeType === Node.TEXT_NODE) {
+        processTextNode(currentNode);
+    }
+
     var walker = document.createTreeWalker(
         textInput,
         NodeFilter.SHOW_TEXT,
         null,
         false
     );
-    let currentNode = walker.firstChild();
-    let textModified = false;
 
+    // Set the walker to the selection node and process all nodes forwards
+    walker.currentNode = currentNode;
     while (currentNode) {
-        if (replaceText(currentNode)) {
-            textModified = true;
-        }
-        currentNode = walker.nextSibling();
+        processTextNode(currentNode);
+        currentNode = walker.nextNode();
     }
 
-    // Restore the selection
-    if (textModified) {
+    // Process nodes backwards from the initial node
+    currentNode = walker.currentNode = range.startContainer;
+    while (currentNode) {
+        processTextNode(currentNode);
+        currentNode = walker.previousNode();
+    }
+
+    // Reset cursor position
+    if (startNode.nodeType === Node.TEXT_NODE) {
         try {
             range.setStart(startNode, startOffset);
-            range.collapse(true);
+            range.setEnd(startNode, startOffset);
             sel.removeAllRanges();
             sel.addRange(range);
         } catch (e) {
-            console.error("Error restoring the cursor position:", e);
+            console.error("Error adjusting the cursor position:", e);
         }
     }
 }
-
 
   document.getElementById("text-input").addEventListener("paste", function(event) {
     event.preventDefault(); // Prevent the default paste action
