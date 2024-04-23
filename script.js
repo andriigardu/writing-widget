@@ -5,8 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Make sure the text-input starts empty and cursor positioned at the start
   var textInput = document.getElementById("text-input");
   textInput.innerHTML = ""; // Ensures it starts empty
-  textInput.focus(); // Focus to set cursor at start
-
+  
   function loadSavedTexts() {
     var savedTextsJSON = localStorage.getItem("savedTexts");
     if (savedTextsJSON) {
