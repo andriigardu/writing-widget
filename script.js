@@ -52,6 +52,11 @@ function handleShortcutInput() {
     var startOffset = range.startOffset;
 
         const replacements = {
+          ' -> ': ' → ',
+        ' <- ': ' ← ',
+        ' => ': ' ⇒ ',
+        ' <= ': ' ⇐ ',
+        ' == ': ' ≡ ',
     // Regular expressions adjusted for matching and capturing groups for replacement
         '(^|\\s)->(\\s|$)': '$1→$2',
         '(^|\\s)<-(\\s|$)': '$1←$2',
