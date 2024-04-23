@@ -272,7 +272,9 @@ function insertEmojiAtRange(emoji, index, textElement) {
     const sel = window.getSelection();
     if (sel.rangeCount > 0) {
         const range = sel.getRangeAt(0);
-        range.deleteContents(); // Clear the selected contents
+        range.setStart(textElement, index); // Set start at the colon position
+        range.setEnd(textElement, index + 1); // Set end right after the colon to replace it
+        range.deleteContents(); // Remove the colon
         
         // Insert the emoji directly at the range's current position
         const emojiNode = document.createTextNode(emoji + ' ');
