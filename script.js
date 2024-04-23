@@ -223,9 +223,10 @@ function restoreCaretPosition(elem) {
   
 document.getElementById("text-input").addEventListener("input", function () {
     const text = this.innerText;
-    const lastColonPos = text.lastIndexOf(':');
+    const cursorPosition = window.getSelection().anchorOffset;
+    const lastColonPos = text.substring(0, cursorPosition).lastIndexOf(':');
 
-    // Check if there is a space or the start of the text after the last colon
+    // Determine if there's a valid colon position to show the emoji popup
     if (lastColonPos !== -1 && (lastColonPos === 0 || text[lastColonPos - 1] === ' ' || text[lastColonPos + 1] === ' ')) {
         showEmojiPopupBasedOnPosition(lastColonPos, this);
         this.lastTypedColon = true;
@@ -266,27 +267,20 @@ function showEmojiPopupBasedOnPosition(index, textElement) {
 
 function insertEmojiAtRange(emoji, index, textElement) {
     const textInput = document.getElementById("text-input");
-    textInput.focus();  // Ensure the text input is focused
+    const range = document.createRange();
     const sel = window.getSelection();
-    if (sel.rangeCount > 0) {
-        const range = sel.getRangeAt(0);
-        range.setStart(textElement, index); // Set start at the colon position
-        range.setEnd(textElement, index + 1); // Set end right after the colon to replace it
-        range.deleteContents(); // Remove the colon
-        
-        // Insert the emoji directly at the range's current position
-        const emojiNode = document.createTextNode(emoji + ' ');
-        range.insertNode(emojiNode);
-
-        // Set the cursor right after the inserted emoji
-        range.setStartAfter(emojiNode);
-        range.setEndAfter(emojiNode);
-        sel.removeAllRanges();  // Clear existing selections
-        sel.addRange(range);  // Set the new range with the cursor positioned correctly
-        hideEmojiPopup();  // Ensure the popup is hidden after inserting an emoji
-    }
+    sel.removeAllRanges();  // Clear existing selections
+    range.setStart(textElement.childNodes[0] || textElement, index);
+    range.setEnd(textElement.childNodes[0] || textElement, index);
+    range.deleteContents(); // Remove the colon
+    const emojiNode = document.createTextNode(emoji + ' ');
+    range.insertNode(emojiNode);
+    range.setStartAfter(emojiNode);
+    range.setEndAfter(emojiNode);
+    sel.addRange(range);
+    hideEmojiPopup();  // Hide the popup after inserting the emoji
+    textInput.focus(); // Refocus on the text input
 }
-
 
 function hideEmojiPopup() {
     const emojiPopup = document.getElementById("emoji-popup");
