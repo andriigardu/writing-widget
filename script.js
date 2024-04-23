@@ -43,12 +43,22 @@ function saveText(span, parent) {
   
 function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
-    var originalHTML = textInput.innerHTML;  // Use innerHTML to keep formatting
+    var originalHTML = textInput.innerHTML;
     var sel = window.getSelection();
-    var anchorNode = sel.anchorNode;
-    var anchorOffset = sel.anchorOffset;
   
-    const shortcuts = { 
+    // Check if there is an active selection
+    if (!sel.rangeCount) return;
+
+    var range = sel.getRangeAt(0);
+    var startContainer = range.startContainer;
+    var startOffset = range.startOffset;
+
+    const replacements = {
+        ' -> ': ' → ',
+        ' <- ': ' ← ',
+        ' => ': ' ⇒ ',
+        ' <= ': ' ⇐ ',
+        ' == ': ' ≡ ',
     // Regular expressions adjusted for matching and capturing groups for replacement
         '(^|\\s)->(\\s|$)': '$1→$2',
         '(^|\\s)<-(\\s|$)': '$1←$2',
@@ -167,21 +177,22 @@ function handleShortcutInput() {
     ':red_triangle_down:': '🔻'
     };
   
-    let modifiedHTML = originalHTML;
-
-    // Apply the replacements based on the shortcuts.
-    Object.keys(shortcuts).forEach(shortcut => {
-        const regex = new RegExp(shortcut, 'g');
-        modifiedHTML = modifiedHTML.replace(regex, shortcuts[shortcut]);
+    Object.keys(replacements).forEach(key => {
+        originalHTML = originalHTML.split(key).join(replacements[key]);
     });
 
-    if (modifiedHTML !== originalHTML) {
-        textInput.innerHTML = modifiedHTML;
-        // Restore cursor position after replacement
-        restoreCursor(textInput, anchorNode, anchorOffset);
+    textInput.innerHTML = originalHTML;
+
+    // Attempt to restore the cursor position
+    try {
+        range.setStart(startContainer, startOffset);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } catch (e) {
+        console.error("Error restoring the cursor position:", e);
     }
 }
-
 
 function restoreCursor(container, anchorNode, anchorOffset) {
     const range = document.createRange();
