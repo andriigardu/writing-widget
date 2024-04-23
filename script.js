@@ -226,17 +226,17 @@ document.getElementById("text-input").addEventListener("input", function () {
     const lastChar = text.charAt(text.length - 1);
     const lastColonPos = text.lastIndexOf(':');
 
-    // Adjusting logic to ensure popup can reappear after emoji insertion
     if (lastChar === ' ' && this.lastTypedColon) {
         hideEmojiPopup();
-        this.lastTypedColon = false; // Reset the flag after a space follows a colon
+        this.lastTypedColon = false;
     } else if (lastChar === ':' && (lastColonPos === 0 || text[lastColonPos - 1] === ' ')) {
         showEmojiPopupBasedOnPosition(lastColonPos, this);
-        this.lastTypedColon = true; // Set a flag that a colon was last typed
-    } else if (!this.lastTypedColon) { // Hide the popup if conditions are not met
+        this.lastTypedColon = true;
+    } else {
         hideEmojiPopup();
     }
 });
+
 
 function showEmojiPopupBasedOnPosition(index, textElement) {
     const emojiPopup = document.getElementById("emoji-popup");
@@ -283,6 +283,7 @@ function insertEmojiAtRange(emoji, index, textElement) {
         range.setEndAfter(emojiNode);
         sel.removeAllRanges();  // Clear existing selections
         sel.addRange(range);  // Set the new range with the cursor positioned correctly
+        hideEmojiPopup();  // Ensure the popup is hidden after inserting an emoji
     }
 }
 
