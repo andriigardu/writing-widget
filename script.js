@@ -223,17 +223,15 @@ function restoreCaretPosition(elem) {
   
 document.getElementById("text-input").addEventListener("input", function () {
     const text = this.innerText;
-    const lastChar = text.charAt(text.length - 1);
     const lastColonPos = text.lastIndexOf(':');
 
-    if (lastChar === ' ' && this.lastTypedColon) {
-        hideEmojiPopup();
-        this.lastTypedColon = false;
-    } else if (lastChar === ':' && (lastColonPos === 0 || text[lastColonPos - 1] === ' ')) {
+    // Check if there is a space or the start of the text after the last colon
+    if (lastColonPos !== -1 && (lastColonPos === 0 || text[lastColonPos - 1] === ' ' || text[lastColonPos + 1] === ' ')) {
         showEmojiPopupBasedOnPosition(lastColonPos, this);
         this.lastTypedColon = true;
     } else {
         hideEmojiPopup();
+        this.lastTypedColon = false;
     }
 });
 
