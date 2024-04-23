@@ -167,7 +167,6 @@ function handleShortcutInput() {
     let modifiedHTML = originalHTML;
 
     Object.keys(shortcuts).forEach(shortcut => {
-        const escapedShortcut = shortcut.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');  // Escape regex special characters
         const regex = new RegExp(escapedShortcut, 'g');
         modifiedHTML = modifiedHTML.replace(regex, shortcuts[shortcut]);
     });
