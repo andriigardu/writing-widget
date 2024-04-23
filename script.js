@@ -45,24 +45,24 @@ function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
     var originalHTML = textInput.innerHTML;  // Use innerHTML to keep formatting
     var sel = window.getSelection();
-  
-    // Save the current selection position.
-    var charCount = sel.anchorOffset;
+    var anchorNode = sel.anchorNode;
+    var anchorOffset = sel.anchorOffset;
   
     const shortcuts = { 
-    '(^|\\s)->(\\s|$)': '→',
-    '(^|\\s)<-(\\s|$)': '←',
-    '(^|\\s)=>(\\s|$)': '⇒',
-    '(^|\\s)<=\\s': '⇐',  // Note: at start or followed by a space
-    '(^|\\s)==(\\s|$)': '≡',
-    '(^|\\s)!=\\s': '≠',  // Note: at start or followed by a space
-    '(^|\\s)>=(\\s|$)': '≥',
-    '(^|\\s)<=\\s': '≤',  // Note: at start or followed by a space
-    '(^|\\s)\\+\\+(\\s|$)': '⧺',
-    '(^|\\s)--(\\s|$)': '⧻',
-    '(^|\\s)&&(\\s|$)': '∧',
-    '(^|\\s)\\|\\|(\\s|$)': '∨',
-    '(^|\\s)\\.\\.\\.(\\s|$)': '…',
+    // Regular expressions adjusted for matching and capturing groups for replacement
+        '(^|\\s)->(\\s|$)': '$1→$2',
+        '(^|\\s)<-(\\s|$)': '$1←$2',
+        '(^|\\s)=>(\\s|$)': '$1⇒$2',
+        '(^|\\s)<=\\s': '$1⇐$2',
+        '(^|\\s)==(\\s|$)': '$1≡$2',
+        '(^|\\s)!=\\s': '$1≠$2',
+        '(^|\\s)>=(\\s|$)': '$1≥$2',
+        '(^|\\s)<=\\s': '$1≤$2',
+        '(^|\\s)\\+\\+(\\s|$)': '$1⧺$2',
+        '(^|\\s)--(\\s|$)': '$1⧻$2',
+        '(^|\\s)&&\\s': '$1∧$2',
+        '(^|\\s)\\|\\|\\s': '$1∨$2',
+        '(^|\\s)\\.\\.\\.(\\s|$)': '$1…$2',
     '(^|\\s)\\(c\\)(\\s|$)': '©',
     '(^|\\s)\\(r\\)(\\s|$)': '®',
     '(^|\\s)\\(tm\\)(\\s|$)': '™',
@@ -178,37 +178,18 @@ function handleShortcutInput() {
     if (modifiedHTML !== originalHTML) {
         textInput.innerHTML = modifiedHTML;
         // Restore cursor position after replacement
-        restoreCursor(textInput, charCount);
+        restoreCursor(textInput, anchorNode, anchorOffset);
     }
 }
 
 
-function restoreCursor(node, chars) {
-    var range = document.createRange();
-    var sel = window.getSelection();
-    range.setStart(node, 0);
+function restoreCursor(container, anchorNode, anchorOffset) {
+    const range = document.createRange();
+    const selection = window.getSelection();
+    range.setStart(anchorNode, anchorOffset);
     range.collapse(true);
-
-    // Count characters to reset position
-    range.setStart(node, 0);
-    range.collapse(true);
-
-    var charCount = 0, found = false;
-
-    node.childNodes.forEach(function(child) {
-        if (!found && child.nodeType == Node.TEXT_NODE) {
-            var tempLength = charCount + child.length;
-            if (chars >= charCount && chars <= tempLength) {
-                range.setStart(child, chars - charCount);
-                range.collapse(true);
-                found = true;
-            }
-            charCount = tempLength;
-        }
-    });
-
-    sel.removeAllRanges();
-    sel.addRange(range);
+    selection.removeAllRanges();
+    selection.addRange(range);
 }
 
 
