@@ -45,13 +45,13 @@ function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
     var originalHTML = textInput.innerHTML;
     var sel = window.getSelection();
-  
-    // Check if there is an active selection
+
     if (!sel.rangeCount) return;
 
     var range = sel.getRangeAt(0);
-    var startContainer = range.startContainer;
-    var startOffset = range.startOffset;
+    var marker = document.createElement("span");
+    marker.appendChild(document.createTextNode("\ufeff")); // Using a zero-width non-breaking space
+    range.insertNode(marker);
 
     const replacements = {
         ' -> ': ' → ',
@@ -183,15 +183,15 @@ function handleShortcutInput() {
 
     textInput.innerHTML = originalHTML;
 
-    // Attempt to restore the cursor position
-    try {
-        range.setStart(startContainer, startOffset);
-        range.collapse(true);
-        sel.removeAllRanges();
-        sel.addRange(range);
-    } catch (e) {
-        console.error("Error restoring the cursor position:", e);
-    }
+    // Restore cursor position
+    var newRange = document.createRange();
+    var markerParent = marker.parentNode;
+    newRange.setStart(markerParent, Array.prototype.indexOf.call(markerParent.childNodes, marker));
+    newRange.collapse(true);
+
+    sel.removeAllRanges();
+    sel.addRange(newRange);
+    markerParent.removeChild(marker);
 }
 
 function restoreCursor(container, anchorNode, anchorOffset) {
