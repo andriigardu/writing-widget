@@ -45,10 +45,9 @@ function handleShortcutInput() {
     var textInput = document.getElementById("text-input");
     var originalHTML = textInput.innerHTML;  // Use innerHTML to keep formatting
     var sel = window.getSelection();
-    var savedRange;
-    if (sel.rangeCount > 0) {
-        savedRange = sel.getRangeAt(0);
-    }
+  
+    // Save the current selection position.
+    var charCount = sel.anchorOffset;
   
     const shortcuts = { 
     '(^|\\s)->(\\s|$)': '→',
@@ -170,28 +169,44 @@ function handleShortcutInput() {
   
     let modifiedHTML = originalHTML;
 
+    // Apply the replacements based on the shortcuts.
     Object.keys(shortcuts).forEach(shortcut => {
-        const escapedShortcut = shortcut.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');  // Escape regex special characters
-        const regex = new RegExp(escapedShortcut, 'g');
-        modifiedHTML = modifiedHTML.replace(regex, function(match) {
-            return match.replace(shortcut, shortcuts[shortcut]);
-        });
+        const regex = new RegExp(shortcut, 'g');
+        modifiedHTML = modifiedHTML.replace(regex, shortcuts[shortcut]);
     });
 
     if (modifiedHTML !== originalHTML) {
         textInput.innerHTML = modifiedHTML;
-        restoreCaretPosition(textInput, savedRange);
+        // Restore cursor position after replacement
+        restoreCursor(textInput, charCount);
     }
 }
 
 
-function restoreCaretPosition(textInput, savedRange) {
-    if (!savedRange) return;
-
-    const range = document.createRange();
-    range.setStart(textInput, savedRange.startOffset);
-    range.setEnd(textInput, savedRange.endOffset);
+function restoreCursor(node, chars) {
+    var range = document.createRange();
     var sel = window.getSelection();
+    range.setStart(node, 0);
+    range.collapse(true);
+
+    // Count characters to reset position
+    range.setStart(node, 0);
+    range.collapse(true);
+
+    var charCount = 0, found = false;
+
+    node.childNodes.forEach(function(child) {
+        if (!found && child.nodeType == Node.TEXT_NODE) {
+            var tempLength = charCount + child.length;
+            if (chars >= charCount && chars <= tempLength) {
+                range.setStart(child, chars - charCount);
+                range.collapse(true);
+                found = true;
+            }
+            charCount = tempLength;
+        }
+    });
+
     sel.removeAllRanges();
     sel.addRange(range);
 }
