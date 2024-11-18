@@ -8,8 +8,7 @@ body {
     height: 500px; /* Full viewport height */
     position: relative; /* For absolute positioning inside */
     border: 0.5px solid #ccc;
-    border-radius: 7px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
     transition: width 0.3s ease;
 }
 .source-sans 3-<uniquifier> {
