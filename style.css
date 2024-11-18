@@ -7,7 +7,7 @@ body {
     width: 335px; /* Fixed width */
     height: 500px; /* Full viewport height */
     position: relative; /* For absolute positioning inside */
-    border: 0.5px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 10px;
     transition: width 0.3s ease;
 }
@@ -50,7 +50,7 @@ body {
     z-index: 2;
     padding: 5px;
     background: #fff;
-    border: 0.5px solid #ccc;
+    border: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
